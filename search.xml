@@ -8,7 +8,7 @@
       <link href="/blog/2020/03/17/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/"/>
       <url>/blog/2020/03/17/%E6%B5%8B%E8%AF%95%E6%96%87%E7%AB%A0/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<p>简单的测试文章</p>]]></content>
       
       
       <categories>
@@ -20,7 +20,9 @@
       
         <tags>
             
-            <tag> 测试，jvm </tag>
+            <tag> 测试 </tag>
+            
+            <tag> jvm </tag>
             
         </tags>
       
@@ -56,6 +58,17 @@
     
     
     <entry>
+      <title>archives</title>
+      <link href="/blog/archives/index.html"/>
+      <url>/blog/archives/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>categories</title>
       <link href="/blog/categories/index.html"/>
       <url>/blog/categories/index.html</url>
@@ -70,17 +83,6 @@
       <title>Tagcloud</title>
       <link href="/blog/tags/index.html"/>
       <url>/blog/tags/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>archives</title>
-      <link href="/blog/archives/index.html"/>
-      <url>/blog/archives/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
