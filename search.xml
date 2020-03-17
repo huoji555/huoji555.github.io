@@ -2044,9 +2044,9 @@
     
     
     <entry>
-      <title>Tagcloud</title>
-      <link href="/blog/tags/index.html"/>
-      <url>/blog/tags/index.html</url>
+      <title>categories</title>
+      <link href="/blog/categories/index.html"/>
+      <url>/blog/categories/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -2055,9 +2055,9 @@
     
     
     <entry>
-      <title>categories</title>
-      <link href="/blog/categories/index.html"/>
-      <url>/blog/categories/index.html</url>
+      <title>Tagcloud</title>
+      <link href="/blog/tags/index.html"/>
+      <url>/blog/tags/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
