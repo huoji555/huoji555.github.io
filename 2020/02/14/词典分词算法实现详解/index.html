@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="词典分词算法实现详解"><meta name="keywords" content="自然语言处理 词典分词 正向最长匹配算法 逆向最长匹配算法 双向最长匹配算法"><meta name="author" content="Ragty"><meta name="copyright" content="Ragty"><title>词典分词算法实现详解 | Ragty の Blog</title><link rel="shortcut icon" href="/blog/melody-favicon.ico"><link rel="stylesheet" href="/blog/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><script>var GLOBAL_CONFIG = { 
+  root: '/blog/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-概述"><span class="toc-text">1.概述</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-词典分词"><span class="toc-text">2.词典分词</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-词典分类及加载"><span class="toc-text">3.词典分类及加载</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#4-词典切分算法"><span class="toc-text">4.词典切分算法</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#5-完全切分算法"><span class="toc-text">5. 完全切分算法</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#6-正向最长匹配算法"><span class="toc-text">6.正向最长匹配算法</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#7-逆向最长匹配"><span class="toc-text">7.逆向最长匹配</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#8-双向最长匹配"><span class="toc-text">8.双向最长匹配</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#9-匹配规则效果对比"><span class="toc-text">9.匹配规则效果对比</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#10-词典切分算法总结"><span class="toc-text">10.词典切分算法总结</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://secure.gravatar.com/avatar/dcc38a5a0d37cb7348d4f72d8f6a2de0"></div><div class="author-info__name text-center">Ragty</div><div class="author-info__description text-center"></div><div class="follow-button"><a href="https://github.com/huoji555" target="_blank" rel="noopener">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/blog/archives"><span class="pull-left">文章</span><span class="pull-right">83</span></a><a class="author-info-articles__tags article-meta" href="/blog/tags"><span class="pull-left">标签</span><span class="pull-right">75</span></a><a class="author-info-articles__categories article-meta" href="/blog/categories"><span class="pull-left">分类</span><span class="pull-right">38</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接-Links</div><a class="author-info-links__name text-center" href="https://blog.csdn.net/huoji555" target="_blank" rel="noopener">MY-CSDN</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/blog/">Ragty の Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/blog">Home</a><a class="site-page" href="/blog/archives">Archives</a><a class="site-page" href="/blog/categories">Categories</a><a class="site-page" href="/blog/tags">Tags</a><a class="site-page" href="/blog/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">词典分词算法实现详解</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-02-14</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/blog/categories/NLP/">NLP</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">1.6k</span><span class="post-meta__separator">|</span><span>阅读时长: 6 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><a id="more"></a>
+
+<h6 id="1-概述"><a href="#1-概述" class="headerlink" title="1.概述"></a>1.概述</h6><p><code>中文分词</code>指的是将一段文本拆分为一系列单词的过程，这是中文信息处理的第一站，中文分词备受关注。中文分词大致分为以下两类：</p>
+<ul>
+<li><strong>基于词典规则</strong></li>
+<li><strong>基于机器学习</strong></li>
+</ul>
+<p>这里我们主要介绍词典分词</p>
+<br>
+
+<h6 id="2-词典分词"><a href="#2-词典分词" class="headerlink" title="2.词典分词"></a>2.词典分词</h6><p><strong>词典分词</strong>是最简单，最常见的分词算法，需要的材料为：</p>
+<ul>
+<li><strong>一部词典</strong></li>
+<li><strong>一套查词典的规则</strong></li>
+</ul>
+<p>简单来说，词典分词就是一个确定的查词与输出的规则系统。词典分词的重点不在于分词本身，而在于<strong>支撑词典的数据结构</strong>。</p>
+<br>
+
+<h6 id="3-词典分类及加载"><a href="#3-词典分类及加载" class="headerlink" title="3.词典分类及加载"></a>3.词典分类及加载</h6><p>互联网上有许多公开的中文词典，比如搜狗实验室发布的互联网词库<code>SogouW</code>，清华大学开放中文词库<code>THUOCL</code>，以及千万级巨型汉语词库<code>HanLP</code>。我们这里用<code>HanLP</code></p>
+<br>
+
+<p><code>HanLP</code>中词典的格式是一种以空格分隔的表格形式，第一列是单词本身，之后表示词性与相应的词频，下面举个栗子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">希望  v  <span class="number">386</span>  n <span class="number">96</span></span><br><span class="line">希罕  a  <span class="number">1</span></span><br><span class="line">希冀  v  <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>下载的话，需要先下载好<code>HanLP</code>的数据包，推荐从<code>码云</code>直接<a href="https://gitee.com/weiyy153/HanLP/tree/1.x/data">下载</a>，<code>GitHub</code>很慢。</p>
+<p>加载的话很简单，我们把下载好的数据包放在<code>src</code>目录下，只需要以下的代码即可完成字典的加载：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TreeMap&lt;String,CoreDictionary.Attribute&gt; dictionary = IOUtil.loadDictionary(<span class="string">"src/HanLP/data/dictionary/CoreNatureDictionary.mini.txt"</span>);</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h6 id="4-词典切分算法"><a href="#4-词典切分算法" class="headerlink" title="4.词典切分算法"></a>4.词典切分算法</h6><p>词典确定之后，<strong>句子中可能含有很多词典中的词语</strong>。它们可能相互重叠，到底输出哪一个由规定的规则决定。常用的规则有以下几种（都基于完全切分过程）：</p>
+<ul>
+<li><strong>完全切分算法</strong></li>
+<li><strong>正向最长匹配算法</strong></li>
+<li><strong>逆向最长匹配算法</strong></li>
+<li><strong>双向最长匹配算法</strong></li>
+</ul>
+<br>
+
+<h6 id="5-完全切分算法"><a href="#5-完全切分算法" class="headerlink" title="5. 完全切分算法"></a>5. 完全切分算法</h6><p>  <code>核心思想</code>：找出一段文本中的所有单词。</p>
+<p>  <code>代码实现</code>：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@author</span>: Ragty</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Date</span>: 2020/2/9 21:38</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Description</span>: 完全切分式的中文算法</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title">segmentFully</span><span class="params">(String text, TreeMap&lt;String, CoreDictionary.Attribute&gt; dictionary)</span> </span>&#123;</span><br><span class="line">    List&lt;String&gt; wordList = <span class="keyword">new</span> LinkedList&lt;String&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt; text.length(); i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>; j&lt;=text.length(); j++)</span><br><span class="line">        &#123;</span><br><span class="line">            String word = text.substring(i,j);</span><br><span class="line">            <span class="keyword">if</span> (dictionary.containsKey(word))</span><br><span class="line">            &#123;</span><br><span class="line">                wordList.add(word);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> wordList;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>  <code>单元测试</code>：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(segmentFully(<span class="string">"就读北京大学"</span>, dictionary));</span><br></pre></td></tr></table></figure>
+
+<p>  <code>测试结果</code>：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[就, 就读, 读, 北, 北京, 北京大学, 京, 大, 大学, 学]</span><br></pre></td></tr></table></figure>
+
+<p>  <code>结果分析</code>:</p>
+<p>  以上的输出并不是中文分词，我们需要的是有意义的词语序列，而不是所有出现在字典中的单词所构成的列表，我们需要完善这个规则。</p>
+<br>
+
+<h6 id="6-正向最长匹配算法"><a href="#6-正向最长匹配算法" class="headerlink" title="6.正向最长匹配算法"></a>6.正向最长匹配算法</h6><p>  <code>核心思想</code>：考虑到越长的单词表达的意义越丰富，于是是我们定义单词越长优先级越高。就是在全切分的基础上添加<strong>优先输出更长的单词且扫描顺序为从前往后</strong>的规则。</p>
+<p>  <code>代码实现</code>：​    </p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@author</span>: Ragty</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Date</span>: 2020/2/9 22:11</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Description</span>: 正向最长匹配中文分词算法</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title">segmentForwardLongest</span> <span class="params">(String text, TreeMap&lt;String, CoreDictionary.Attribute&gt; dictionary)</span> </span>&#123;</span><br><span class="line">    List&lt;String&gt; wordList = <span class="keyword">new</span> LinkedList&lt;String&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt; text.length(); )</span><br><span class="line">    &#123;</span><br><span class="line">        String longestWord = text.substring(i,i+<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=i+<span class="number">1</span>; j&lt;=text.length(); j++)</span><br><span class="line">        &#123;</span><br><span class="line">            String word = text.substring(i,j);</span><br><span class="line">            <span class="keyword">if</span> (dictionary.containsKey(word))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (word.length() &gt; longestWord.length())</span><br><span class="line">                &#123;</span><br><span class="line">                    longestWord = word;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        wordList.add(longestWord);</span><br><span class="line">        i += longestWord.length();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> wordList;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>  <code>单元测试</code>：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(segmentForwardLongest(<span class="string">"就读北京大学"</span>,dictionary));</span><br><span class="line">System.out.println(segmentForwardLongest(<span class="string">"研究生命起源"</span>,dictionary));</span><br></pre></td></tr></table></figure>
+
+<p>  <code>测试结果</code>：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[就读, 北京大学]</span><br><span class="line">[研究生, 命, 起源]</span><br></pre></td></tr></table></figure>
+
+<p>  <code>结果分析</code>：</p>
+<p>  前一个结果更加符合预期了，但是在第二个实例中，研究生的优先级是大于研究的。我们需要解决这个优先级的冲突。</p>
+  <br>
+
+<h6 id="7-逆向最长匹配"><a href="#7-逆向最长匹配" class="headerlink" title="7.逆向最长匹配"></a>7.逆向最长匹配</h6><p>  <code>核心思想</code>：与正向匹配的唯一区别在于扫描的方向</p>
+<p>  <code>代码实现</code>：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@author</span>: Ragty</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Date</span>:  22:25</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Description</span>: 逆向最长匹配的中文分词算法</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title">segmentBackwardLongest</span> <span class="params">(String text, TreeMap&lt;String, CoreDictionary.Attribute&gt; dictionary)</span> </span>&#123;</span><br><span class="line">    List&lt;String&gt; wordList = <span class="keyword">new</span> LinkedList&lt;String&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=text.length()-<span class="number">1</span> ; i &gt;= <span class="number">0</span>; )</span><br><span class="line">    &#123;</span><br><span class="line">        String longestWord = text.substring(i,i+<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;=i; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            String word = text.substring(j,i+<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">if</span> (dictionary.containsKey(word))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (word.length() &gt; longestWord.length())</span><br><span class="line">                &#123;</span><br><span class="line">                    longestWord = word;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        wordList.add(<span class="number">0</span>,longestWord);</span><br><span class="line">        i -= longestWord.length();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> wordList;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>  <code>单元测试</code>：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(segmentBackwardLongest(<span class="string">"研究生命起源"</span>,dictionary));</span><br><span class="line">System.out.println(segmentBackwardLongest(<span class="string">"项目的研究"</span>,dictionary));</span><br></pre></td></tr></table></figure>
+
+<p>  <code>测试结果</code>：</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[研究, 生命, 起源]</span><br><span class="line">[项，目的，研究]</span><br></pre></td></tr></table></figure>
+
+<p>  <code>结果分析</code>：</p>
+<p>  虽然逆向最长匹配算法能解决一些问题，但同时也出现了新的问题。</p>
+  <br>
+
+<h6 id="8-双向最长匹配"><a href="#8-双向最长匹配" class="headerlink" title="8.双向最长匹配"></a>8.双向最长匹配</h6><p>  <code>核心思想</code>：综合前两种规则，取长补短。规则如下所述</p>
+<ul>
+<li><p>同时执行正向和逆向最长匹配，若两者词数不同，则返回次数更少的一个</p>
+</li>
+<li><p>否则，返回两者中单字最少的那一个。单子数目相同时，优先返回逆向最长匹配的结果</p>
+<p><code>代码实现</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@author</span>: Ragty</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Date</span>: 2020/2/9 22:29</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Description</span>: 统计分词中的单字数量</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">countingSingleChar</span><span class="params">(List&lt;String&gt; wordList)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (String word : wordList)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (word.length() == <span class="number">1</span>)</span><br><span class="line">            size++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> size;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@author</span>: Ragty</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Date</span>: 2020/2/9 22:37</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Description</span>: 双向最长匹配的中文分词算法</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title">segmentBidirectional</span> <span class="params">(String text, TreeMap&lt;String, CoreDictionary.Attribute&gt; dictionary)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    List&lt;String&gt; forwardLongest = segmentForwardLongest(text, dictionary);</span><br><span class="line">    List&lt;String&gt; backwardLongest = segmentBackwardLongest(text, dictionary);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (forwardLongest.size() &lt; backwardLongest.size())</span><br><span class="line">        <span class="keyword">return</span> forwardLongest;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (forwardLongest.size() &gt; backwardLongest.size())</span><br><span class="line">        <span class="keyword">return</span> backwardLongest;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (countingSingleChar(forwardLongest) &lt; countingSingleChar(backwardLongest))</span><br><span class="line">            <span class="keyword">return</span> forwardLongest;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> backwardLongest;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>单元测试</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(segmentBidirectional(<span class="string">"研究生命起源"</span>,dictionary));</span><br></pre></td></tr></table></figure>
+
+<p><code>测试结果</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[研究, 生命, 起源]</span><br></pre></td></tr></table></figure>
+
+<p><code>结果分析</code>：</p>
+<p>调用了两次匹配算法，所以速度上较慢，而且很多时候是帮倒忙，不实用</p>
+</li>
+</ul>
+<br>
+
+<h6 id="9-匹配规则效果对比"><a href="#9-匹配规则效果对比" class="headerlink" title="9.匹配规则效果对比"></a>9.匹配规则效果对比</h6><table>
+<thead>
+<tr>
+<th>序号</th>
+<th>原文</th>
+<th>正向最长匹配</th>
+<th>逆向最长匹配</th>
+<th>双向最长匹配</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>项目的研究</td>
+<td><strong>[项目，的，研究]</strong></td>
+<td>[项，目的，研究]</td>
+<td>[项，目的，研究]</td>
+</tr>
+<tr>
+<td>2</td>
+<td>商品和服务</td>
+<td>[商品，和服，务]</td>
+<td><strong>[商品，和，服务]</strong></td>
+<td><strong>[商品，和，服务]</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>研究生命起源</td>
+<td>[研究生，命, 起源]</td>
+<td><strong>[研究, 生命, 起源]</strong></td>
+<td><strong>[研究, 生命, 起源]</strong></td>
+</tr>
+</tbody></table>
+<br>
+
+<h6 id="10-词典切分算法总结"><a href="#10-词典切分算法总结" class="headerlink" title="10.词典切分算法总结"></a>10.词典切分算法总结</h6><p>由以上的表格分析，规则系统的脆弱可见一斑。规则集的维护又是是拆东墙补西墙，有时会帮倒忙。</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Ragty</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://gitee.com/huoji555/blog/2020/02/14/%E8%AF%8D%E5%85%B8%E5%88%86%E8%AF%8D%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E8%AF%A6%E8%A7%A3/">https://gitee.com/huoji555/blog/2020/02/14/%E8%AF%8D%E5%85%B8%E5%88%86%E8%AF%8D%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E8%AF%A6%E8%A7%A3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://gitee.com/huoji555/blog">Ragty の Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blog/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86-%E8%AF%8D%E5%85%B8%E5%88%86%E8%AF%8D-%E6%AD%A3%E5%90%91%E6%9C%80%E9%95%BF%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95-%E9%80%86%E5%90%91%E6%9C%80%E9%95%BF%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95-%E5%8F%8C%E5%90%91%E6%9C%80%E9%95%BF%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95/">自然语言处理 词典分词 正向最长匹配算法 逆向最长匹配算法 双向最长匹配算法</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/blog/2020/02/25/%E5%AD%97%E5%85%B8%E6%A0%91%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E5%8F%8A%E5%AE%9E%E7%8E%B0(%E6%94%AF%E6%8C%81%E4%B8%AD%E6%96%87%E6%8F%92%E5%85%A5)/"><i class="fa fa-chevron-left">  </i><span>字典树原理分析及实现(支持中文插入)</span></a></div><div class="next-post pull-right"><a href="/blog/2020/02/10/NLP%E6%A6%82%E8%BF%B0/"><span>NLP概述</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: '64bb26cd3e1c8abc30b9',
+  clientSecret: '2c12bfa74e197296c7f3fe590350ba444099ef0b',
+  repo: 'huoji555.github.io',
+  owner: 'huoji555',
+  admin: 'huoji555',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2020 By Ragty</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text"><a href="http://beian.miit.gov.cn " target="_blank" rel="noopener" charset="utf-8"> ICP备案号:京ICP备<13502>号 </a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file-o"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/blog/js/utils.js?version=1.7.0"></script><script src="/blog/js/fancybox.js?version=1.7.0"></script><script src="/blog/js/sidebar.js?version=1.7.0"></script><script src="/blog/js/copy.js?version=1.7.0"></script><script src="/blog/js/fireworks.js?version=1.7.0"></script><script src="/blog/js/transition.js?version=1.7.0"></script><script src="/blog/js/scroll.js?version=1.7.0"></script><script src="/blog/js/head.js?version=1.7.0"></script><script src="/blog/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

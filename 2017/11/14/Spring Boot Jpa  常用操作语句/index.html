@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Spring Boot Jpa  常用操作语句"><meta name="keywords" content="spring boot jpa spring data jpa Spring jpa基本操作语句 Jpa基础概念"><meta name="author" content="Ragty"><meta name="copyright" content="Ragty"><title>Spring Boot Jpa  常用操作语句 | Ragty の Blog</title><link rel="shortcut icon" href="/blog/melody-favicon.ico"><link rel="stylesheet" href="/blog/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><script>var GLOBAL_CONFIG = { 
+  root: '/blog/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://secure.gravatar.com/avatar/dcc38a5a0d37cb7348d4f72d8f6a2de0"></div><div class="author-info__name text-center">Ragty</div><div class="author-info__description text-center"></div><div class="follow-button"><a href="https://github.com/huoji555" target="_blank" rel="noopener">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/blog/archives"><span class="pull-left">文章</span><span class="pull-right">83</span></a><a class="author-info-articles__tags article-meta" href="/blog/tags"><span class="pull-left">标签</span><span class="pull-right">75</span></a><a class="author-info-articles__categories article-meta" href="/blog/categories"><span class="pull-left">分类</span><span class="pull-right">38</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接-Links</div><a class="author-info-links__name text-center" href="https://blog.csdn.net/huoji555" target="_blank" rel="noopener">MY-CSDN</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/blog/">Ragty の Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/blog">Home</a><a class="site-page" href="/blog/archives">Archives</a><a class="site-page" href="/blog/categories">Categories</a><a class="site-page" href="/blog/tags">Tags</a><a class="site-page" href="/blog/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">Spring Boot Jpa  常用操作语句</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-14</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/blog/categories/spring-boot/">spring boot</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">1.1k</span><span class="post-meta__separator">|</span><span>阅读时长: 4 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><a id="more"></a>
+
+
+<p><strong><span style="font-size:24px">什么是JPA?&nbsp;&nbsp;</span></strong></p>
+<p><strong><span style="font-size:24px"><br>
+</span></strong></p>
+<p><span style="font-size:24px"></span></p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; font-size:14px; line-height:22.4px">
+JPA （ The Java Persistence API ）是用于访问，持久化和管理 Java 对象 /类与关系型数据库之间的数据交互的 Java 规范。 JPA 被定义为 EJB （ Enterprise JavaBeans ） 3.0 规范的一部分，作为 EJB 2 CMP 实体 Bean 规范的替代。</p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; font-size:14px; line-height:22.4px">
+注意， JPA 只是一个标准，只定义了一系列接口，而没有具体的实现。很多企业级框架提供了对 JPA 的实现，如 Spring 。因此 Spring 本身与 JPA 无关，只是提供了对 JPA 的支持，因此在 Spring 中你也会看到很多注解都是属于&nbsp;<code style="font-family:Consolas,'Panic Sans','DejaVu Sans Mono','Bitstream Vera Sans Mono',Menlo,'Microsoft Yahei',monospace">javax.persistence</code>&nbsp;包的。</p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; font-size:14px; line-height:22.4px">
+JPA<span style="line-height:22.4px; background-color:rgb(240,240,240)">&nbsp;</span>允许&nbsp;<a target="_blank" target="_blank" href="https://en.wikipedia.org/wiki/POJO" rel="nofollow" style="color:rgb(119,128,135); text-decoration:none; word-break:break-all">POJO</a>（
+ Plain Old Java Objects ）轻松地持久化，而不需要类来实现 EJB 2 CM P 规范所需的任何接口或方法。 JPA 还允许通过<strong>注解</strong>或 XML 定义对象的关系映射，定义 Java 类如何映射到关系数据库表。 JPA 还定义了一个运行时&nbsp;<code style="font-family:Consolas,'Panic Sans','DejaVu Sans Mono','Bitstream Vera Sans Mono',Menlo,'Microsoft Yahei',monospace">EntityManager</code>&nbsp;API
+ ，用于处理对象的查询和管理事务。 同时， JPA 定义了对象级查询语言&nbsp;<strong>JPQL</strong>，以允许从数据库中查询对象，实现了对数据库的解耦合，提高了程序的可移植性，而不具体依赖某一底层数据库。</p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; font-size:14px; line-height:22.4px">
+JPA 是 Java 持久化规范中的一个最新版本。第一个版本是 OMG 持久性服务 Java 绑定，但这个一个失败的产品，甚至没有任何商业产品支持它。接下来的版本是 EJB 1.0 CMP Entity Beans ，它已经非常成功地被大型 Java EE 提供程序（ BEA ， IBM ）采用，但是它复杂性太高而且性能比较差。 EJB 2.0 CMP 试图通过引入本地接口来减少 Entity Bean 的一些复杂性，但是大多数复杂性仍然存在,而且缺乏可移植性。</p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; font-size:14px; line-height:22.4px">
+历史总是要向前发展的，种种的这些使得 EJB 3.0 规范将降低复杂性作为主要目标，这导致规范委员会沿着 JPA 的路径前进。 JPA 旨在统一 EJB 2 CMP ， JDO ， Hibernate ，从目前来看， JPA 的确取得了成功。</p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; font-size:14px; line-height:22.4px">
+目前大多数持久化供应商已经发布了 JPA 的实现，并被行业和用户采用。这些包括 Hibernate （由 JBoss 和 Red Hat 收购）， TopLink （由 Oracle 收购）和 Kodo JDO （由 BEA 和 Oracle 收购）。其他支持 JPA 的产品包括 Cocobase （由 Thought Inc. 收购）和 JPOX 。</p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; font-size:14px; line-height:22.4px">
+<br>
+</p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; font-size:14px; line-height:22.4px">
+<br>
+</p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; line-height:22.4px">
+<strong><span style="font-size:24px">JPA的基本操作语句</span></strong></p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; line-height:22.4px; font-size:14px">
+<br>
+</p>
+<pre name="code" class="java" style="font-size: 14px;"> //And --- 等价于 SQL 中的 and 关键字，比如 findByHeightAndSex(int height,char sex)；  
+ public List&lt;User&gt; findByHeightAndSex(int height,char sex);  
+
+<p>// Or — 等价于 SQL 中的 or 关键字，比如 findByHeightOrSex(int height,char sex)；<br> public List&lt;User&gt; findByHeightOrSex(int height,char sex);  </p>
+<p> //Between — 等价于 SQL 中的 between 关键字，比如 findByHeightBetween(int min, int max)；<br> public List&lt;User&gt; findByHeightBetween(int min,int max);  </p>
+<p> //LessThan — 等价于 SQL 中的 &quot;&lt;&quot;，比如 findByHeightLessThan(int max)；<br> public List&lt;User&gt; findByHeightLessThan(int max);  </p>
+<p> //GreaterThan — 等价于 SQL 中的&quot;&gt;&quot;，比如 findByHeightGreaterThan(int min)；<br> public List&lt;User&gt; findByHeightGreaterThan(int min);  </p>
+<p> //IsNull — 等价于 SQL 中的 &quot;is null&quot;，比如 findByNameIsNull()；<br> public List&lt;User&gt; findByNameIsNull();  </p>
+<p> //IsNotNull — 等价于 SQL 中的 &quot;is not null&quot;，比如 findByNameIsNotNull()；<br> public List&lt;User&gt; findByNameIsNotNull();  </p>
+<p> //NotNull — 与 IsNotNull 等价；<br> public List&lt;User&gt; findByNameNotNull();  </p>
+<p> //Like — 等价于 SQL 中的 &quot;like&quot;，比如 findByNameLike(String name);<br> public List&lt;User&gt; findByNameLike(String name);  </p>
+<p> //NotLike — 等价于 SQL 中的 &quot;not like&quot;，比如 findByNameNotLike(String name)；<br> public List&lt;User&gt; findByNameNotLike(String name);  </p>
+<p> //OrderBy — 等价于 SQL 中的 &quot;order by&quot;，比如 findByNameNotNullOrderByHeightAsc()；<br> public List&lt;User&gt;findByNameNotNullOrderByHeightAsc();  </p>
+<p> //Not — 等价于 SQL 中的 &quot;！ =&quot;，比如 findByNameNot(String name)；<br> public List&lt;User&gt; findByNameNot(String name);  </p>
+<p> //In — 等价于 SQL 中的 &quot;in&quot;，比如 findByNameIN(String name);<br> public List&lt;User&gt; findByNameIn(String name);  </p>
+<p> //NotIn — 等价于 SQL 中的 &quot;not in&quot;，比如 findByNameNotIN(String name);<br> public List&lt;User&gt; findByNameNotIn(String name);<br></pre></p>
+<p></p>
+<p style="font-size:14px; font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; line-height:22.4px">
+<br>
+</p>
+<br>
+<p><strong><span style="font-size:24px">&nbsp;原生Sql语句</span></strong></p>
+<p><strong><span style="font-size:24px"><br>
+</span></strong></p>
+<pre name="code" class="java">   //利用原生的SQL进行查询操作  
+   @Query(value = &quot;select o.* from orders o ,user u where o.uid=u.id and u.name=?1&quot;, nativeQuery = true)  
+   @Modifying  
+   public List&lt;Order&gt; findOrderByName(String name);  
+
+<p>   //利用原生的SQL进行删除操作<br>   @Query(value = &quot;delete from orders where id=?1 &quot;, nativeQuery = true)<br>   @Modifying<br>   public void deleteOrderById(int id);  </p>
+<p>   //利用原生的SQL进行删除操作<br>   @Query(value = &quot;delete from orders where uid=?1 &quot;, nativeQuery = true)<br>   @Modifying<br>   public void deleteOrderByUId(int uid);  </p>
+<p>   //利用原生的SQL进行修改操作<br>   @Query(value = &quot;update orders set name=?1 where id=?2 &quot;, nativeQuery = true)<br>   @Modifying<br>   public void updateOrderName(String name,int id);  </p>
+<p>   //利用原生的SQL进行插入操作<br>   @Query(value = &quot;insert into orders(name,uid) value(?1,?2)&quot;, nativeQuery = true)<br>   @Modifying<br>   public void insertOrder(String name,int uid);</pre></p>
+<p></p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Ragty</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://gitee.com/huoji555/blog/2017/11/14/Spring%20Boot%20Jpa%20%20%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E8%AF%AD%E5%8F%A5/">https://gitee.com/huoji555/blog/2017/11/14/Spring%20Boot%20Jpa%20%20%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E8%AF%AD%E5%8F%A5/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://gitee.com/huoji555/blog">Ragty の Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blog/tags/spring-boot-jpa-spring-data-jpa-Spring-jpa%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%E8%AF%AD%E5%8F%A5-Jpa%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/">spring boot jpa spring data jpa Spring jpa基本操作语句 Jpa基础概念</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/blog/2017/11/16/Spring%204.0%E6%96%B0%E7%89%B9%E6%80%A7------Web%E5%BC%80%E5%8F%91%E7%9A%84%E5%A2%9E%E5%BC%BA/"><i class="fa fa-chevron-left">  </i><span>Spring 4.0新特性------Web开发的增强</span></a></div><div class="next-post pull-right"><a href="/blog/2017/11/13/Spring%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/"><span>Spring体系结构</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: '64bb26cd3e1c8abc30b9',
+  clientSecret: '2c12bfa74e197296c7f3fe590350ba444099ef0b',
+  repo: 'huoji555.github.io',
+  owner: 'huoji555',
+  admin: 'huoji555',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2020 By Ragty</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text"><a href="http://beian.miit.gov.cn " target="_blank" rel="noopener" charset="utf-8"> ICP备案号:京ICP备<13502>号 </a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file-o"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/blog/js/utils.js?version=1.7.0"></script><script src="/blog/js/fancybox.js?version=1.7.0"></script><script src="/blog/js/sidebar.js?version=1.7.0"></script><script src="/blog/js/copy.js?version=1.7.0"></script><script src="/blog/js/fireworks.js?version=1.7.0"></script><script src="/blog/js/transition.js?version=1.7.0"></script><script src="/blog/js/scroll.js?version=1.7.0"></script><script src="/blog/js/head.js?version=1.7.0"></script><script src="/blog/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

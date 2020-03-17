@@ -1,0 +1,315 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="使用Adaline神经网络识别印刷体数字"><meta name="keywords" content="人工智能 Neuroph Adaline"><meta name="author" content="Ragty"><meta name="copyright" content="Ragty"><title>使用Adaline神经网络识别印刷体数字 | Ragty の Blog</title><link rel="shortcut icon" href="/blog/melody-favicon.ico"><link rel="stylesheet" href="/blog/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><script>var GLOBAL_CONFIG = { 
+  root: '/blog/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://secure.gravatar.com/avatar/dcc38a5a0d37cb7348d4f72d8f6a2de0"></div><div class="author-info__name text-center">Ragty</div><div class="author-info__description text-center"></div><div class="follow-button"><a href="https://github.com/huoji555" target="_blank" rel="noopener">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/blog/archives"><span class="pull-left">文章</span><span class="pull-right">83</span></a><a class="author-info-articles__tags article-meta" href="/blog/tags"><span class="pull-left">标签</span><span class="pull-right">75</span></a><a class="author-info-articles__categories article-meta" href="/blog/categories"><span class="pull-left">分类</span><span class="pull-right">38</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接-Links</div><a class="author-info-links__name text-center" href="https://blog.csdn.net/huoji555" target="_blank" rel="noopener">MY-CSDN</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/blog/">Ragty の Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/blog">Home</a><a class="site-page" href="/blog/archives">Archives</a><a class="site-page" href="/blog/categories">Categories</a><a class="site-page" href="/blog/tags">Tags</a><a class="site-page" href="/blog/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">使用Adaline神经网络识别印刷体数字</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2018-04-25</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/blog/categories/Nerouph/">Nerouph</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">1.3k</span><span class="post-meta__separator">|</span><span>阅读时长: 6 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><a id="more"></a>
+
+<p><span style="font-size:24px;color:#666666;">1.创建Adaline神经网络</span></p><pre class="html">       /**
+     * @author Ragty
+     * @param  设置Adaline神经网络
+     * @serialData 2018.4.24
+     * @param inputNeuralCount
+     * @param outputNeuralNetwork
+     */
+    public void creatNetwork(int inputNeuralCount, int outputNeuralCount){
+
+<pre><code>    //设置神经网络类型为Adaline
+    this.setNetworkType(NeuralNetworkType.ADALINE);
+
+    //建立输入神经元，表刺激
+    NeuronProperties inputNeural = new NeuronProperties();
+    inputNeural.setProperty(&quot;transferFunction&quot;, TransferFunctionType.LINEAR);
+
+    //建立神经网络的输入层
+    Layer inputLayer = LayerFactory.createLayer(inputNeuralCount, inputNeural);
+    inputLayer.addNeuron(new BiasNeuron());
+    this.addLayer(inputLayer);
+
+    //建立输出神经元
+    NeuronProperties outputNeural = new NeuronProperties();
+    outputNeural.setProperty(&quot;transferFunction&quot;, TransferFunctionType.LINEAR);
+
+    //创建输出层
+    Layer outputLayer = LayerFactory.createLayer(outputNeuralCount, outputNeural);
+    this.addLayer(outputLayer);
+
+    //输入输出层全连接
+    ConnectionFactory.fullConnect(inputLayer, outputLayer);
+    NeuralNetworkFactory.setDefaultIO(this);
+
+    //设置LMS算法
+    //学习步长系数为0.05（由最速下降法引入，表示学习的速度）一般是在0.1或0.01这样的数量级
+            //步长太大，不精准，步长太小，学习速度慢，易陷入局部最优
+    //设置最大可接受误差为0.5  (LMS中不同于感知机，误差是连续的)
+    //(w_new = w_old + 2aep) (b_new = b_old + 2ae)  &amp;gt;&amp;gt;LMS公式（步长系数a，省略常数2）
+    LMS lms = new LMS();
+    lms.setLearningRate(0.05);
+    lms.setMaxError(0.5);
+    this.setLearningRule(lms);
+
+}</code></pre><p>2.实现Adaline的核心算法LMS<br>public LMS(){</p>
+<pre><code>}</code></pre><p>   /**<br>    *@author Ragty<br>    *@param  LMS核心算法<br>    *@serialData 2018.4.24<br>    *@核心公式  deltaWeight = learningRate * neuronError * input(learingRate是学习系数)<br>    */<br>    @Override<br>    protected void updateNetworkWeights(double[] outputError) {<br>        // TODO Auto-generated method stub<br>        int i = 0;</p>
+<pre><code>    //遍历每个神经元，修改权值
+    for(Neuron neuron : neuralNetwork.getOutputNeurons()){
+        neuron.setError(outputError[i]);
+        this.updateNetworkWeights(neuron);
+        i++;
+    }
+
+}
+
+
+/**
+ * @author Ragty
+ * @param  迭代更新每个输入神经元的权值
+ * @serialData 2018.4.24
+ * @param neuron
+ */
+protected void updateNetworkWeights(Neuron neuron) {
+    // TODO Auto-generated method stub
+    //取得神经元误差
+    double neuronError = neuron.getError();
+
+    //根据所有神经元输入迭代学习
+    for(Connection connection : neuron.getInputConnections()){
+        //神经元的一个输入
+        double input = connection.getInput();
+        double weightChange = this.learningRate * neuronError * input;
+
+        //更新权值
+        Weight weight = connection.getWeight();
+        weight.weightChange = weightChange;
+        weight.value += weightChange;
+    }
+
+}</code></pre><p>3.实现Adaline感知机识别印刷体数字<br>public class AdalineDemo implements LearningEventListener{</p>
+<pre><code>//设置输入神经元的个数为5*7=35个
+public final static int char_width = 5;
+public final static int char_height = 7;
+
+public static String[][] DIGITS = { 
+      { &quot; OOO &quot;,
+        &quot;O   O&quot;,
+        &quot;O   O&quot;,
+        &quot;O   O&quot;,
+        &quot;O   O&quot;,
+        &quot;O   O&quot;,
+        &quot; OOO &quot;  },
+
+      { &quot;  O  &quot;,
+        &quot; OO  &quot;,
+        &quot;O O  &quot;,
+        &quot;  O  &quot;,
+        &quot;  O  &quot;,
+        &quot;  O  &quot;,
+        &quot;  O  &quot;  },
+
+      { &quot; OOO &quot;,
+        &quot;O   O&quot;,
+        &quot;    O&quot;,
+        &quot;   O &quot;,
+        &quot;  O  &quot;,
+        &quot; O   &quot;,
+        &quot;OOOOO&quot;  },
+
+      { &quot; OOO &quot;,
+        &quot;O   O&quot;,
+        &quot;    O&quot;,
+        &quot; OOO &quot;,
+        &quot;    O&quot;,
+        &quot;O   O&quot;,
+        &quot; OOO &quot;  },
+
+      { &quot;   O &quot;,
+        &quot;  OO &quot;,
+        &quot; O O &quot;,
+        &quot;O  O &quot;,
+        &quot;OOOOO&quot;,
+        &quot;   O &quot;,
+        &quot;   O &quot;  },
+
+      { &quot;OOOOO&quot;,
+        &quot;O    &quot;,
+        &quot;O    &quot;,
+        &quot;OOOO &quot;,
+        &quot;    O&quot;,
+        &quot;O   O&quot;,
+        &quot; OOO &quot;  },
+
+      { &quot; OOO &quot;,
+        &quot;O   O&quot;,
+        &quot;O    &quot;,
+        &quot;OOOO &quot;,
+        &quot;O   O&quot;,
+        &quot;O   O&quot;,
+        &quot; OOO &quot;  },
+
+      { &quot;OOOOO&quot;,
+        &quot;    O&quot;,
+        &quot;    O&quot;,
+        &quot;   O &quot;,
+        &quot;  O  &quot;,
+        &quot; O   &quot;,
+        &quot;O    &quot;  },
+
+      { &quot; OOO &quot;,
+        &quot;O   O&quot;,
+        &quot;O   O&quot;,
+        &quot; OOO &quot;,
+        &quot;O   O&quot;,
+        &quot;O   O&quot;,
+        &quot; OOO &quot;  },
+
+      { &quot; OOO &quot;,
+        &quot;O   O&quot;,
+        &quot;O   O&quot;,
+        &quot; OOOO&quot;,
+        &quot;    O&quot;,
+        &quot;O   O&quot;,
+        &quot; OOO &quot;  } };
+
+
+public static void main(String[] args) {
+
+    //设置Adaline神经网络输入节点为35个，输出节点为10个
+    Adaline ada = new Adaline(char_width * char_height, DIGITS.length);
+
+    //设置训练集为35个输入节点，10个输出节点
+    DataSet ds = new DataSet(char_width * char_height, DIGITS.length);
+
+    //设置训练集(前面是输入值，后面是期望值)
+    for(int i = 0; i &amp;lt; DIGITS.length; i++ ){
+       ds.addRow(creatTrainRow(DIGITS[i], i));
+    }
+    //监督训练过程
+    ada.getLearningRule().addListener(new AdalineDemo());
+    //训练该神经网络
+    ada.learn(ds);
+
+    //测试训练好的数据
+    for(int i = 0; i &amp;lt; DIGITS.length; i++){
+        ada.setInput(image2data(DIGITS[i]));
+        ada.calculate();
+        print(DIGITS[i]);
+        System.out.print(maxIndex(ada.getOutput()));
+        System.out.println();
+    }
+
+}
+
+
+/**
+ * @author Ragty
+ * @param  设置这几个数字的训练集
+ * @serialData 2018.4.24
+ * @param image
+ * @param idealValue
+ * @return
+ */
+public static DataSetRow creatTrainRow(String[] image, int idealValue){
+    double[] output = new double[DIGITS.length];
+
+    //将训练集初始化
+    for(int i = 0; i &amp;lt;DIGITS.length; i++)
+        output[i] = -1;
+
+    //输入数据
+    double[] input = image2data(image);
+
+    //用这样的方式来表示一个具体的数字（10个数字分为十个维度，表示哪个数字把哪个数字的维度设置为1）
+    output[idealValue] = 1;
+    //设置训练集以及期望值
+    DataSetRow dsr = new DataSetRow(input, output);
+    return dsr;
+}
+
+
+/**
+ * @author Ragty
+ * @param  将输入的二维数组转化为网络能够识别的格式（有字的地方全部转化为1，无字的地方转化为-1）
+ * @serialData 2018.4.24
+ * @param image
+ * @return
+ */
+public static double[] image2data(String[] image){
+    double[] input = new double[char_width * char_height];
+
+    for(int row = 0; row &amp;lt; char_height; row++){
+        for(int col = 0; col &amp;lt; char_width; col++){
+            int index = (row*char_width)+col;
+            char ch = image[row].charAt(col);
+            input[index] = ch == &apos;O&apos;? 1 :-1;
+        }
+    }
+
+    return input;
+}
+
+
+/**
+ * @author Ragty
+ * @param  识别输出数据为数字（采用竞争规则，在所有维度里，将最大的那个维度视为1，其余均为0）
+ * @param  即找到数组中最大值的索引下标(第一次从左边的条件进入)
+ * @serialData 2018.4.24
+ * @param data
+ * @return
+ */
+public static int maxIndex(double[] data){
+    int result = -1;
+    for(int i = 0; i &amp;lt; data.length; i++){
+        if(result == -1 || data[i] &amp;gt; data[result]){
+            result = i;
+        }
+    }
+    return result;
+}
+
+
+/**
+ * @author Ragty
+ * @param  打印输出的打印字体
+ * @serialData 2018.4.24
+ * @param dIGITS2
+ */
+public static void print(String[] dIGITS2){
+
+    for(int i = 0; i &amp;lt;dIGITS2.length; i++){
+        if(i == dIGITS2.length-1){
+            System.out.print(dIGITS2[i]+&quot;===&amp;gt;&quot;);
+        } else {
+            System.out.println(dIGITS2[i]);
+        }
+    }
+
+}
+
+/**
+ * @param 监督训练
+ */
+@Override
+public void handleLearningEvent(LearningEvent event) {
+    // TODO Auto-generated method stub
+    IterativeLearning bp = (IterativeLearning)event.getSource();
+    System.out.println(&quot;iterate:&quot;+bp.getCurrentIteration()); 
+    System.out.println(Arrays.toString(bp.getNeuralNetwork().getWeights()));
+}</code></pre><p>}</pre><br /><br /><span style="font-size:24px;">4.识别结果</span><p><img src="" alt="" /><img src="" alt="" /><img src="" alt="" /><img src="" alt="" /><img src="" alt="" /><img src="" alt="" /><img src="https://img-blog.csdn.net/20180425103537962" alt="" /><br /></p></p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Ragty</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://gitee.com/huoji555/blog/2018/04/25/%E4%BD%BF%E7%94%A8Adaline%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%AF%86%E5%88%AB%E5%8D%B0%E5%88%B7%E4%BD%93%E6%95%B0%E5%AD%97/">https://gitee.com/huoji555/blog/2018/04/25/%E4%BD%BF%E7%94%A8Adaline%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%AF%86%E5%88%AB%E5%8D%B0%E5%88%B7%E4%BD%93%E6%95%B0%E5%AD%97/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://gitee.com/huoji555/blog">Ragty の Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blog/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD-Neuroph-Adaline/">人工智能 Neuroph Adaline</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/blog/2018/08/15/java%E4%B8%AD%E8%A7%A3%E6%9E%90%E4%B8%8A%E4%BC%A0%E7%9A%84excel%E6%96%87%E4%BB%B6%EF%BC%88xls,xlsx%EF%BC%89/"><i class="fa fa-chevron-left">  </i><span>java中解析上传的excel文件（xls,xlsx）</span></a></div><div class="next-post pull-right"><a href="/blog/2018/04/23/%E6%84%9F%E7%9F%A5%E6%9C%BA%E5%8A%A0%E7%AE%97%E6%B3%95%E8%87%AA%E5%8A%A8%E8%AF%86%E5%88%AB%E8%B1%A1%E9%99%90/"><span>感知机加算法自动识别象限</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: '64bb26cd3e1c8abc30b9',
+  clientSecret: '2c12bfa74e197296c7f3fe590350ba444099ef0b',
+  repo: 'huoji555.github.io',
+  owner: 'huoji555',
+  admin: 'huoji555',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2020 By Ragty</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text"><a href="http://beian.miit.gov.cn " target="_blank" rel="noopener" charset="utf-8"> ICP备案号:京ICP备<13502>号 </a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file-o"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/blog/js/utils.js?version=1.7.0"></script><script src="/blog/js/fancybox.js?version=1.7.0"></script><script src="/blog/js/sidebar.js?version=1.7.0"></script><script src="/blog/js/copy.js?version=1.7.0"></script><script src="/blog/js/fireworks.js?version=1.7.0"></script><script src="/blog/js/transition.js?version=1.7.0"></script><script src="/blog/js/scroll.js?version=1.7.0"></script><script src="/blog/js/head.js?version=1.7.0"></script><script src="/blog/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

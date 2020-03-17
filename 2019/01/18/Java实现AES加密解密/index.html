@@ -1,0 +1,179 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Java实现AES加密解密"><meta name="keywords" content="AES 加密解密 AES加密Java"><meta name="author" content="Ragty"><meta name="copyright" content="Ragty"><title>Java实现AES加密解密 | Ragty の Blog</title><link rel="shortcut icon" href="/blog/melody-favicon.ico"><link rel="stylesheet" href="/blog/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><script>var GLOBAL_CONFIG = { 
+  root: '/blog/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-text">1. 什么是AES</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-text">2. AES加密</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-text">2. AES解密</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-text">4. 进制转换工具（不进行进制转换会出现乱码）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-text">5. 测试程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#"><span class="toc-text">6. 测试结果 </span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://secure.gravatar.com/avatar/dcc38a5a0d37cb7348d4f72d8f6a2de0"></div><div class="author-info__name text-center">Ragty</div><div class="author-info__description text-center"></div><div class="follow-button"><a href="https://github.com/huoji555" target="_blank" rel="noopener">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/blog/archives"><span class="pull-left">文章</span><span class="pull-right">83</span></a><a class="author-info-articles__tags article-meta" href="/blog/tags"><span class="pull-left">标签</span><span class="pull-right">75</span></a><a class="author-info-articles__categories article-meta" href="/blog/categories"><span class="pull-left">分类</span><span class="pull-right">38</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接-Links</div><a class="author-info-links__name text-center" href="https://blog.csdn.net/huoji555" target="_blank" rel="noopener">MY-CSDN</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/blog/">Ragty の Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/blog">Home</a><a class="site-page" href="/blog/archives">Archives</a><a class="site-page" href="/blog/categories">Categories</a><a class="site-page" href="/blog/tags">Tags</a><a class="site-page" href="/blog/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">Java实现AES加密解密</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2019-01-18</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/blog/categories/%E5%8A%A0%E5%AF%86/">加密</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">866</span><span class="post-meta__separator">|</span><span>阅读时长: 3 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><a id="more"></a>
+
+<h3>1. 什么是AES</h3>
+
+<p><strong>高级加密标准</strong>（英语：<strong>Advanced Encryption Standard</strong>，缩写：<strong>AES</strong>），是一种区块加密标准。这个标准用来替代原先的DES，已经被多方分析且广为全世界所使用。</p>
+
+<p>那么为什么原来的DES会被取代呢，原因就在于其使用56位密钥，比较容易被破解。而AES可以使用128、192、和256位密钥，并且用128位分组加密和解密数据，相对来说安全很多。完善的加密算法在理论上是无法破解的，除非使用穷尽法。使用穷尽法破解密钥长度在128位以上的加密数据是不现实的，仅存在理论上的可能性。统计显示，即使使用目前世界上运算速度最快的计算机，穷尽128位密钥也要花上几十亿年的时间，更不用说去破解采用256位密钥长度的AES算法了。</p>
+
+<p> </p>
+
+<h3>2. AES加密</h3>
+
+<pre class="has">
+<code class="hljs language-java">    /*
+     * @auther: Ragty
+     * @describe: AES加密
+     * @param: [content, password]
+     * @return: byte[]
+     * @date: 2019/1/18
+     */
+    public static String encrypt(String content, String password) {
+        try {
+            KeyGenerator kgen = KeyGenerator.getInstance("AES");            // 创建AES的Key生产者
+            SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+            random.setSeed(password.getBytes());
+            kgen.init(128, random);                                         // 利用用户密码作为随机数初始化出(密码一样，就可以解密)
+
+            SecretKey secretKey = kgen.generateKey();                       // 根据用户密码，生成一个密钥
+            byte[] enCodeFormat = secretKey.getEncoded();                   // 返回基本编码格式的密钥，如果此密钥不支持编码，则返回null
+            SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");     // 转换为AES专用密钥
+
+            Cipher cipher = Cipher.getInstance("AES");                      // 创建密码器
+            byte[] byteContent = content.getBytes("utf-8");                 // 设置转换格式
+            cipher.init(Cipher.ENCRYPT_MODE, key);                          // 初始化为加密模式的密码器
+            byte[] encrypt = cipher.doFinal(byteContent);                   // 加密
+            String result = parseByte2HexStr(encrypt);                      // 防止乱码，转换进制
+
+            return result;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }</code></pre>
+
+<p> </p>
+
+<h3>2. AES解密</h3>
+
+<p> </p>
+
+<pre class="has">
+<code class="hljs language-java">/**
+     * @auther: Ragty
+     * @describe: AES解密器
+     * @param: [content, password]
+     * @return: byte[]
+     * @date: 2019/1/18
+     */
+    public static String decrypt(String content, String password) {
+        try {
+            KeyGenerator kgen = KeyGenerator.getInstance("AES");            // 创建AES的Key生产者
+            SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+            random.setSeed(password.getBytes());
+            kgen.init(128, random);                                         // 利用用户密码作为随机数初始化出(密码一样，就可以解密)
+
+            SecretKey secretKey = kgen.generateKey();                       // 根据用户密码，生成一个密钥
+            byte[] enCodeFormat = secretKey.getEncoded();                   // 返回基本编码格式的密钥，如果此密钥不支持编码，则返回null
+            SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");     // 转换为AES专用密钥
+
+            Cipher cipher = Cipher.getInstance("AES");                      // 创建密码器
+            cipher.init(Cipher.DECRYPT_MODE, key);                          // 初始化为解密模式的密码器
+            byte[] results = cipher.doFinal(parseHexStr2Byte(content));     // 解密
+            return new String(results);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }</code></pre>
+
+<p> </p>
+
+<h3>4. 进制转换工具（不进行进制转换会出现乱码）</h3>
+
+<pre class="has">
+<code class="hljs language-java">/*
+     * @auther: Ragty
+     * @describe: 将二进制转换为十六进制
+     * @param: [buf]
+     * @return: java.lang.String
+     * @date: 2019/1/18
+     */
+    private static String parseByte2HexStr(byte buf[]) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i &lt; buf.length; i++) {
+            String hex = Integer.toHexString(buf[i] &amp; 0xFF);
+            if (hex.length() == 1) {
+                hex = '0' + hex;
+            }
+            sb.append(hex.toUpperCase());
+        }
+        return sb.toString();
+    }
+
+
+
+
+    /**
+     * @auther: Ragty
+     * @describe: 十六进制转换二进制
+     * @param: [hexStr]
+     * @return: byte[]
+     * @date: 2019/1/18
+     */
+    private static byte[] parseHexStr2Byte(String hexStr) {
+        if (hexStr.length() &lt; 1)
+            return null;
+        byte[] result = new byte[hexStr.length()/2];
+        for (int i = 0;i&lt; hexStr.length()/2; i++) {
+            int high = Integer.parseInt(hexStr.substring(i*2, i*2+1), 16);
+            int low = Integer.parseInt(hexStr.substring(i*2+1, i*2+2), 16);
+            result[i] = (byte) (high * 16 + low);
+        }
+        return result;
+    }</code></pre>
+
+<p> </p>
+
+<h3>5. 测试程序</h3>
+
+<pre class="has">
+<code class="hljs language-java">public static void main(String[] args) {
+
+        String content = "AES 测试";
+        String password = "2019";
+
+        String result = encrypt(content,password);
+        String decrypt = decrypt(result,password);
+
+        System.out.println("加密前:" + content);
+        System.out.println("加密后:" + result);
+        System.out.println("解密后:" + decrypt);
+
+    }</code></pre>
+
+<h3>6. 测试结果 </h3>
+
+<pre class="has">
+<code class="hljs language-java">加密前:AES 测试
+加密后:E385F2B1B2BED8898C8A9D92F41BD637
+解密后:AES 测试</code></pre>
+
+<p> </p>
+
+<p> </p></div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Ragty</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://gitee.com/huoji555/blog/2019/01/18/Java%E5%AE%9E%E7%8E%B0AES%E5%8A%A0%E5%AF%86%E8%A7%A3%E5%AF%86/">https://gitee.com/huoji555/blog/2019/01/18/Java%E5%AE%9E%E7%8E%B0AES%E5%8A%A0%E5%AF%86%E8%A7%A3%E5%AF%86/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://gitee.com/huoji555/blog">Ragty の Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blog/tags/AES-%E5%8A%A0%E5%AF%86%E8%A7%A3%E5%AF%86-AES%E5%8A%A0%E5%AF%86Java/">AES 加密解密 AES加密Java</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/blog/2019/01/23/Java%E7%88%AC%E8%99%AB%E6%8A%93%E5%8F%96%E7%BD%91%E9%A1%B5%E6%95%B0%E6%8D%AE(%E6%8A%93%E5%8F%96%E6%85%95%E8%AF%BE%E7%BD%91%E8%AE%BA%E5%9D%9B%E4%B8%BA%E5%AE%9E%E4%BE%8B)/"><i class="fa fa-chevron-left">  </i><span>Java爬虫抓取网页数据(抓取慕课网论坛为实例)</span></a></div><div class="next-post pull-right"><a href="/blog/2019/01/16/Java%E6%A8%A1%E6%8B%9FHttp%E8%AF%B7%E6%B1%82%E8%BF%9C%E7%A8%8B%E6%8E%A5%E5%8F%A3/"><span>Java模拟Http请求远程接口</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: '64bb26cd3e1c8abc30b9',
+  clientSecret: '2c12bfa74e197296c7f3fe590350ba444099ef0b',
+  repo: 'huoji555.github.io',
+  owner: 'huoji555',
+  admin: 'huoji555',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2020 By Ragty</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text"><a href="http://beian.miit.gov.cn " target="_blank" rel="noopener" charset="utf-8"> ICP备案号:京ICP备<13502>号 </a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file-o"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/blog/js/utils.js?version=1.7.0"></script><script src="/blog/js/fancybox.js?version=1.7.0"></script><script src="/blog/js/sidebar.js?version=1.7.0"></script><script src="/blog/js/copy.js?version=1.7.0"></script><script src="/blog/js/fireworks.js?version=1.7.0"></script><script src="/blog/js/transition.js?version=1.7.0"></script><script src="/blog/js/scroll.js?version=1.7.0"></script><script src="/blog/js/head.js?version=1.7.0"></script><script src="/blog/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="FastDFS分布式文件系统搭建（二）FastDFS+Nginx实现分布式文件系统"><meta name="keywords" content="FastDFS搭建 分布式文件系统搭建"><meta name="author" content="Ragty"><meta name="copyright" content="Ragty"><title>FastDFS分布式文件系统搭建（二）FastDFS+Nginx实现分布式文件系统 | Ragty の Blog</title><link rel="shortcut icon" href="/blog/melody-favicon.ico"><link rel="stylesheet" href="/blog/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><script>var GLOBAL_CONFIG = { 
+  root: '/blog/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-FastDFS安装环境"><span class="toc-text">1 FastDFS安装环境</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-安装libevent"><span class="toc-text">2 安装libevent</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-安装libfastcommon"><span class="toc-text">3 安装libfastcommon</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-3-安装FastDFS"><span class="toc-text">2.2.3 安装FastDFS</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-4-Storage安装"><span class="toc-text">2.2.4 Storage安装</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-5-检测Storage服务是否正常"><span class="toc-text">2.2.5 检测Storage服务是否正常</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-5-Nginx安装"><span class="toc-text">2.2.5 Nginx安装</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-6-配置Nginx"><span class="toc-text">2.2.6 配置Nginx</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#在-nginx的配置文件nginx-conf中添加一个Server"><span class="toc-text">在 nginx的配置文件nginx.conf中添加一个Server</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-7-启动Nignx"><span class="toc-text">2.2.7 启动Nignx</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://secure.gravatar.com/avatar/dcc38a5a0d37cb7348d4f72d8f6a2de0"></div><div class="author-info__name text-center">Ragty</div><div class="author-info__description text-center"></div><div class="follow-button"><a href="https://github.com/huoji555" target="_blank" rel="noopener">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/blog/archives"><span class="pull-left">文章</span><span class="pull-right">83</span></a><a class="author-info-articles__tags article-meta" href="/blog/tags"><span class="pull-left">标签</span><span class="pull-right">75</span></a><a class="author-info-articles__categories article-meta" href="/blog/categories"><span class="pull-left">分类</span><span class="pull-right">38</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接-Links</div><a class="author-info-links__name text-center" href="https://blog.csdn.net/huoji555" target="_blank" rel="noopener">MY-CSDN</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/blog/">Ragty の Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/blog">Home</a><a class="site-page" href="/blog/archives">Archives</a><a class="site-page" href="/blog/categories">Categories</a><a class="site-page" href="/blog/tags">Tags</a><a class="site-page" href="/blog/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">FastDFS分布式文件系统搭建（二）FastDFS+Nginx实现分布式文件系统</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2019-05-07</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/blog/categories/FastDFS/">FastDFS</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">868</span><span class="post-meta__separator">|</span><span>阅读时长: 3 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><a id="more"></a>
+
+<h5 id="1-FastDFS安装环境"><a href="#1-FastDFS安装环境" class="headerlink" title="1 FastDFS安装环境"></a>1 <code>FastDFS</code>安装环境</h5><p><code>FastDFS</code>是C语言开发，建议在linux上运行，本教程使用Centos6.5作为安装环境。</p>
+<p>首先安装<code>gcc</code>编译环境</p>
+<blockquote>
+<p>yum install gcc-c++</p>
+</blockquote>
+<br>
+
+<h5 id="2-安装libevent"><a href="#2-安装libevent" class="headerlink" title="2 安装libevent"></a>2 安装<code>libevent</code></h5><p>FastDFS依赖<code>libevent</code>库，需要安装：</p>
+<blockquote>
+<p>yum -y install libevent</p>
+</blockquote>
+<br>
+
+<h5 id="3-安装libfastcommon"><a href="#3-安装libfastcommon" class="headerlink" title="3 安装libfastcommon"></a>3 安装<code>libfastcommon</code></h5><p>这里强调一下，此包 包含了FastDFS运行所需要的一些基础库，可从Github下载<a href="https://github.com/happyfish100/libfastcommon" target="_blank" rel="noopener">master</a>这个版本，和后边的<code>FastDFS</code>版本有关系.</p>
+<p>将该文件拷贝到/usr/local/下</p>
+<blockquote>
+<p>cd /usr/local</p>
+<p>unzip libfastcommon-master.zip</p>
+<p>cd libfastcommon-master</p>
+<p>./make.sh</p>
+<p>./make.sh install</p>
+</blockquote>
+<p><code>libfastcommon</code>默认安装到了</p>
+<ul>
+<li>/usr/lib64/libfastcommon.so</li>
+<li>/usr/lib64/libfdfsclient.so</li>
+</ul>
+<p>因为FastDFS主程序设置的lib目录是/usr/local/lib，所以需要<strong>创建软链接</strong>.</p>
+<blockquote>
+<p>ln -s /usr/lib64/libfastcommon.so  /usr/local/lib/libfastcommon.so</p>
+<p>ln -s /usr/lib64/libfastcommon.so  /usr/lib/libfastcommon.so</p>
+<p>ln -s /usr/lib64/libfdfsclient.so  /usr/local/lib/libfdfsclient.so</p>
+<p>ln -s /usr/lib64/libfdfsclient.so  /usr/lib/libfdfsclient.so</p>
+</blockquote>
+<p>这里需要注意一下，创建软连接时<strong>不可直接复制文件</strong>到别的地方，会导致文件无可用权限而影响后边的安装.</p>
+<br>
+
+<h5 id="2-2-3-安装FastDFS"><a href="#2-2-3-安装FastDFS" class="headerlink" title="2.2.3 安装FastDFS"></a>2.2.3 安装<code>FastDFS</code></h5><p>首先下载文件，这里需要和之前的版本保持对应，<code>libfastcommon-master(200k)</code>对应这里的<a href="https://sourceforge.net/projects/fastdfs/" target="_blank" rel="noopener">5.08</a>版本.</p>
+<blockquote>
+<p>tar -zxvf FastDFS_v5.08.tar.gz</p>
+<p>cd FastDFS</p>
+<p>./make.sh</p>
+<p>./make.sh install</p>
+</blockquote>
+<p>安装成功后进入到FastDFS文件，将<code>conf</code>中的的所有文件拷贝到/etc/fdfs/下.</p>
+<p>进入/etc/fdfs/目录下，修改配置文件:</p>
+<blockquote>
+<p>cp tracker.conf      # 拷贝</p>
+<p>vi tracker.conf       # 修改</p>
+<p>将 base_path=/home/yuqing/FastDFS </p>
+<p>改为</p>
+<p>base_path=/home/FastDFS</p>
+</blockquote>
+<p>这时，可以尝试启动项目了：</p>
+<blockquote>
+<p>/usr/bin/fdfs_trackerd/etc/fdfs/tracker.conf restart</p>
+</blockquote>
+<p>设置开机自动启动</p>
+<blockquote>
+<p>vim /etc/rc.d/rc.local</p>
+<p>/usr/bin/fdfs_trackerd/etc/fdfs/tracker.conf restart</p>
+</blockquote>
+<br>
+
+<h5 id="2-2-4-Storage安装"><a href="#2-2-4-Storage安装" class="headerlink" title="2.2.4 Storage安装"></a>2.2.4 <code>Storage</code>安装</h5><p>如果时在不同的服务器安装，重复以上的步骤即可</p>
+<p>之后是配置<code>Storage</code>服务</p>
+<p>修改<code>/etc/fdfs/storage.conf</code>文件</p>
+<p><img src="https://img-blog.csdn.net/20180626140318180?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NvZGVfc2hhZG93/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<p><img src="https://img-blog.csdn.net/20180626140300245?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NvZGVfc2hhZG93/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<p><img src="https://img-blog.csdn.net/20180626140244516?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NvZGVfc2hhZG93/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<p>启动<code>Storage</code>服务</p>
+<blockquote>
+<p><code>/usr/bin/fdfs_storaged /etc/fdfs/storage.conf</code> </p>
+<p>/usr/bin/fdfs_storaged /etc/fdfs/storage.conf restart    # 重启命令</p>
+</blockquote>
+<br>
+
+<h5 id="2-2-5-检测Storage服务是否正常"><a href="#2-2-5-检测Storage服务是否正常" class="headerlink" title="2.2.5 检测Storage服务是否正常"></a>2.2.5 检测<code>Storage</code>服务是否正常</h5><p>1.修改配置文件<code>/etc/fdfs/client.conf</code></p>
+<p><img src="https://img-blog.csdn.net/20180626140230202?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NvZGVfc2hhZG93/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<p>2.测试</p>
+<p><img src="https://img-blog.csdn.net/20180626140209646?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NvZGVfc2hhZG93/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<blockquote>
+<p>/usr/bin/fdfs_test /etc/fdfs/client.conf upload anti-steal.jpg</p>
+</blockquote>
+<p>3.测试结果</p>
+<p><img src="https://img-blog.csdn.net/20180626140627785?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NvZGVfc2hhZG93/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<p>至此，FastDFS配置成功.</p>
+<br>
+
+<h5 id="2-2-5-Nginx安装"><a href="#2-2-5-Nginx安装" class="headerlink" title="2.2.5 Nginx安装"></a>2.2.5 Nginx安装</h5><p>现在安装好了FastDFS，可以实现上传图片功能，但是它并没有提供HTTP服务，所以无法通过HTTP来访问文件，这时就需要整合Nginx，让Nginx来实现这个功能。</p>
+<p>这里我们先安装<code>fastdfs-nginx-module</code>，<a href="https://github.com/happyfish100/fastdfs-nginx-module" target="_blank" rel="noopener">下载地址</a></p>
+<ul>
+<li>解压</li>
+</ul>
+<blockquote>
+<p>unzip  fastdfs-nginx-module.zip</p>
+</blockquote>
+<ul>
+<li>修改压缩包下<code>/usr/local/fastdfs-nginx-module/src/config</code>文件，把其中的<code>local</code>去掉 </li>
+</ul>
+<p><img src="https://img-blog.csdn.net/20180626163055392?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NvZGVfc2hhZG93/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<ul>
+<li>对nginx重新配置(这里主要是将以上的<code>fastdfs-nginx-module</code>编译)</li>
+</ul>
+<blockquote>
+<p>./configure –add-module=/usr/local/fastdfs-nginx-module/src</p>
+<p>chmod +x *</p>
+<p>make</p>
+<p>make install</p>
+</blockquote>
+<p>如果你没有Nignx的话，先安一个:</p>
+<blockquote>
+<p>cd /usr/local/src<br>wget   <a href="http://nginx.org/download/nginx-1.10.3.tar.gz" target="_blank" rel="noopener">http://nginx.org/download/nginx-1.10.3.tar.gz</a><br>tar -zxvf nginx-1.10.3.tar.gz<br>cd nginx-1.10.3<br>./configure –add-module=/usr/local/fastdfs-nginx-module/src<br>make<br>make install</p>
+</blockquote>
+<p>把<code>/usr/local/fastdfs-nginx-module/src/mod_fastdfs.conf</code>文件复制到<code>/etc/fdfs</code>目录下。编辑：</p>
+<blockquote>
+<p>vi mod_fastdfs.conf       # 修改</p>
+<p>url_have_group_name = true     #否则浏览器无法查看图片</p>
+</blockquote>
+<p><img src="https://img-blog.csdn.net/20180626163653336?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NvZGVfc2hhZG93/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<p><img src="https://img-blog.csdn.net/20180626163659848?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NvZGVfc2hhZG93/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<p><img src="https://img-blog.csdn.net/20180626163708533?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NvZGVfc2hhZG93/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<br>
+
+<h5 id="2-2-6-配置Nginx"><a href="#2-2-6-配置Nginx" class="headerlink" title="2.2.6 配置Nginx"></a>2.2.6 配置Nginx</h5><h6 id="在-nginx的配置文件nginx-conf中添加一个Server"><a href="#在-nginx的配置文件nginx-conf中添加一个Server" class="headerlink" title="在 nginx的配置文件nginx.conf中添加一个Server"></a>在 nginx的配置文件<code>nginx.conf</code>中添加一个Server</h6><blockquote>
+<p>vim /usr/local/nginx/conf/nginx.conf</p>
+</blockquote>
+<p>添加的server</p>
+<blockquote>
+<p>server {<br>       listen       8888;  # 监听的端口<br>       server_name  10.101.100.45;  #配置的Stroge服务器地址</p>
+<p>​        location /group1/M00{<br>​                     root /usr/coallocal/test;   #配置的文件上传地址(同之前的配置保持一致)<br>​                     ngx_fastdfs_module;        #插件名称<br>                   }<br>​    }</p>
+</blockquote>
+<br>
+
+<h5 id="2-2-7-启动Nignx"><a href="#2-2-7-启动Nignx" class="headerlink" title="2.2.7 启动Nignx"></a>2.2.7 启动Nignx</h5><blockquote>
+<p>cd nginx</p>
+<p>sbin/nginx</p>
+</blockquote>
+<p><img src="https://img-blog.csdn.net/20180626164336870?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NvZGVfc2hhZG93/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<p>测试图片上传:</p>
+<blockquote>
+<p>cd /etc/fdfs<br>/usr/bin/fdfs_test /etc/fdfs/client.conf upload anti-steal.jpg</p>
+</blockquote>
+<p><img src="https://img-blog.csdn.net/20180626165150607?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NvZGVfc2hhZG93/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+<p>浏览器中访问网址</p>
+<p><img src="https://img-blog.csdn.net/20180626165251260?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NvZGVfc2hhZG93/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" alt=""></p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Ragty</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://gitee.com/huoji555/blog/2019/05/07/FastDFS%E5%88%86%E5%B8%83%E5%BC%8F%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA%EF%BC%88%E4%BA%8C%EF%BC%89FastDFS+Nginx%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">https://gitee.com/huoji555/blog/2019/05/07/FastDFS%E5%88%86%E5%B8%83%E5%BC%8F%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA%EF%BC%88%E4%BA%8C%EF%BC%89FastDFS+Nginx%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://gitee.com/huoji555/blog">Ragty の Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blog/tags/FastDFS%E6%90%AD%E5%BB%BA-%E5%88%86%E5%B8%83%E5%BC%8F%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA/">FastDFS搭建 分布式文件系统搭建</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/blog/2019/05/08/FastDFS%E5%88%86%E5%B8%83%E5%BC%8F%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA%EF%BC%88%E4%B8%89%EF%BC%89SpringBoot%E9%9B%86%E6%88%90FastDFS/"><i class="fa fa-chevron-left">  </i><span>FastDFS分布式文件系统搭建（三）SpringBoot集成FastDFS</span></a></div><div class="next-post pull-right"><a href="/blog/2019/05/07/FastDFS%E5%88%86%E5%B8%83%E5%BC%8F%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA%EF%BC%88%E4%B8%80%EF%BC%89%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86/"><span>FastDFS分布式文件系统搭建（一）基础原理</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: '64bb26cd3e1c8abc30b9',
+  clientSecret: '2c12bfa74e197296c7f3fe590350ba444099ef0b',
+  repo: 'huoji555.github.io',
+  owner: 'huoji555',
+  admin: 'huoji555',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2020 By Ragty</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text"><a href="http://beian.miit.gov.cn " target="_blank" rel="noopener" charset="utf-8"> ICP备案号:京ICP备<13502>号 </a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file-o"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/blog/js/utils.js?version=1.7.0"></script><script src="/blog/js/fancybox.js?version=1.7.0"></script><script src="/blog/js/sidebar.js?version=1.7.0"></script><script src="/blog/js/copy.js?version=1.7.0"></script><script src="/blog/js/fireworks.js?version=1.7.0"></script><script src="/blog/js/transition.js?version=1.7.0"></script><script src="/blog/js/scroll.js?version=1.7.0"></script><script src="/blog/js/head.js?version=1.7.0"></script><script src="/blog/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

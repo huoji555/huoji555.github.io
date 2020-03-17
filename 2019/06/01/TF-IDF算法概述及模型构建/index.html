@@ -1,0 +1,191 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="TF-IDF算法概述及模型构建"><meta name="keywords" content="TF-IDF TF IDF 搜索引擎 模型构建"><meta name="author" content="Ragty"><meta name="copyright" content="Ragty"><title>TF-IDF算法概述及模型构建 | Ragty の Blog</title><link rel="shortcut icon" href="/blog/melody-favicon.ico"><link rel="stylesheet" href="/blog/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><script>var GLOBAL_CONFIG = { 
+  root: '/blog/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-应用场景"><span class="toc-text">1.应用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-TF-IDF解释"><span class="toc-text">2.TF-IDF解释</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-模型解释"><span class="toc-text">3.模型解释</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-实例展示"><span class="toc-text">4.实例展示</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-总结"><span class="toc-text">5.总结</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://secure.gravatar.com/avatar/dcc38a5a0d37cb7348d4f72d8f6a2de0"></div><div class="author-info__name text-center">Ragty</div><div class="author-info__description text-center"></div><div class="follow-button"><a href="https://github.com/huoji555" target="_blank" rel="noopener">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/blog/archives"><span class="pull-left">文章</span><span class="pull-right">83</span></a><a class="author-info-articles__tags article-meta" href="/blog/tags"><span class="pull-left">标签</span><span class="pull-right">75</span></a><a class="author-info-articles__categories article-meta" href="/blog/categories"><span class="pull-left">分类</span><span class="pull-right">38</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接-Links</div><a class="author-info-links__name text-center" href="https://blog.csdn.net/huoji555" target="_blank" rel="noopener">MY-CSDN</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/blog/">Ragty の Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/blog">Home</a><a class="site-page" href="/blog/archives">Archives</a><a class="site-page" href="/blog/categories">Categories</a><a class="site-page" href="/blog/tags">Tags</a><a class="site-page" href="/blog/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">TF-IDF算法概述及模型构建</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2019-06-01</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/blog/categories/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">搜索引擎</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">2.7k</span><span class="post-meta__separator">|</span><span>阅读时长: 8 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><a id="more"></a>
+
+
+<h4 id="1-应用场景"><a href="#1-应用场景" class="headerlink" title="1.应用场景"></a>1.应用场景</h4><p>我在构建搜索引擎的时候，需要构建一个排名算法。我最初版本的做法为，根据一篇文章中词汇出现的频率，对各个网页进行排序。这样会有一个很明显的缺点，当我们页面中出现很多<strong>中止词（例如，the,1,2）</strong>时，这样不能客观反映搜索词对文档的重要程度。</p>
+<p><strong>我们需要调整某些单词在一般情况下更频繁出现的事实（过滤中止词）</strong>。TF-IDF值（搜索词的重要性），随着单词在文件中出现的次数成正比增加，但同时会随着它在包含该单词的所有文档中出现的频率成反比下降(从这里可以推出TF-IDF的公式)，<strong>从而获取该文章关于搜索词重要性的权值。</strong></p>
+<blockquote>
+<p>TF-IDF是当今最受欢迎的术语加权方案之一，旨在反映搜索词对集合中文档的重要程度。</p>
+<p>它的主要思想是：如果某个词或短语在一篇文章中出现的频率TF高，并且在其他文章中很少出现，则认为此词或者短语具有很好的类别区分能力，适合用来分类。</p>
+</blockquote>
+<p>应用方面：</p>
+<ul>
+<li><strong>搜索引擎</strong>经常使用tf-idf加权方案，作为在给定用户查询的情况下对文档的相关性进行评分和排序的核心工具。tf-idf可以成功地用于各种主题领域的停止词过滤，包括文本摘要的分类。</li>
+<li>通过对每个查询项的tf-idf求和来计算最简单的<strong>排名函数之一</strong> ; 许多更复杂的排名函数是这个简单模型的变体。</li>
+</ul>
+<br>
+
+<h4 id="2-TF-IDF解释"><a href="#2-TF-IDF解释" class="headerlink" title="2.TF-IDF解释"></a>2.TF-IDF解释</h4><p><strong>TF(Term Frequency)</strong>：表示词汇频率。</p>
+<p>假设我们有一套英文文本文档，并希望对与查询最相关的文档进行排名，搜索词为<code>The Brown cow</code>.我们最简单的方法是，删除不包含<code>the</code>，<code>brown</code>，<code>cow</code>所有这些词的文档，但如此操作后，仍剩余许多文档。为了进一步区分它们，需要计算这些搜索词在文档中出现的次数，<strong>我们将搜索词在文档中出现的频率称作词频(TF)</strong>，这个数字是对<strong>词数（Term Count）</strong>的归一化，以防止它偏向长的文件(<strong>同一个词语在长文件里可能会比短文件有更高的词数，而不管该词语重要与否</strong>)。</p>
+<p>如果一个词条在一个类的文档中频繁出现，则说明该词条能够很好代表这个类的文本的特征，这样的词条应该给它们赋予较高的权重，并选来作为该类文本的特征词以区别与其它类文档。这种搜索词加权可归纳为：</p>
+<blockquote>
+<p>文档中出现的搜索词的权重与搜索词频率成正比</p>
+</blockquote>
+<p>TF的不足之处：</p>
+<blockquote>
+<p>它不能有效的过滤<code>中止词</code>，例如上述提到的<code>the</code></p>
+</blockquote>
+<p><strong>IDF(Inverse document frequency)</strong>：表示逆向文档频率。</p>
+<blockquote>
+<p>IDF是一个词语普遍重要性的度量(过滤中止词)</p>
+</blockquote>
+<p>接着上面的例子讲，因为搜索词<code>the</code>很常见，<strong>TF(Term Frequency)</strong>倾向于错误地强调更频繁地使用“the”一词的文档（这里可以将<code>the</code>看作为中止词），<strong>而没有给予更有意义的术语“brown”和“cow”足够的权重</strong>。与不常见的单词“brown”和“cow”不同，术语“the”不是区分相关和非相关文档和术语的好关键词。因此，结合了<strong>逆文档频率因子</strong>，其减少了在文档集中频繁出现的术语的权重（<strong>降低中止词权重</strong>），并且增加了很少出现的词语的权重。这种加权可以归纳为：</p>
+<blockquote>
+<p>词语的特异性可以量化为其<strong>出现的文档数量的反函数</strong></p>
+</blockquote>
+<br>
+
+<h4 id="3-模型解释"><a href="#3-模型解释" class="headerlink" title="3.模型解释"></a>3.模型解释</h4><blockquote>
+<p><code>TF-IDF</code>是两个统计量的乘积。有多种方法可以确定统计量的具体值。</p>
+</blockquote>
+<p><strong>词频(TF)</strong></p>
+<p>在<strong>术语频率</strong> tf（<em>t</em>，<em>d</em>）的情况下，最简单的选择是使用文档中单词的原始计数，f(t,d)即单词<strong>t</strong>在文档<strong>d</strong>中出现的次数，即(t/d)。最简单的tf方案是tf（<em>t</em>，<em>d</em>）= <em>f</em> (t,d)。其他可能性包括：</p>
+<ul>
+<li>布尔“频率”：TF（t,d）= 1，如果d中出现t为1，否则为0;</li>
+<li>根据文件长度调整的词频： f(t,d)/ (d中的总词数);</li>
+<li>对数缩放频率：TF（t,d）= log（1 +  f(t,d) ） ; </li>
+<li>增加频率，以防止偏向更长的文档，例如原始频率除以文档中最常出现的单词的原始频率：</li>
+</ul>
+<p><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/da4be29a89f4c67ff5a8ad0c7355df1aff67a65b" alt=""></p>
+<p><code>词频（tf）权重的变体</code></p>
+<table>
+<thead>
+<tr>
+<th align="left">加权计划</th>
+<th align="left">权重</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">二进制</td>
+<td align="left"><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/a019735e07635e5a74673d6e1a34919027e645f5" alt="{0,1}"></td>
+</tr>
+<tr>
+<td align="left">原始计数</td>
+<td align="left"><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/69faba5875c1ba7d6a3820c813ba22fba35185f5" alt=""></td>
+</tr>
+<tr>
+<td align="left">期限频率(使用最频繁)</td>
+<td align="left"><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/91699003abf4fe8bdf861bbce08e73e71acf5fd4" alt=""></td>
+</tr>
+<tr>
+<td align="left">日志规范化</td>
+<td align="left"><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/9c173382612c58c00325c4e9f593739ab3afc324" alt=""></td>
+</tr>
+<tr>
+<td align="left">双标准化K.</td>
+<td align="left"><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/65b776d7a3f8e42f15c880fb7582282b987684fe" alt=""></td>
+</tr>
+<tr>
+<td align="left">双归一化0.5</td>
+<td align="left"><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/45badc1c70ec2caa00ed8c21ed75bd9f8d3e650c" alt=""></td>
+</tr>
+</tbody></table>
+<p><strong>IDF（逆向文档频率）</strong></p>
+<blockquote>
+<p><strong>对文档中的罕见词进行加权</strong>(通过将文档总数除以包含该项的文档数，然后取该商的对数得到).</p>
+</blockquote>
+<p><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/ac67bc0f76b5b8e31e842d6b7d28f8949dab7937" alt=""></p>
+<p>N表示语料库中的文档总数</p>
+<p>tf(t,d)表示包含搜索词的文档数，搜索词不在语料库中时为0。则这将导致除零。因此，通常将分母调整为<img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/104921c6994a66054acc909a6bb811a47f983a53" alt=""></p>
+<p>利用  <strong>lg1=0</strong>  解决0的问题</p>
+<p><code>IDF（逆向文档频率）权重的变体</code></p>
+<table>
+<thead>
+<tr>
+<th align="left">加权计划</th>
+<th align="center">（IDF权重）    <img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/e5d6fca54b5ec3fa4680ead41736fc1c16a58ca1" alt=""></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">一元</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="left">逆文档频率</td>
+<td align="center"><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/864fcfdc0c16344c11509f724f1aa7081cf9f657" alt="{\ displaystyle \ log {\ frac {N} {n_ {t}}} =  -  \ log {\ frac {n_ {t}} {N}}}"></td>
+</tr>
+<tr>
+<td align="left">逆文档频率平滑</td>
+<td align="center"><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/23e5ae785c1ddc6bd95d404ea3fac2477fff5eff" alt=""></td>
+</tr>
+<tr>
+<td align="left">逆文档频率最大值</td>
+<td align="center"><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/f15c125a1d7f1327afeecc4e2b89272a9a094338" alt=""></td>
+</tr>
+<tr>
+<td align="left">概率逆文档频率</td>
+<td align="center"><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/1868194cba8431aa2d556dd1aac90d78833eaaf3" alt=""></td>
+</tr>
+</tbody></table>
+<p><strong>TF-IDF</strong></p>
+<p>下面给出<code>TF-IDF</code>的计算公式</p>
+<p><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/10109d0e60cc9d50a1ea2f189bac0ac29a030a00" alt=""></p>
+<p><code>TF-DIF模型原理解释</code></p>
+<blockquote>
+<p>通过高频词汇(在给定文件中）达到tf-idf的高权重，并且在整个文档集合中该搜索词的文档频率低; 因此，权重倾向于过滤掉常用术语。<strong>由于idf的log函数内的比率始终大于或等于1(比率为1时，idf值为0)</strong>，因此idf（和tf-idf）的值大于或等于0.当一个术语出现在更多文档中时，对数内的比率接近1 ，使idf和tf-idf更接近0。</p>
+</blockquote>
+<p><strong>nt越大(中止词越多)，比率越接近于1，idf的值越接近于0.</strong></p>
+<p><code>推荐的加权组合方案</code></p>
+<table>
+<thead>
+<tr>
+<th align="center">加权计划</th>
+<th align="left">文档搜索词权重</th>
+<th align="left">查询搜索词权重</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="left"><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/74db3d91105b74e8450a78fadbf7ea7f241bc737" alt=""></td>
+<td align="left"><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/fe1629098093a97eb293bd5085009c51c3cdd77b" alt=""></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="left"><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/dc85c57525999f9f224ac5623e606bea2160d171" alt=""></td>
+<td align="left"><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/29f34f3a19a3fec371d5ab2756896a4c3cfc0d96" alt=""></td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="left"><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/c271425fa07254a10379f1379e02d0fd034f4f21" alt=""></td>
+<td align="left"><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/cb8cdf7f351b63973cee045cc98c9efcde04203a" alt=""></td>
+</tr>
+</tbody></table>
+<br>
+
+<h4 id="4-实例展示"><a href="#4-实例展示" class="headerlink" title="4.实例展示"></a>4.实例展示</h4><blockquote>
+<p>在某个一共有一千词的网页中“原子能”、“的”和“应用”分别出现了 2 次、35 次 和 5 次，那么它们的词频就分别是 0.002、0.035 和 0.005。 我们将这三个数相加，其和 0.042 就是相应网页和查询“原子能的应用” 相关性的一个简单的度量。概括地讲，如果一个查询包含关键词 w1,w2,…,wN, 它们在一篇特定网页中的词频分别是: TF1, TF2, …, TFN.（TF: term frequency)。 那么，这个查询和该网页的相关性就是:TF1 + TF2 + … + TFN。<br>在上面的例子中，词“的”占了总词频的 80% 以上，而它对确定网页的主题几乎没有用。我们称这种词叫“中止词”（Stopwords)，也就是说在度量相关性是不应考虑它们的频率。在汉语中，应删除词还有“是”、“和”、“中”、“地”、“得”等等几十个。忽略这些应删除词后，上述网页的相似度就变成了0.007，其中“原子能”贡献了 0.002，“应用”贡献了 0.005。细心的读者可能还会发现另一个小的漏洞。在汉语中，“应用”是个很通用的词，而“原子能”是个很专业的词，后者在相关性排名中比前者重要。因此我们需要给汉语中的每一个词给一个权重，这个权重的设定必须满足下面两个条件：</p>
+</blockquote>
+<ul>
+<li>一个词预测主题能力越强，权重就越大，反之，权重就越小。我们在网页中看到“原子能”这个词，或多或少地能了解网页的主题。我们看到“应用”一次，对主题基本上还是一无所知。因此，“原子能“的权重就应该比应用大。</li>
+<li>应删除词的权重应该是零。</li>
+</ul>
+<blockquote>
+<p>我们很容易发现，如果一个关键词只在很少的网页中出现，我们通过它就容易锁定搜索目标，它的权重也就应该大。反之如果一个词在大量网页中出现，我们看到它仍然不是很清楚要找什么内容，因此它应该小。概括地讲，假定一个关键词 w 在 Dw 个网页中出现过，那么 Dw 越大，w的权重越小，反之亦然。在信息检索中，使用最多的权重是“逆文本频率指数” （Inverse document frequency 缩写为IDF），它的公式为log（D/Dw）其中D是全部网页数。比如，我们假定中文网页数是D=10亿，应删除词“的”在所有的网页中都出现，即Dw=10亿，那么它的IDF=log(10亿/10亿）= log (1) = 0。假如专用词“原子能”在两百万个网页中出现，即Dw=200万，则它的权重IDF=log(500) =2.7。又假定通用词“应用”，出现在五亿个网页中，它的权重IDF = log(2)则只有 0.3。也就是说，在网页中找到一个“原子能”的匹配相当于找到九个“应用”的匹配。利用 IDF，上述相关性计算的公式就由词频的简单求和变成了加权求和，即 TF1<em>IDF1 +　TF2</em>IDF2 +… + TFN*IDFN。在上面的例子中，该网页和“原子能的应用”的相关性为 0.0069，其中“原子能”贡献了 0.0054，而“应用”只贡献了0.0015。这个比例和我们的直觉比较一致了。</p>
+</blockquote>
+<br>
+
+<h4 id="5-总结"><a href="#5-总结" class="headerlink" title="5.总结"></a>5.总结</h4><p>本质上IDF是一种试图抑制噪音的加权 ，并且<strong>单纯地认为文本频数小的单词就越重要</strong>，<strong>文本频数大的单词就越无用</strong>，显然这并不是完全正确的。IDF的简单结构并<strong>不能有效地反映单词的重要程度和特征词的分布情况</strong>，使其无法很好地完成对权值调整的功能，所以TFIDF法的精度并不是很高。</p>
+<p>我们在构建搜索引擎时，特征词在不同的标记符中对文章内容的反映程度不同，其权重的计算方法也应不同。<strong>因此应该对于处于网页不同位置的特征词分别赋予不同的系数，然后乘以特征词的词频，以提高文本表示的效果</strong>。</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Ragty</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://gitee.com/huoji555/blog/2019/06/01/TF-IDF%E7%AE%97%E6%B3%95%E6%A6%82%E8%BF%B0%E5%8F%8A%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA/">https://gitee.com/huoji555/blog/2019/06/01/TF-IDF%E7%AE%97%E6%B3%95%E6%A6%82%E8%BF%B0%E5%8F%8A%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://gitee.com/huoji555/blog">Ragty の Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blog/tags/TF-IDF-TF-IDF-%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E-%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA/">TF-IDF TF IDF 搜索引擎 模型构建</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/blog/2019/06/07/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E4%BC%98%E5%8C%96%20%20%20%20TF_IDF%E4%B9%8BJava%E5%AE%9E%E7%8E%B0/"><i class="fa fa-chevron-left">  </i><span>搜索引擎优化    TF_IDF之Java实现</span></a></div><div class="next-post pull-right"><a href="/blog/2019/05/31/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%9D%E7%BB%B4%E7%AC%94%E8%AE%B0%EF%BC%88%E5%8D%81%E4%B8%83%EF%BC%89%20%E5%B8%83%E5%B0%94%E6%90%9C%E7%B4%A2/"><span>数据结构思维笔记（十七） 布尔搜索</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: '64bb26cd3e1c8abc30b9',
+  clientSecret: '2c12bfa74e197296c7f3fe590350ba444099ef0b',
+  repo: 'huoji555.github.io',
+  owner: 'huoji555',
+  admin: 'huoji555',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2020 By Ragty</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text"><a href="http://beian.miit.gov.cn " target="_blank" rel="noopener" charset="utf-8"> ICP备案号:京ICP备<13502>号 </a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file-o"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/blog/js/utils.js?version=1.7.0"></script><script src="/blog/js/fancybox.js?version=1.7.0"></script><script src="/blog/js/sidebar.js?version=1.7.0"></script><script src="/blog/js/copy.js?version=1.7.0"></script><script src="/blog/js/fireworks.js?version=1.7.0"></script><script src="/blog/js/transition.js?version=1.7.0"></script><script src="/blog/js/scroll.js?version=1.7.0"></script><script src="/blog/js/head.js?version=1.7.0"></script><script src="/blog/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

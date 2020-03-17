@@ -1,0 +1,294 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="JAVA实现百度OCR文字识别功能"><meta name="keywords" content=""><meta name="author" content="Ragty"><meta name="copyright" content="Ragty"><title>JAVA实现百度OCR文字识别功能 | Ragty の Blog</title><link rel="shortcut icon" href="/blog/melody-favicon.ico"><link rel="stylesheet" href="/blog/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><script>var GLOBAL_CONFIG = { 
+  root: '/blog/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#"><span class="toc-text">&amp;nbsp; &amp;nbsp; &amp;nbsp; 调用百度OCR文字识别接口，实现图片文字识别，需要获取百度提供的API Key (ak) 和Scerct Key (sk),下面是具体实现代码和效果图。</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text">}
+&amp;nbsp; &amp;nbsp;</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#"><span class="toc-text">需要调用的几个类：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#"><span class="toc-text"></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#"><span class="toc-text">&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; 识别前的图片</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://secure.gravatar.com/avatar/dcc38a5a0d37cb7348d4f72d8f6a2de0"></div><div class="author-info__name text-center">Ragty</div><div class="author-info__description text-center"></div><div class="follow-button"><a href="https://github.com/huoji555" target="_blank" rel="noopener">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/blog/archives"><span class="pull-left">文章</span><span class="pull-right">83</span></a><a class="author-info-articles__tags article-meta" href="/blog/tags"><span class="pull-left">标签</span><span class="pull-right">75</span></a><a class="author-info-articles__categories article-meta" href="/blog/categories"><span class="pull-left">分类</span><span class="pull-right">38</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接-Links</div><a class="author-info-links__name text-center" href="https://blog.csdn.net/huoji555" target="_blank" rel="noopener">MY-CSDN</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/blog/">Ragty の Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/blog">Home</a><a class="site-page" href="/blog/archives">Archives</a><a class="site-page" href="/blog/categories">Categories</a><a class="site-page" href="/blog/tags">Tags</a><a class="site-page" href="/blog/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">JAVA实现百度OCR文字识别功能</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2018-03-17</time><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">2.3k</span><span class="post-meta__separator">|</span><span>阅读时长: 12 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><a id="more"></a>
+
+
+<h1><span style="font-size:18px">&nbsp;</span><span style="font-size:24px"> &nbsp; &nbsp; 调用百度OCR文字识别接口，实现图片文字识别，需要获取百度提供的API Key (ak) 和Scerct Key (sk),下面是具体实现代码和效果图。</span></h1>
+<p></p>
+<pre class="java">package imageProcessing;
+
+<p>import java.io.BufferedReader;<br>import java.io.InputStreamReader;<br>import java.net.HttpURLConnection;<br>import java.net.URL;<br>import java.net.URLEncoder;<br>import java.util.List;<br>import java.util.Map;</p>
+<p>import org.json.JSONObject;</p>
+<p>import com.baidu.ai.aip.utils.FileUtil;<br>import com.baidu.ai.aip.utils.HttpUtil;<br>import com.baidu.aip.util.Base64Util;</p>
+<p>public class baidu1 {</p>
+<pre><code>public static void main(String[] args) {
+
+    String otherHost = &amp;quot;https://aip.baidubce.com/rest/2.0/ocr/v1/general&amp;quot;;
+        // 本地图片路径
+        String filePath = &amp;quot;E:/img/38.jpg&amp;quot;;
+        try {
+            byte[] imgData = FileUtil.readFileByBytes(filePath);
+            String imgStr = Base64Util.encode(imgData);
+            String params = URLEncoder.encode(&amp;quot;image&amp;quot;, &amp;quot;UTF-8&amp;quot;) &amp;#43; &amp;quot;=&amp;quot; &amp;#43; URLEncoder.encode(imgStr, &amp;quot;UTF-8&amp;quot;);
+            /**
+             * 线上环境access_token有过期时间， 客户端可自行缓存，过期后重新获取。
+             */
+            String accessToken = getAuth(&amp;quot;你的ak&amp;#20540;&amp;quot;, &amp;quot;你的secerct key&amp;#20540;&amp;quot;);
+            String result = HttpUtil.post(otherHost, accessToken, params);
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+}
+
+
+
+ public static String getAuth(String ak, String sk) {
+        // 获取token地址
+        String authHost = &amp;quot;https://aip.baidubce.com/oauth/2.0/token?&amp;quot;;
+        String getAccessTokenUrl = authHost
+                // 1. grant_type为固定参数
+                &amp;#43; &amp;quot;grant_type=client_credentials&amp;quot;
+                // 2. 官网获取的 API Key
+                &amp;#43; &amp;quot;&amp;amp;client_id=&amp;quot; &amp;#43; ak
+                // 3. 官网获取的 Secret Key
+                &amp;#43; &amp;quot;&amp;amp;client_secret=&amp;quot; &amp;#43; sk;
+        try {
+            URL realUrl = new URL(getAccessTokenUrl);
+            // 打开和URL之间的连接
+            HttpURLConnection connection = (HttpURLConnection) realUrl.openConnection();
+            connection.setRequestMethod(&amp;quot;GET&amp;quot;);
+            connection.connect();
+            // 获取所有响应头字段
+            Map&amp;lt;String, List&amp;lt;String&amp;gt;&amp;gt; map = connection.getHeaderFields();
+            // 遍历所有的响应头字段
+            for (String key : map.keySet()) {
+                System.err.println(key &amp;#43; &amp;quot;---&amp;gt;&amp;quot; &amp;#43; map.get(key));
+            }
+            // 定义 BufferedReader输入流来读取URL的响应
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String result = &amp;quot;&amp;quot;;
+            String line;
+            while ((line = in.readLine()) != null) {
+                result &amp;#43;= line;
+            }
+            /**
+             * 返回结果示例
+             */
+            System.err.println(&amp;quot;result:&amp;quot; &amp;#43; result);
+            JSONObject jsonObject = new JSONObject(result);
+            String access_token = jsonObject.getString(&amp;quot;access_token&amp;quot;);
+            return access_token;
+        } catch (Exception e) {
+            System.err.printf(&amp;quot;获取token失败！&amp;quot;);
+            e.printStackTrace(System.err);
+        }
+        return null;
+    }</code></pre><h2>}
+<span style="font-family:SimSun">&nbsp; &nbsp;</span></h2></pre>
+<h1 style="font-family:monospace; white-space:pre"><span style="font-family:SimSun">需要调用的几个类：</span></h1>
+<pre class="java">package com.baidu.ai.aip.utils;
+
+<p>/**</p>
+<ul>
+<li><p>Base64 工具类</p>
+</li>
+<li><p>/<br>public class Base64Util {<br>  private static final char last2byte = (char) Integer.parseInt(&quot;00000011&quot;, 2);<br>  private static final char last4byte = (char) Integer.parseInt(&quot;00001111&quot;, 2);<br>  private static final char last6byte = (char) Integer.parseInt(&quot;00111111&quot;, 2);<br>  private static final char lead6byte = (char) Integer.parseInt(&quot;11111100&quot;, 2);<br>  private static final char lead4byte = (char) Integer.parseInt(&quot;11110000&quot;, 2);<br>  private static final char lead2byte = (char) Integer.parseInt(&quot;11000000&quot;, 2);<br>  private static final char[] encodeTable = new char[]{‘A’, ‘B’, ‘C’, ‘D’, ‘E’, ‘F’, ‘G’, ‘H’, ‘I’, ‘J’, ‘K’, ‘L’, ‘M’, ‘N’, ‘O’, ‘P’, ‘Q’, ‘R’, ‘S’, ‘T’, ‘U’, ‘V’, ‘W’, ‘X’, ‘Y’, ‘Z’, ‘a’, ‘b’, ‘c’, ‘d’, ‘e’, ‘f’, ‘g’, ‘h’, ‘i’, ‘j’, ‘k’, ‘l’, ‘m’, ‘n’, ‘o’, ‘p’, ‘q’, ‘r’, ‘s’, ‘t’, ‘u’, ‘v’, ‘w’, ‘x’, ‘y’, ‘z’, ‘0’, ‘1’, ‘2’, ‘3’, ‘4’, ‘5’, ‘6’, ‘7’, ‘8’, ‘9’, ‘&#43;’, ‘/‘};</p>
+<p>  public Base64Util() {<br>  }</p>
+<p>  public static String encode(byte[] from) {</p>
+<pre><code>StringBuilder to = new StringBuilder((int) ((double) from.length * 1.34D) &amp;#43; 3);
+int num = 0;
+char currentByte = 0;
+
+int i;
+for (i = 0; i &amp;lt; from.length; &amp;#43;&amp;#43;i) {
+    for (num %= 8; num &amp;lt; 8; num &amp;#43;= 6) {
+        switch (num) {
+            case 0:
+                currentByte = (char) (from[i] &amp;amp; lead6byte);
+                currentByte = (char) (currentByte &amp;gt;&amp;gt;&amp;gt; 2);
+            case 1:
+            case 3:
+            case 5:
+            default:
+                break;
+            case 2:
+                currentByte = (char) (from[i] &amp;amp; last6byte);
+                break;
+            case 4:
+                currentByte = (char) (from[i] &amp;amp; last4byte);
+                currentByte = (char) (currentByte &amp;lt;&amp;lt; 2);
+                if (i &amp;#43; 1 &amp;lt; from.length) {
+                    currentByte = (char) (currentByte | (from[i &amp;#43; 1] &amp;amp; lead2byte) &amp;gt;&amp;gt;&amp;gt; 6);
+                }
+                break;
+            case 6:
+                currentByte = (char) (from[i] &amp;amp; last2byte);
+                currentByte = (char) (currentByte &amp;lt;&amp;lt; 4);
+                if (i &amp;#43; 1 &amp;lt; from.length) {
+                    currentByte = (char) (currentByte | (from[i &amp;#43; 1] &amp;amp; lead4byte) &amp;gt;&amp;gt;&amp;gt; 4);
+                }
+        }
+
+        to.append(encodeTable[currentByte]);
+    }
+}
+
+if (to.length() % 4 != 0) {
+    for (i = 4 - to.length() % 4; i &amp;gt; 0; --i) {
+        to.append(&amp;quot;=&amp;quot;);
+    }
+}
+
+return to.toString();</code></pre><p>  }<br>}<br></pre></p>
+<br>
+<pre class="java">package com.baidu.ai.aip.utils;
+
+</li>
+</ul>
+<p>import java.io.*;</p>
+<p>/**</p>
+<ul>
+<li><p>文件读取工具类</p>
+</li>
+<li><p>/<br>public class FileUtil {</p>
+<p>  /**</p>
+<ul>
+<li><p>读取文件内容，作为字符串返回</p>
+</li>
+<li><p>/<br>public static String readFileAsString(String filePath) throws IOException {<br>  File file = new File(filePath);<br>  if (!file.exists()) {</p>
+<pre><code>throw new FileNotFoundException(filePath);</code></pre><p>  } </p>
+<p>  if (file.length() &gt; 1024 * 1024 * 1024) {</p>
+<pre><code>throw new IOException(&amp;quot;File is too large&amp;quot;);</code></pre><p>  } </p>
+<p>  StringBuilder sb = new StringBuilder((int) (file.length()));<br>  // 创建字节输入流<br>  FileInputStream fis = new FileInputStream(filePath);<br>  // 创建一个长度为10240的Buffer<br>  byte[] bbuf = new byte[10240];<br>  // 用于保存实际读取的字节数<br>  int hasRead = 0;<br>  while ( (hasRead = fis.read(bbuf)) &gt; 0 ) {  </p>
+<pre><code>sb.append(new String(bbuf, 0, hasRead));  </code></pre><p>  }<br>  fis.close();<br>  return sb.toString();<br>}</p>
+<p>/**</p>
+</li>
+<li><p>根据文件路径读取byte[] 数组</p>
+</li>
+<li><p>/<br>public static byte[] readFileByBytes(String filePath) throws IOException {<br>  File file = new File(filePath);<br>  if (!file.exists()) {</p>
+<pre><code>throw new FileNotFoundException(filePath);</code></pre><p>  } else {</p>
+<pre><code>ByteArrayOutputStream bos = new ByteArrayOutputStream((int) file.length());
+BufferedInputStream in = null;
+
+try {
+    in = new BufferedInputStream(new FileInputStream(file));
+    short bufSize = 1024;
+    byte[] buffer = new byte[bufSize];
+    int len1;
+    while (-1 != (len1 = in.read(buffer, 0, bufSize))) {
+        bos.write(buffer, 0, len1);
+    }
+
+    byte[] var7 = bos.toByteArray();
+    return var7;
+} finally {
+    try {
+        if (in != null) {
+            in.close();
+        }
+    } catch (IOException var14) {
+        var14.printStackTrace();
+    }
+
+    bos.close();
+}</code></pre><p>  }<br>}<br>}<br></pre></p>
+<pre class="java">package com.baidu.ai.aip.utils;
+
+</li>
+</ul>
+</li>
+</ul>
+<p>import java.io.BufferedReader;<br>import java.io.DataOutputStream;<br>import java.io.InputStreamReader;<br>import java.net.HttpURLConnection;<br>import java.net.URL;<br>import java.util.List;<br>import java.util.Map;</p>
+<p>/**</p>
+<ul>
+<li><p>http 工具类</p>
+</li>
+<li><p>/<br>public class HttpUtil {</p>
+<p>  public static String post(String requestUrl, String accessToken, String params)</p>
+<pre><code>    throws Exception {
+String contentType = &amp;quot;application/x-www-form-urlencoded&amp;quot;;
+return HttpUtil.post(requestUrl, accessToken, contentType, params);</code></pre><p>  }</p>
+<p>  public static String post(String requestUrl, String accessToken, String contentType, String params)</p>
+<pre><code>    throws Exception {
+String encoding = &amp;quot;UTF-8&amp;quot;;
+if (requestUrl.contains(&amp;quot;nlp&amp;quot;)) {
+    encoding = &amp;quot;GBK&amp;quot;;
+}
+return HttpUtil.post(requestUrl, accessToken, contentType, params, encoding);</code></pre><p>  }</p>
+<p>  public static String post(String requestUrl, String accessToken, String contentType, String params, String encoding)</p>
+<pre><code>    throws Exception {
+String url = requestUrl &amp;#43; &amp;quot;?access_token=&amp;quot; &amp;#43; accessToken;
+return HttpUtil.postGeneralUrl(url, contentType, params, encoding);</code></pre><p>  }</p>
+<p>  public static String postGeneralUrl(String generalUrl, String contentType, String params, String encoding)</p>
+<pre><code>    throws Exception {
+URL url = new URL(generalUrl);
+// 打开和URL之间的连接
+HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+connection.setRequestMethod(&amp;quot;POST&amp;quot;);
+// 设置通用的请求属性
+connection.setRequestProperty(&amp;quot;Content-Type&amp;quot;, contentType);
+connection.setRequestProperty(&amp;quot;Connection&amp;quot;, &amp;quot;Keep-Alive&amp;quot;);
+connection.setUseCaches(false);
+connection.setDoOutput(true);
+connection.setDoInput(true);
+
+// 得到请求的输出流对象
+DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+out.write(params.getBytes(encoding));
+out.flush();
+out.close();
+
+// 建立实际的连接
+connection.connect();
+// 获取所有响应头字段
+Map&amp;lt;String, List&amp;lt;String&amp;gt;&amp;gt; headers = connection.getHeaderFields();
+// 遍历所有的响应头字段
+for (String key : headers.keySet()) {
+    System.err.println(key &amp;#43; &amp;quot;---&amp;gt;&amp;quot; &amp;#43; headers.get(key));
+}
+// 定义 BufferedReader输入流来读取URL的响应
+BufferedReader in = null;
+in = new BufferedReader(
+        new InputStreamReader(connection.getInputStream(), encoding));
+String result = &amp;quot;&amp;quot;;
+String getLine;
+while ((getLine = in.readLine()) != null) {
+    result &amp;#43;= getLine;
+}
+in.close();
+System.err.println(&amp;quot;result:&amp;quot; &amp;#43; result);
+return result;</code></pre><p>  }<br>}<br></pre></p>
+<br>
+<h1><span style="font-size:14px"><span style="white-space:pre"></span></span></h1>
+<h1><span style="font-size:32px">&nbsp; &nbsp; &nbsp; &nbsp; 识别前的图片</span></h1>
+<p><span style="font-size:14px"><img src="https://img-blog.csdn.net/20180317205108031" alt=""><br>
+</span></p>
+<p><span style="font-size:14px"><br>
+</span></p>
+<p><span style="font-size:32px"><br>
+</span></p>
+<p><strong><span style="font-size:32px">&nbsp; &nbsp; &nbsp; &nbsp;识别后的输出数据</span></strong></p>
+<p><span style="font-size:14px"></span></p>
+<div>&nbsp;{&quot;log_id&quot;:&nbsp;8037719738599397843,&nbsp;&quot;words_result_num&quot;:&nbsp;14,&nbsp;&quot;words_result&quot;:&nbsp;[{&quot;location&quot;:&nbsp;{&quot;width&quot;:&nbsp;1043,&nbsp;&quot;top&quot;:&nbsp;0,&nbsp;&quot;height&quot;:&nbsp;172,&nbsp;&quot;left&quot;:&nbsp;0},&nbsp;&quot;words&quot;:&nbsp;&quot;住所:浙江省永嘉县瓯北镇报喜鸟工业区长猜业执照信息公示专用&quot;},&nbsp;{&quot;location&quot;:&nbsp;{&quot;width&quot;:&nbsp;464,&nbsp;&quot;top&quot;:&nbsp;21,&nbsp;&quot;height&quot;:&nbsp;57,&nbsp;&quot;left&quot;:&nbsp;0},&nbsp;&quot;words&quot;:&nbsp;&quot;企业名称:报喜鸟控股份有限公司&quot;},&nbsp;{&quot;location&quot;:&nbsp;{&quot;width&quot;:&nbsp;400,&nbsp;&quot;top&quot;:&nbsp;76,&nbsp;&quot;height&quot;:&nbsp;39,&nbsp;&quot;left&quot;:&nbsp;0},&nbsp;&quot;words&quot;:&nbsp;&quot;类型:其他股份有限公司(上市)&quot;},&nbsp;{&quot;location&quot;:&nbsp;{&quot;width&quot;:&nbsp;238,&nbsp;&quot;top&quot;:&nbsp;149,&nbsp;&quot;height&quot;:&nbsp;32,&nbsp;&quot;left&quot;:&nbsp;0},&nbsp;&quot;words&quot;:&nbsp;&quot;法定代表人:吴志泽&quot;},&nbsp;{&quot;location&quot;:&nbsp;{&quot;width&quot;:&nbsp;272,&nbsp;&quot;top&quot;:&nbsp;186,&nbsp;&quot;height&quot;:&nbsp;29,&nbsp;&quot;left&quot;:&nbsp;0},&nbsp;&quot;words&quot;:&nbsp;&quot;成立时间:2001-06-20&quot;},&nbsp;{&quot;location&quot;:&nbsp;{&quot;width&quot;:&nbsp;354,&nbsp;&quot;top&quot;:&nbsp;219,&nbsp;&quot;height&quot;:&nbsp;31,&nbsp;&quot;left&quot;:&nbsp;0},&nbsp;&quot;words&quot;:&nbsp;&quot;注册资本:126328万人民币元&quot;},&nbsp;{&quot;location&quot;:&nbsp;{&quot;width&quot;:&nbsp;303,&nbsp;&quot;top&quot;:&nbsp;255,&nbsp;&quot;height&quot;:&nbsp;32,&nbsp;&quot;left&quot;:&nbsp;0},&nbsp;&quot;words&quot;:&nbsp;&quot;营业期限:200106-20至&quot;},&nbsp;{&quot;location&quot;:&nbsp;{&quot;width&quot;:&nbsp;1121,&nbsp;&quot;top&quot;:&nbsp;285,&nbsp;&quot;height&quot;:&nbsp;38,&nbsp;&quot;left&quot;:&nbsp;0},&nbsp;&quot;words&quot;:&nbsp;&quot;经营范围:服装、皮鞋、皮革制品的生产及销售,经营进出口业务,经济信息咨询服务,企业管理&quot;},&nbsp;{&quot;location&quot;:&nbsp;{&quot;width&quot;:&nbsp;983,&nbsp;&quot;top&quot;:&nbsp;325,&nbsp;&quot;height&quot;:&nbsp;33,&nbsp;&quot;left&quot;:&nbsp;128},&nbsp;&quot;words&quot;:&nbsp;&quot;与咨询服务,培训服务,企业营销策划,房屋租赁,实业投资,投资管理,资产管理,&quot;},&nbsp;{&quot;location&quot;:&nbsp;{&quot;width&quot;:&nbsp;999,&nbsp;&quot;top&quot;:&nbsp;358,&nbsp;&quot;height&quot;:&nbsp;35,&nbsp;&quot;left&quot;:&nbsp;124},&nbsp;&quot;words&quot;:&nbsp;&quot;投资咨询,企业管理咨询(未经金融等监管部门批准,不得从事向公众融资存款、融资&quot;},&nbsp;{&quot;location&quot;:&nbsp;{&quot;width&quot;:&nbsp;999,&nbsp;&quot;top&quot;:&nbsp;393,&nbsp;&quot;height&quot;:&nbsp;33,&nbsp;&quot;left&quot;:&nbsp;124},&nbsp;&quot;words&quot;:&nbsp;&quot;担保、代客理财等金融服务)。(依法须经批准的项目,经相关部门批准后方可开展经&quot;},&nbsp;{&quot;location&quot;:&nbsp;{&quot;width&quot;:&nbsp;105,&nbsp;&quot;top&quot;:&nbsp;429,&nbsp;&quot;height&quot;:&nbsp;34,&nbsp;&quot;left&quot;:&nbsp;123},&nbsp;&quot;words&quot;:&nbsp;&quot;营活动)&quot;},&nbsp;{&quot;location&quot;:&nbsp;{&quot;width&quot;:&nbsp;393,&nbsp;&quot;top&quot;:&nbsp;463,&nbsp;&quot;height&quot;:&nbsp;34,&nbsp;&quot;left&quot;:&nbsp;0},&nbsp;&quot;words&quot;:&nbsp;&quot;登记机关:浙江省工商行政管理局&quot;},&nbsp;{&quot;location&quot;:&nbsp;{&quot;width&quot;:&nbsp;274,&nbsp;&quot;top&quot;:&nbsp;499,&nbsp;&quot;height&quot;:&nbsp;34,&nbsp;&quot;left&quot;:&nbsp;0},&nbsp;&quot;words&quot;:&nbsp;&quot;核准时间:2017-08-15&quot;}]}<br>
+</div>
+<br>
+<p></p>
+<br>
+</li>
+</ul>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Ragty</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://gitee.com/huoji555/blog/2018/03/17/JAVA%E5%AE%9E%E7%8E%B0%E7%99%BE%E5%BA%A6OCR%E6%96%87%E5%AD%97%E8%AF%86%E5%88%AB%E5%8A%9F%E8%83%BD/">https://gitee.com/huoji555/blog/2018/03/17/JAVA%E5%AE%9E%E7%8E%B0%E7%99%BE%E5%BA%A6OCR%E6%96%87%E5%AD%97%E8%AF%86%E5%88%AB%E5%8A%9F%E8%83%BD/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://gitee.com/huoji555/blog">Ragty の Blog</a>！</span></div></div><div class="post-meta__tag-list"></div><nav id="pagination"><div class="prev-post pull-left"><a href="/blog/2018/03/29/Hibernate%E4%B8%ADLongtext%20%E6%98%A0%E5%B0%84%E5%88%B0%E6%95%B0%E6%8D%AE%E5%BA%93/"><i class="fa fa-chevron-left">  </i><span>Hibernate中Longtext 映射到数据库</span></a></div><div class="next-post pull-right"><a href="/blog/2018/03/17/%E7%94%A8java%E5%B0%86png%E5%9B%BE%E7%89%87%E8%BD%AC%E6%8D%A2%E6%88%90jpg%E6%A0%BC%E5%BC%8F%E7%9A%84%E5%9B%BE%E7%89%87/"><span>用java将png图片转换成jpg格式的图片</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: '64bb26cd3e1c8abc30b9',
+  clientSecret: '2c12bfa74e197296c7f3fe590350ba444099ef0b',
+  repo: 'huoji555.github.io',
+  owner: 'huoji555',
+  admin: 'huoji555',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2020 By Ragty</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text"><a href="http://beian.miit.gov.cn " target="_blank" rel="noopener" charset="utf-8"> ICP备案号:京ICP备<13502>号 </a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file-o"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/blog/js/utils.js?version=1.7.0"></script><script src="/blog/js/fancybox.js?version=1.7.0"></script><script src="/blog/js/sidebar.js?version=1.7.0"></script><script src="/blog/js/copy.js?version=1.7.0"></script><script src="/blog/js/fireworks.js?version=1.7.0"></script><script src="/blog/js/transition.js?version=1.7.0"></script><script src="/blog/js/scroll.js?version=1.7.0"></script><script src="/blog/js/head.js?version=1.7.0"></script><script src="/blog/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

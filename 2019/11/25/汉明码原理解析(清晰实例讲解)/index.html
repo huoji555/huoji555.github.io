@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="汉明码原理解析(清晰实例讲解)"><meta name="keywords" content="汉明码 校验码 汉明校验码"><meta name="author" content="Ragty"><meta name="copyright" content="Ragty"><title>汉明码原理解析(清晰实例讲解) | Ragty の Blog</title><link rel="shortcut icon" href="/blog/melody-favicon.ico"><link rel="stylesheet" href="/blog/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><script>var GLOBAL_CONFIG = { 
+  root: '/blog/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-汉明码实质及原理"><span class="toc-text">1.汉明码实质及原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-核心公式介绍"><span class="toc-text">2.核心公式介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-确定校验位的位置"><span class="toc-text">3.确定校验位的位置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-确定校验位的值-核心）"><span class="toc-text">4.确定校验位的值(核心）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-汉明码纠正"><span class="toc-text">5.汉明码纠正</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://secure.gravatar.com/avatar/dcc38a5a0d37cb7348d4f72d8f6a2de0"></div><div class="author-info__name text-center">Ragty</div><div class="author-info__description text-center"></div><div class="follow-button"><a href="https://github.com/huoji555" target="_blank" rel="noopener">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/blog/archives"><span class="pull-left">文章</span><span class="pull-right">83</span></a><a class="author-info-articles__tags article-meta" href="/blog/tags"><span class="pull-left">标签</span><span class="pull-right">75</span></a><a class="author-info-articles__categories article-meta" href="/blog/categories"><span class="pull-left">分类</span><span class="pull-right">38</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接-Links</div><a class="author-info-links__name text-center" href="https://blog.csdn.net/huoji555" target="_blank" rel="noopener">MY-CSDN</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/blog/">Ragty の Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/blog">Home</a><a class="site-page" href="/blog/archives">Archives</a><a class="site-page" href="/blog/categories">Categories</a><a class="site-page" href="/blog/tags">Tags</a><a class="site-page" href="/blog/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">汉明码原理解析(清晰实例讲解)</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2019-11-25</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/blog/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">896</span><span class="post-meta__separator">|</span><span>阅读时长: 3 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><a id="more"></a>
+
+<h4 id="1-汉明码实质及原理"><a href="#1-汉明码实质及原理" class="headerlink" title="1.汉明码实质及原理"></a>1.汉明码实质及原理</h4><p>汉明码实质上是<strong>多重奇偶校验</strong>，其实现原理是：在有效信息位中加入几个校验位形成汉明码，使码距比较均匀的拉大。<strong>具有检验并纠正一位错误的能力</strong>。</p>
+<br>
+
+<h4 id="2-核心公式介绍"><a href="#2-核心公式介绍" class="headerlink" title="2.核心公式介绍"></a>2.核心公式介绍</h4><p><strong>2^k &gt;= N+K+1</strong></p>
+<p>其中，<code>K</code>代表<strong>校验位的位数</strong>，<code>N</code>代表<strong>信息位的位数</strong></p>
+<p>下面是 <strong>信息位N值与校验位K值的对应关系表</strong>(重要)</p>
+<table>
+<thead>
+<tr>
+<th>信息码位数(N)</th>
+<th>1</th>
+<th>2~4</th>
+<th>5~11</th>
+<th>12~26</th>
+<th>27~57</th>
+<th align="center">58~120</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>校验码位数(M)</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td align="center">7</td>
+</tr>
+</tbody></table>
+<br>
+
+<h4 id="3-确定校验位的位置"><a href="#3-确定校验位的位置" class="headerlink" title="3.确定校验位的位置"></a>3.确定校验位的位置</h4><p>根据上表确定校验码位数之后，将它插入到信息码中(这里信息码用D表示，校验码用P表示)，规则是：</p>
+<ul>
+<li><strong>校验码Pi 必须是在2的i-1次方位置，即只能放在H1，H2，H4，H8…</strong></li>
+<li><strong>这里指的位置都是从右向左排序（信息码和校验码都一样）</strong></li>
+</ul>
+<p>举个例子，现有一个<code>4位信息码(D1,D2,D3,D4)</code>，它的排列是这样的：</p>
+<p>D4 D3 D2  <strong>P3</strong>  D1 <strong>P2</strong>  <strong>P1</strong> </p>
+<p>知道位置之后，下一步就是确定校验位的值了</p>
+<br>
+
+<h4 id="4-确定校验位的值-核心）"><a href="#4-确定校验位的值-核心）" class="headerlink" title="4.确定校验位的值(核心）"></a>4.确定校验位的值(核心）</h4><p>我之前是卡在这一步了，我觉得大部分博客没有直观的将这部分相关的知识讲到位，都是含糊其辞，其实用对方法后，是很简单的，下面是确定校验位值的思路：</p>
+<ul>
+<li><strong>根据校验位的位数，确定每个位置占用的校验位号</strong></li>
+<li><strong>根据参与校验的信息位的位置，确定信息位的值(异或计算)</strong></li>
+</ul>
+<br>
+
+<p>下面通过一个例子介绍，现在有一个二进制编码1011(D1,D2,D3,D4)，求它的汉明码</p>
+<ul>
+<li><p><strong>首先确定校验位的位数及位置</strong></p>
+<p>信息码共<code>4</code>位，校验码通过公式计算为<code>3</code>位，一共<code>7</code>位，排列如下</p>
+<p>D4 D3 D2  <strong>P3</strong>  D1 <strong>P2</strong>  <strong>P1</strong></p>
+<p><strong>它的校验位的对应表如下：</strong></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>位置(从右至左)</th>
+<th>占用的校验位号</th>
+<th align="center">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>1</td>
+<td align="center">1=1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+<td align="center">2=2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1，2</td>
+<td align="center">3=1+2</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4</td>
+<td align="center">4=4</td>
+</tr>
+<tr>
+<td>5</td>
+<td>1，4</td>
+<td align="center">5=1+4</td>
+</tr>
+<tr>
+<td>6</td>
+<td>2，4</td>
+<td align="center">6=2+4</td>
+</tr>
+<tr>
+<td>7</td>
+<td>1，2，4</td>
+<td align="center">7=1+2+4</td>
+</tr>
+</tbody></table>
+<br>
+
+<ul>
+<li><p><strong>确定校验位的值(敲黑板)</strong></p>
+<p>确定各校验码 的参与校验位的信息位的位置，如下表</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>校验码名称(位置)</th>
+<th>参与校验码的信息位的位置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>P1 (位置为1)</td>
+<td>1，3，5，7      <strong>(1出现过的位置)</strong></td>
+</tr>
+<tr>
+<td>P2 (位置为2)</td>
+<td>2，3，6，7      <strong>(2出现过的位置)</strong></td>
+</tr>
+<tr>
+<td>P3 (位置为4)</td>
+<td>4，5，6，7      <strong>(4出现过的位置)</strong></td>
+</tr>
+</tbody></table>
+<p>​    <strong>现在就可以根据上表确定各校验位的值了(异或运算)：</strong></p>
+<p>​    P1 = D1⊕D2⊕D4 = 1⊕0⊕1 = 0</p>
+<p>​    P2 = D1⊕D3⊕D4 = 1⊕1⊕1 =1</p>
+<p>​    P3 = D2⊕D3⊕D4 = 1⊕0⊕1 = 0</p>
+<p>​    <strong>异或运算简单来说，就是两个相同的数结果为0，不同的数结果为1，这里看1的个数就成，偶数为0，奇数就是1</strong><br><br></p>
+<p>所以生成的海明码为</p>
+<p>D4 D3 D2  <strong>P3</strong>  D1 <strong>P2</strong>  <strong>P1</strong></p>
+<p>1    1   0     <strong>0</strong>     1    <strong>1</strong>    <strong>0</strong></p>
+<br>
+
+<h4 id="5-汉明码纠正"><a href="#5-汉明码纠正" class="headerlink" title="5.汉明码纠正"></a>5.汉明码纠正</h4><p>假设传输中H6(D3)发生了错误，原码就变为：</p>
+<p>1    <u>0</u>   0     <strong>0</strong>     1    <strong>1</strong>    <strong>0</strong></p>
+<p>检错过程很简单，<strong>将接收到的码字重新进行奇偶校验</strong> ：</p>
+<p>S1 = P1⊕D1⊕D2⊕D4 = 0⊕1⊕0⊕1 = 0</p>
+<p>S2 = P2⊕D1⊕D3⊕D4 = 1⊕1⊕0⊕1 = 1</p>
+<p>S3 = P3⊕D2⊕D3⊕D4 = 0⊕0⊕0⊕1 = 1</p>
+<p>所以真值为<code>S3,S2,S1</code>，即110，转换为十进制为6，即第六位发生了错误，纠正</p>
+<p>1    <u>1</u>   0     <strong>0</strong>     1    <strong>1</strong>    <strong>0</strong></p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Ragty</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://gitee.com/huoji555/blog/2019/11/25/%E6%B1%89%E6%98%8E%E7%A0%81%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90(%E6%B8%85%E6%99%B0%E5%AE%9E%E4%BE%8B%E8%AE%B2%E8%A7%A3)/">https://gitee.com/huoji555/blog/2019/11/25/%E6%B1%89%E6%98%8E%E7%A0%81%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90(%E6%B8%85%E6%99%B0%E5%AE%9E%E4%BE%8B%E8%AE%B2%E8%A7%A3)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://gitee.com/huoji555/blog">Ragty の Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blog/tags/%E6%B1%89%E6%98%8E%E7%A0%81-%E6%A0%A1%E9%AA%8C%E7%A0%81-%E6%B1%89%E6%98%8E%E6%A0%A1%E9%AA%8C%E7%A0%81/">汉明码 校验码 汉明校验码</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/blog/2019/11/26/CRC%E5%BE%AA%E7%8E%AF%E5%86%97%E4%BD%99%E6%A0%A1%E9%AA%8C%E7%A0%81%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90(%E9%99%84%E5%AE%9E%E4%BE%8B)/"><i class="fa fa-chevron-left">  </i><span>CRC循环冗余校验码原理解析(附实例)</span></a></div><div class="next-post pull-right"><a href="/blog/2019/11/21/Spring%20Boot%E5%8D%87%E7%BA%A7%E5%88%B02.2.x%E6%95%B0%E6%8D%AE%E8%BF%9E%E6%8E%A5%E6%8A%A5%E9%94%99%E5%8F%8A%E5%88%86%E6%9E%90/"><span>Spring Boot升级到2.2.x数据连接报错及分析</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: '64bb26cd3e1c8abc30b9',
+  clientSecret: '2c12bfa74e197296c7f3fe590350ba444099ef0b',
+  repo: 'huoji555.github.io',
+  owner: 'huoji555',
+  admin: 'huoji555',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2020 By Ragty</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text"><a href="http://beian.miit.gov.cn " target="_blank" rel="noopener" charset="utf-8"> ICP备案号:京ICP备<13502>号 </a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file-o"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/blog/js/utils.js?version=1.7.0"></script><script src="/blog/js/fancybox.js?version=1.7.0"></script><script src="/blog/js/sidebar.js?version=1.7.0"></script><script src="/blog/js/copy.js?version=1.7.0"></script><script src="/blog/js/fireworks.js?version=1.7.0"></script><script src="/blog/js/transition.js?version=1.7.0"></script><script src="/blog/js/scroll.js?version=1.7.0"></script><script src="/blog/js/head.js?version=1.7.0"></script><script src="/blog/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

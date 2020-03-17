@@ -1,0 +1,246 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="PBKDF2算法Java实现"><meta name="keywords" content="密码加盐 PBKDF2 密码攻击"><meta name="author" content="Ragty"><meta name="copyright" content="Ragty"><title>PBKDF2算法Java实现 | Ragty の Blog</title><link rel="shortcut icon" href="/blog/melody-favicon.ico"><link rel="stylesheet" href="/blog/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><script>var GLOBAL_CONFIG = { 
+  root: '/blog/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text">1.加盐处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text"> </span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text">2.为什么要加盐</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text"> </span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text">3.常用密码攻击方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text"> </span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text">4. 让密码更难破解（慢哈希函数）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text"> </span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text">5.实现代码 </span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text"> </span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-text">6.单元测试</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://secure.gravatar.com/avatar/dcc38a5a0d37cb7348d4f72d8f6a2de0"></div><div class="author-info__name text-center">Ragty</div><div class="author-info__description text-center"></div><div class="follow-button"><a href="https://github.com/huoji555" target="_blank" rel="noopener">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/blog/archives"><span class="pull-left">文章</span><span class="pull-right">83</span></a><a class="author-info-articles__tags article-meta" href="/blog/tags"><span class="pull-left">标签</span><span class="pull-right">75</span></a><a class="author-info-articles__categories article-meta" href="/blog/categories"><span class="pull-left">分类</span><span class="pull-right">38</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接-Links</div><a class="author-info-links__name text-center" href="https://blog.csdn.net/huoji555" target="_blank" rel="noopener">MY-CSDN</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/blog/">Ragty の Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/blog">Home</a><a class="site-page" href="/blog/archives">Archives</a><a class="site-page" href="/blog/categories">Categories</a><a class="site-page" href="/blog/tags">Tags</a><a class="site-page" href="/blog/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">PBKDF2算法Java实现</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2018-11-02</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/blog/categories/%E5%AF%86%E7%A0%81%E5%8A%A0%E7%9B%90/">密码加盐</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">1.9k</span><span class="post-meta__separator">|</span><span>阅读时长: 6 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><a id="more"></a>
+
+<h2>1.加盐处理</h2>
+
+<blockquote>
+<p>       在密码学中，是指通过在密码任意固定位置插入特定的字符串，让散列后的结果和使用原始密码的散列结果不相符，这种过程称之为“加盐”（比如可以在密码中混入一段“随机”的字符串再进行哈希加密，这个被字符串被称作盐值）。</p>
+</blockquote>
+
+<h2> </h2>
+
+<h2>2.为什么要加盐</h2>
+
+<blockquote>
+<p>      涉及身份验证的系统都需要存储用户的认证信息，常用的用户认证方式主要为用户名和密码的方式，为了安全起见，用户输入的密码需要保存为密文形式，可采用已公开的不可逆的hash加密算法，比如SHA256, SHA512, SHA3等，对于同一密码，同一加密算法会产生相同的hash值，这样，当用户进行身份验证时，也可对用户输入的明文密码应用相同的hash加密算法，得出一个hash值，然后使用该hash值和之前存储好的密文值进行对照，如果两个值相同，则密码认证成功，否则密码认证失败。</p>
+
+<p>     由于密码是由用户设定的，在实际应用中，用户设置的密码复杂度可能不够高，同时不同的用户极有可能会使用相同的密码，那么这些用户对应的密文也会相同，这样，当存储用户密码的数据库泄露后，攻击者会很容易便能找到相同密码的用户，从而也降低了破解密码的难度，因此，在对用户密码进行加密时，需要考虑对密码进行掩饰，即使是相同的密码，也应该要保存为不同的密文，即使用户输入的是弱密码，也需要考虑进行增强，从而增加密码被攻破的难度，而使用带盐的加密hash值便能满足该需求。</p>
+</blockquote>
+
+<h2> </h2>
+
+<h2>3.常用密码攻击方式</h2>
+
+<blockquote>
+<p> 常用的密码攻击方式有字典攻击、暴力破解、查表法、反向查表法、彩虹表等。</p>
+
+<p>     对字典攻击和暴力破解，攻击者均采用逐密码尝试的方式，目前没有很好的手段来阻止字典攻击和暴力破解攻击，只能是想办法让这两种攻击方式变得相对低效一些，而相同的密码产生不同的hash值便能让攻击者针对每一个hash值都需要从头进行尝试，从而使攻击变得更加低效。</p>
+
+<p>      对查表法、反向查表法和彩虹表攻击方式，攻击者需要提前准备好包含密码和密码hash值的密码表，然后根据该表和用户密码数据库进行批量匹配，从而达到攻破密码的目的；而如果我们在加密时，给每个密码附加了不同的随机值，这样每个密码对应的hash值也会不同，这样攻击者在准备密码表时，就必须要将最基本的密码和用户密码数据库中的盐值进行笛卡尔积后再计算hash值，盐值越多，用户需要准备的表量越大，这样对于攻击而言，就变得有些得不偿失了。</p>
+</blockquote>
+
+<h2> </h2>
+
+<h2>4. 让密码更难破解（慢哈希函数）</h2>
+
+<blockquote>
+<p>       加盐使攻击者无法采用特定的查询表和彩虹表快速破解大量哈希值，但是却不能阻止他们使用字典攻击或暴力攻击。高端的显卡（GPU）和定制的硬件可以每秒进行数十亿次哈希计算，因此这类攻击依然可以很高效。为了降低攻击者的效率，我们可以使用一种叫做<strong>密钥扩展</strong>的技术。</p>
+
+<p>      这种技术的思想就是把哈希函数变得很慢，于是即使有着超高性能的GPU或定制硬件，字典攻击和暴力攻击也会慢得让攻击者无法接受。最终的目标是把哈希函数的速度降到足以让攻击者望而却步，但造成的延迟又不至于引起用户的注意。</p>
+
+<p>     密钥扩展的实现是依靠一种CPU密集型哈希函数。不要尝试自己发明简单的迭代哈希加密，如果迭代不够多，是可以被高效的硬件快速并行计算出来的，就和普通哈希一样。应该使用标准的算法，比如<a href="http://en.wikipedia.org/wiki/PBKDF2" target="_blank" rel="noopener">PBKDF2</a>或者<a href="http://en.wikipedia.org/wiki/Bcrypt" target="_blank" rel="noopener">bcrypt</a>。这里使用<a href="http://en.wikipedia.org/wiki/PBKDF2" target="_blank" rel="noopener">PBKDF2</a>实现</p>
+
+<p>      这类算法使用一个安全因子或迭代次数作为参数，这个值决定了哈希函数会有多慢。对于桌面软件或者手机软件，获取参数最好的办法就是执行一个简短的性能基准测试，找到使哈希函数大约耗费0.5秒的值。这样，你的程序就可以尽可能保证安全，而又不影响到用户体验。</p>
+</blockquote>
+
+<h2> </h2>
+
+<h2>5.实现代码 </h2>
+
+<pre class="has">
+<code>package com.hwj.util;
+
+import org.springframework.stereotype.Component;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+
+@Component
+public class PBKDF2Util {
+
+    public static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA1";
+
+
+    public static final int SALT_BYTE_SIZE = 32 / 2;         //盐的长度
+    public static final int HASH_BIT_SIZE = 128 * 4;         //生成密文的长度
+    public static final int PBKDF2_ITERATIONS = 1000;        //迭代次数
+
+
+
+    /**
+     * @auther: Ragty
+     * @describe: 对输入的密码进行验证
+     * @param: [attemptedPassword(待验证密码), encryptedPassword(密文), salt(盐值)]
+     * @return: boolean
+     * @date: 2018/11/2
+     */
+    public boolean authenticate(String attemptedPassword, String encryptedPassword, String salt)
+            throws NoSuchAlgorithmException, InvalidKeySpecException {
+        // 用相同的盐值对用户输入的密码进行加密
+        String encryptedAttemptedPassword = getEncryptedPassword(attemptedPassword, salt);
+        // 把加密后的密文和原密文进行比较，相同则验证成功，否则失败
+        return encryptedAttemptedPassword.equals(encryptedPassword);
+    }
+
+
+
+    /**
+     * @auther: Ragty
+     * @describe: 生成密文
+     * @param: [password(明文密码), salt(盐值)]
+     * @return: java.lang.String
+     * @date: 2018/11/2
+     */
+    public String getEncryptedPassword(String password, String salt) throws NoSuchAlgorithmException,
+            InvalidKeySpecException {
+
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), fromHex(salt), PBKDF2_ITERATIONS, HASH_BIT_SIZE);
+        SecretKeyFactory f = SecretKeyFactory.getInstance(PBKDF2_ALGORITHM);
+        return toHex(f.generateSecret(spec).getEncoded());
+    }
+
+
+
+
+    /**
+     * @auther: Ragty
+     * @describe: 通过加密的强随机数生成盐(最后转换为16进制)
+     * @param: []
+     * @return: java.lang.String
+     * @date: 2018/11/2
+     */
+    public String generateSalt() throws NoSuchAlgorithmException {
+        SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+        byte[] salt = new byte[SALT_BYTE_SIZE];
+        random.nextBytes(salt);
+
+        return toHex(salt);
+    }
+
+
+
+
+    /**
+     * @auther: Ragty
+     * @describe: 十六进制字符串转二进制字符串
+     * @param: [hex]
+     * @return: byte[]
+     * @date: 2018/11/2
+     */
+    private static byte[] fromHex(String hex) {
+        byte[] binary = new byte[hex.length() / 2];
+        for (int i = 0; i &lt; binary.length; i++) {
+            binary[i] = (byte) Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);
+        }
+        return binary;
+    }
+
+
+
+
+
+    /**
+     * @auther: Ragty
+     * @describe: 二进制字符串转十六进制字符串
+     * @param: [array]
+     * @return: java.lang.String
+     * @date: 2018/11/2
+     */
+    private static String toHex(byte[] array) {
+        BigInteger bi = new BigInteger(1, array);
+        String hex = bi.toString(16);
+        int paddingLength = (array.length * 2) - hex.length();
+        if (paddingLength &gt; 0)
+            return String.format("%0" + paddingLength + "d", 0) + hex;
+        else
+            return hex;
+    }
+}</code></pre>
+
+<h2> </h2>
+
+<h2>6.单元测试</h2>
+
+<pre class="has">
+<code>package com.hwj;
+
+import com.hwj.util.MD5Util;
+import com.hwj.util.PBKDF2Util;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import sun.security.util.Password;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class SaltTest {
+
+    @Autowired
+    private PBKDF2Util pbkdf2Util;
+    @Autowired
+    private MD5Util md5Util;
+
+
+    @Test
+    public void mailSendTest() throws Exception{
+
+        String password = "123456";
+
+        String salt = pbkdf2Util.generateSalt();
+        String pbkdf2 = pbkdf2Util.getEncryptedPassword(password,salt);
+        String md5 = md5Util.digest(password);
+
+        System.out.println("原始密码:"+password);
+        System.out.println("MD5加密后的密码:"+md5);
+        System.out.println("盐值:"+salt);
+        System.out.println("PBKDF2加盐后的密码:"+pbkdf2);
+        System.out.println("Test success");
+
+    }
+
+
+}
+</code></pre>
+
+<p> </p>
+
+<p>7.测试结果</p>
+
+<blockquote>
+<p>原始密码:123456<br />
+MD5加密后的密码:e10adc3949ba59abbe56e057f20f883e<br />
+盐值:fb8681ed06d293f602596206089cc961<br />
+PBKDF2加盐后的密码:ac9bb962cc0e9b8a8c9887e0df41982b98001456afa191123fcd67ece84d3f715ecc5be82a704ec001e8bec1b53fe01f8adacffbfa3bc425f10b962c3690a904<br />
+Test success </p>
+</blockquote>
+
+<p> </p></div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Ragty</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://gitee.com/huoji555/blog/2018/11/02/PBKDF2%E7%AE%97%E6%B3%95Java%E5%AE%9E%E7%8E%B0/">https://gitee.com/huoji555/blog/2018/11/02/PBKDF2%E7%AE%97%E6%B3%95Java%E5%AE%9E%E7%8E%B0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://gitee.com/huoji555/blog">Ragty の Blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blog/tags/%E5%AF%86%E7%A0%81%E5%8A%A0%E7%9B%90-PBKDF2-%E5%AF%86%E7%A0%81%E6%94%BB%E5%87%BB/">密码加盐 PBKDF2 密码攻击</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/blog/2018/11/15/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84!%E7%BA%BF%E6%80%A7%E8%A1%A8%E6%80%BB%E7%BB%93+%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/"><i class="fa fa-chevron-left">  </i><span>数据结构:线性表总结+思维导图</span></a></div><div class="next-post pull-right"><a href="/blog/2018/08/22/%E7%99%BE%E5%BA%A6OCR%E8%AF%86%E5%88%AB%E8%A1%A8%E6%A0%BC%E6%96%87%E5%AD%97%EF%BC%8C%E5%B9%B6%E8%87%AA%E5%8A%A8%E4%B8%8B%E8%BD%BD%E5%88%B0%E6%9C%AC%E5%9C%B0(%E5%87%86%E7%A1%AE%E7%8E%87%E5%BE%88%E9%AB%98)/"><span>百度OCR识别表格文字，并自动下载到本地(准确率很高)</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: '64bb26cd3e1c8abc30b9',
+  clientSecret: '2c12bfa74e197296c7f3fe590350ba444099ef0b',
+  repo: 'huoji555.github.io',
+  owner: 'huoji555',
+  admin: 'huoji555',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2020 By Ragty</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text"><a href="http://beian.miit.gov.cn " target="_blank" rel="noopener" charset="utf-8"> ICP备案号:京ICP备<13502>号 </a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file-o"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/blog/js/utils.js?version=1.7.0"></script><script src="/blog/js/fancybox.js?version=1.7.0"></script><script src="/blog/js/sidebar.js?version=1.7.0"></script><script src="/blog/js/copy.js?version=1.7.0"></script><script src="/blog/js/fireworks.js?version=1.7.0"></script><script src="/blog/js/transition.js?version=1.7.0"></script><script src="/blog/js/scroll.js?version=1.7.0"></script><script src="/blog/js/head.js?version=1.7.0"></script><script src="/blog/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
