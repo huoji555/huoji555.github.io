@@ -7,85 +7,767 @@
     error: '复制错误',
     noSupport: '浏览器不支持'
   }
-} </script><meta name="generator" content="Hexo 4.2.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="false"><div class="author-info"><div class="author-info__avatar text-center"><img src="https://secure.gravatar.com/avatar/dcc38a5a0d37cb7348d4f72d8f6a2de0"></div><div class="author-info__name text-center">Ragty</div><div class="author-info__description text-center"></div><div class="follow-button"><a href="https://github.com/huoji555" target="_blank" rel="noopener">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/blog/archives"><span class="pull-left">文章</span><span class="pull-right">83</span></a><a class="author-info-articles__tags article-meta" href="/blog/tags"><span class="pull-left">标签</span><span class="pull-right">75</span></a><a class="author-info-articles__categories article-meta" href="/blog/categories"><span class="pull-left">分类</span><span class="pull-right">38</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接-Links</div><a class="author-info-links__name text-center" href="https://blog.csdn.net/huoji555" target="_blank" rel="noopener">MY-CSDN</a></div></div></div><nav id="nav" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/blog/">Ragty の Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/blog">Home</a><a class="site-page" href="/blog/archives">Archives</a><a class="site-page" href="/blog/categories">Categories</a><a class="site-page" href="/blog/tags">Tags</a><a class="site-page" href="/blog/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="site-info"><div id="site-title">Ragty の Blog</div><div id="site-sub-title">When the world sleep, I dream.</div><div id="site-social-icons"><a class="social-icon" href="https://github.com/huoji555" target="_blank" rel="noreferrer noopener nofollow"><i class="fa-github fab"></i></a><a class="social-icon" href="https://blog.csdn.net/huoji555" target="_blank" rel="noreferrer noopener nofollow"><i class="fa-rss fas"></i></a></div></div></nav><div id="content-outer"><div class="layout" id="content-inner"><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/12/09/Js%E4%B8%AD%E5%88%A9%E7%94%A8ES6%E7%89%B9%E6%80%A7%E7%9A%84%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F%E5%8F%8A%E6%B1%82%E6%9C%80%E5%A4%A7%EF%BC%88%E5%B0%8F%EF%BC%89%E5%80%BC%E7%9A%84%E5%A4%9A%E7%A7%8D%E6%96%B9%E6%A1%88/">Js中利用ES6特性的数组排序及求最大（小）值的多种方案</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-12-09</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/js/">js</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/blog/tags/javascript-%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F-es6/">javascript 数组排序 es6 ...</a></span><div class="content">
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="false"><div class="author-info"><div class="author-info__avatar text-center"><img src="https://secure.gravatar.com/avatar/dcc38a5a0d37cb7348d4f72d8f6a2de0"></div><div class="author-info__name text-center">Ragty</div><div class="author-info__description text-center"></div><div class="follow-button"><a href="https://github.com/huoji555" target="_blank" rel="noopener">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/blog/archives"><span class="pull-left">文章</span><span class="pull-right">83</span></a><a class="author-info-articles__tags article-meta" href="/blog/tags"><span class="pull-left">标签</span><span class="pull-right">75</span></a><a class="author-info-articles__categories article-meta" href="/blog/categories"><span class="pull-left">分类</span><span class="pull-right">38</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接-Links</div><a class="author-info-links__name text-center" href="https://blog.csdn.net/huoji555" target="_blank" rel="noopener">MY-CSDN</a></div></div></div><nav id="nav" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/blog/">Ragty の Blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/blog">Home</a><a class="site-page" href="/blog/archives">Archives</a><a class="site-page" href="/blog/categories">Categories</a><a class="site-page" href="/blog/tags">Tags</a><a class="site-page" href="/blog/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="site-info"><div id="site-title">Ragty の Blog</div><div id="site-sub-title">When the world sleep, I dream.</div><div id="site-social-icons"><a class="social-icon" href="https://github.com/huoji555" target="_blank" rel="noreferrer noopener nofollow"><i class="fa-github fab"></i></a><a class="social-icon" href="https://blog.csdn.net/huoji555" target="_blank" rel="noreferrer noopener nofollow"><i class="fa-rss fas"></i></a></div></div></nav><div id="content-outer"><div class="layout" id="content-inner"><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/12/09/Js%E4%B8%AD%E5%88%A9%E7%94%A8ES6%E7%89%B9%E6%80%A7%E7%9A%84%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F%E5%8F%8A%E6%B1%82%E6%9C%80%E5%A4%A7%EF%BC%88%E5%B0%8F%EF%BC%89%E5%80%BC%E7%9A%84%E5%A4%9A%E7%A7%8D%E6%96%B9%E6%A1%88/">Js中利用ES6特性的数组排序及求最大（小）值的多种方案</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-12-09</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/js/">js</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/blog/tags/javascript-%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F-es6/">javascript 数组排序 es6 ...</a></span><div class="content"><a id="more"></a>
 
 
-
-1.数组去重
-
-
-方案1：
-思路：对待去重的数组arr进行for循环遍历，然后在新的数组newArr中去查找当前被遍历的元素arr[i]，如果返回&#20540;为-1，说明在新的数组中还没有出现过当前被遍历的元素arr[i]，则把该元素放到新的数组中。当数组arr遍历完以后，新数组newAr ...</div><a class="more" href="/blog/2017/12/09/Js%E4%B8%AD%E5%88%A9%E7%94%A8ES6%E7%89%B9%E6%80%A7%E7%9A%84%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F%E5%8F%8A%E6%B1%82%E6%9C%80%E5%A4%A7%EF%BC%88%E5%B0%8F%EF%BC%89%E5%80%BC%E7%9A%84%E5%A4%9A%E7%A7%8D%E6%96%B9%E6%A1%88/#more" style="margin-top: 14px">阅读更多</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/12/09/Js%E4%B8%ADvar%E3%80%81let%E3%80%81const%E7%9A%84%E5%8C%BA%E5%88%AB/">Js中var、let、const的区别</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-12-09</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/js/">js</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/blog/tags/javascript-var-let-const/">javascript var let const</a></span><div class="content">
-
-
-概述
-
-
-使用var声明的变量，其作用域为该语句所在的函数内，且存在变量提升现象；
-使用let声明的变量，其作用域为该语句所在的代码块内，不存在变量提升；
-使用const声明的是常量，在后面出现的代码中不能再修改该常量的&#20540;。
-
-
-
-
-var与let的区别
-
-
-1.使用未声明的变量， ...</div><a class="more" href="/blog/2017/12/09/Js%E4%B8%ADvar%E3%80%81let%E3%80%81const%E7%9A%84%E5%8C%BA%E5%88%AB/#more" style="margin-top: 14px">阅读更多</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/12/03/%E5%8E%9F%E7%94%9FBootstrap%E5%AE%9E%E7%8E%B0%E5%8A%A8%E6%80%81%E5%88%86%E9%A1%B5/">原生Bootstrap实现动态分页</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-12-03</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/%E5%88%86%E9%A1%B5/">分页</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/blog/tags/%E5%88%86%E9%A1%B5-boot-bootstrap/">分页 boot bootstrap</a></span><div class="content">
-
-
-
-
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 最近开发时需要动态显示分页页数，写了一个动态显示页数的算法。效果为动态显示当前页数以及后的页数，规定自己想要显示的页数x，若总页数小于x，则显示自己的页数，若大于x，则每次只显示当前所在页数，以 ...</div><a class="more" href="/blog/2017/12/03/%E5%8E%9F%E7%94%9FBootstrap%E5%AE%9E%E7%8E%B0%E5%8A%A8%E6%80%81%E5%88%86%E9%A1%B5/#more" style="margin-top: 14px">阅读更多</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/11/16/Spring%204.0%E6%96%B0%E7%89%B9%E6%80%A7------Web%E5%BC%80%E5%8F%91%E7%9A%84%E5%A2%9E%E5%BC%BA/">Spring 4.0新特性------Web开发的增强</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-16</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/spring/">spring</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/blog/tags/spring-spring%E6%96%B0%E7%89%B9%E6%80%A7-web%E5%BC%80%E5%8F%91%E5%A2%9E%E5%BC%BA/">spring spring新特性 web开发增强</a></span><div class="content">
-
-
-
-
-一、@RestController
-为了方便Rest开发，通过新的@RestController指定在控制器上，这样就不需要在每个@RequestMapping方法上加@ResponseBody了。而且添加了一个AsyncRstTemplate,支持REST客户端的异步无阻塞支持。
-
-@Re ...</div><a class="more" href="/blog/2017/11/16/Spring%204.0%E6%96%B0%E7%89%B9%E6%80%A7------Web%E5%BC%80%E5%8F%91%E7%9A%84%E5%A2%9E%E5%BC%BA/#more" style="margin-top: 14px">阅读更多</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/11/14/Spring%20Boot%20Jpa%20%20%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E8%AF%AD%E5%8F%A5/">Spring Boot Jpa  常用操作语句</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-14</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/spring-boot/">spring boot</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/blog/tags/spring-boot-jpa-spring-data-jpa-Spring-jpa%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%E8%AF%AD%E5%8F%A5-Jpa%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/">spring boot jpa spring data jpa Spring jpa基本操作语句 Jpa基础概念</a></span><div class="content">
-
-
-什么是JPA?&nbsp;&nbsp;
-
-
-
-
-JPA （ The Java Persistence API ）是用于访问，持久化和管理 Java 对象 /类与关系型数据库之间的数据交互的 Java 规范。 JPA 被定义为 EJB （ Enterprise JavaBeans ） 3.0 规范 ...</div><a class="more" href="/blog/2017/11/14/Spring%20Boot%20Jpa%20%20%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E8%AF%AD%E5%8F%A5/#more" style="margin-top: 14px">阅读更多</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/11/13/Spring%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/">Spring体系结构</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-13</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/spring/">spring</a></span><div class="content">
-
-
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;概述
-&nbsp; &nbsp; &nbsp; Spring核心框架由4000多个类组成，整个框架按其所属功能可以划分为4个主要模块。如图1所示
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ...</div><a class="more" href="/blog/2017/11/13/Spring%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/#more" style="margin-top: 14px">阅读更多</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/11/13/Spring%20%E6%A6%82%E8%BF%B0%E5%8F%8A%E4%BC%98%E7%82%B9/">Spring 概述及优点</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-13</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/spring/">spring</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/blog/tags/spring-spring%E4%BC%98%E7%82%B9-Spring%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/">spring spring优点 Spring基础概念</a></span><div class="content">
-
-
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1.&nbsp;Spring是什么
-
-
-&nbsp; &nbsp; &nbsp; &nbsp; 
-Spring是分层的java SE/EE 应用一站式的轻量级开源框架，以ioc（Inverse of Control ...</div><a class="more" href="/blog/2017/11/13/Spring%20%E6%A6%82%E8%BF%B0%E5%8F%8A%E4%BC%98%E7%82%B9/#more" style="margin-top: 14px">阅读更多</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/11/12/Spring%20%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E5%87%A0%E7%A7%8D%E6%B3%A8%E8%A7%A3/">Spring 中常用的几种注解</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-12</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/spring/">spring</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/blog/tags/spring-spring%E6%B3%A8%E8%A7%A3-%E5%BA%94%E7%94%A8-%E6%B3%A8%E9%87%8A-%E7%BB%93%E6%9E%84/">spring spring注解 应用 注释 结构</a></span><div class="content">
-
-
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Spring 2.5 中除了提供 @Component 注释外，还定义了几个拥有特殊语义的注释，它们分别是：@Repository、@Service 和 @Controller。
-
-
-&nbsp; &nbsp; &nbsp; & ...</div><a class="more" href="/blog/2017/11/12/Spring%20%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E5%87%A0%E7%A7%8D%E6%B3%A8%E8%A7%A3/#more" style="margin-top: 14px">阅读更多</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/11/12/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A6%82%E8%BF%B0%E5%8F%8A%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/">数据库概述及基本概念</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-12</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/blog/tags/%E6%95%B0%E6%8D%AE%E5%BA%93-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B-mysql-%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/">数据库 数据类型 mysql 关系型数据库 数据库基本概念</a></span><div class="content">
+<br>
+<p><strong><span style="font-size:24px">1.数组去重</span></strong></p>
+<p><span style="font-size:18px"><br>
+</span></p>
+<p><span style="font-size:18px">方案1：</span></p>
+<p><span style="font-size:12px">思路：对待去重的数组arr进行for循环遍历，然后在新的数组newArr中去查找当前被遍历的元素arr[i]，如果返回&#20540;为-1，说明在新的数组中还没有出现过当前被遍历的元素arr[i]，则把该元素放到新的数组中。当数组arr遍历完以后，新数组newArr就是去重以后的数组。</span></p>
+<p><pre name="code" class="javascript">var arr = [1, 4, 7, 4, 3, 2, 1, 4, 7];
+var newArr = [];
+for(var i = 0; i &lt; arr.length; i++) {
+if(newArr.indexOf(arr[i]) === -1) {
+newArr.push(arr[i]);
+}
+}
+console.log(newArr);</pre><br>
+</p>
+<p><span style="font-size:18px">方案2：</span></p>
+<p>思路：该方案和方案1思路相同，只不过是使用reduce方法进行遍历。</p>
+<p><pre name="code" class="javascript">var arr = [1, 4, 7, 4, 3, 2, 1, 4, 7];
+var newArr = arr.reduce((newArr, current) =&gt; {
+if(newArr.indexOf(current) === -1) {
+newArr.push(current);
+}
+return newArr;
+}, []);
+console.log(newArr);</pre><br>
+</p>
+<p><span style="font-size:18px">方案3：</span></p>
+<p>思路：当前方案使用了ES6新增的set数据解构的去重特性，然后在将生成的set对象转换成数组。</p>
+<p><pre name="code" class="javascript">var arr = [1, 4, 7, 4, 3, 2, 1, 4, 7];
+var newArr = Array.from(new Set(arr));
+console.log(newArr);</pre></p>
+<p><br>
+</p>
+<p><br>
+</p>
+<br>
+<span style="color:rgb(34,34,34); font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; line-height:27.2px"><span style="font-size:24px"><strong>2.在数组中找出最小&#20540;（或者最大&#20540;）</strong></span></span><br>
+<p><span style="color:rgb(34,34,34); font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; line-height:27.2px"></span></p>
+<div>
+<p><span style="font-size:18px">实现方案1：</span></p>
+<p><span style="font-size:12px">思路：假设第一个数组元素是最小&#20540;，然后对数组后面的元素进行遍历、判断，如果当前被遍历的元素小于iMin变量的&#20540;，说明iMin变量的&#20540;还不是最小&#20540;，则将当前遍历的元素&#20540;替换掉iMin变量的&#20540;。当循环结束，iMin变量的&#20540;就是数组中最小的&#20540;。</span></p>
+<p><span style="font-size:12px"></span><pre name="code" class="javascript">var arr = [23, 45, 40, 30, 12];
+var iMin = arr.shift();
+arr.forEach((v) =&gt; {
+iMin = v &lt; iMin ? v : iMin;
+});
+console.log(iMin);</pre><br>
+</p>
+<p><span style="font-size:18px"><strong>实现方案2：</strong></span></p>
+<p><span style="font-size:14px">思路：利用Math.min()方法求最小&#20540;，但是该方法的参数是一个数&#20540;列表，而不是一个数组，故使用ES6新增的扩展运算符将数组转换成列表，然后传递到Math.min()方法中去即可。</span></p>
+<p><span style="font-size:14px"></span><pre name="code" class="javascript">var arr = [23, 45, 40, 30, 12];
+var iMin = Math.min(...arr);
+console.log(iMin);</pre><br>
+<br>
+</p>
+</div>
+<p></p>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/12/09/Js%E4%B8%ADvar%E3%80%81let%E3%80%81const%E7%9A%84%E5%8C%BA%E5%88%AB/">Js中var、let、const的区别</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-12-09</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/js/">js</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/blog/tags/javascript-var-let-const/">javascript var let const</a></span><div class="content"><a id="more"></a>
 
 
-数据库学习笔记（一）数据库概述及基本概念 &nbsp;
+<p><span style="color:rgb(38,38,38); line-height:25.05px; white-space:pre-wrap"><strong><span style="font-size:32px">概述</span></strong></span></p>
+<p><br>
+</p>
+<p><span style="color:rgb(38,38,38); font-size:15px; line-height:25.05px; white-space:pre-wrap">使用var声明的变量，其作用域为该语句所在的函数内，且存在变量提升现象；</span></p>
+<span style="color:rgb(38,38,38); font-size:15px; line-height:25.05px; white-space:pre-wrap">使用let声明的变量，其作用域为该语句所在的代码块内，不存在变量提升；</span><br style="color:rgb(38,38,38); font-size:15px; line-height:25.05px; white-space:pre-wrap">
+<p><span style="color:rgb(38,38,38); font-size:15px; line-height:25.05px; white-space:pre-wrap">使用const声明的是常量，在后面出现的代码中不能再修改该常量的&#20540;。</span></p>
+<p><br>
+</p>
+<p><br>
+</p>
+<p><span style="color:rgb(38,38,38); line-height:25.05px; white-space:pre-wrap"><strong><span style="font-size:32px">var与let的区别</span></strong></span></p>
+<p><span style="color:rgb(38,38,38); line-height:25.05px; white-space:pre-wrap"><span style="font-size:24px"><strong><br>
+</strong></span></span></p>
+<p><span style="font-weight:bold"><span style="font-size:18px"><span style="color:#262626"><span style="line-height:25.05px; white-space:pre-wrap">1.</span></span><span style="color:rgb(63,63,63); font-family:'microsoft yahei'; line-height:1.1">使用未声明的变量，表现不同</span></span></span></p>
+<p><span style="font-size:18px"><span style="color:rgb(63,63,63); font-family:'microsoft yahei'; line-height:1.1"></span></span></p>
+<pre name="code" class="html">(function() {
+  console.log(varTest); //输出undefined(注意要注释掉下面一行才能运行)
+  console.log(letTest); //直接报错：ReferenceError: letTest is not defined
+
+<p>  var varTest = ‘test var OK.’;<br>  let letTest = ‘test let OK.’;<br>}());</pre></p>
+<p></p>
+<p><br>
+</p>
+<span style="color:rgb(38,38,38)"><span style="line-height:25.05px; white-space:pre-wrap"><strong>2.</strong></span></span><span style="color:rgb(63,63,63); font-family:'microsoft yahei'; line-height:1.1"><span style="font-size:18px"><strong>重复声明同一个变量时，表现不同</strong></span></span>
+<p><span style="color:rgb(63,63,63); font-family:'microsoft yahei'; line-height:1.1"><span style="font-size:18px"></span></span></p>
+<pre name="code" class="html">(function() {
+  var varTest = 'test var OK.';
+  let letTest = 'test let OK.';
+
+<p>  var varTest = ‘varTest changed.’;<br>  let letTest = ‘letTest changed.’; //直接报错：SyntaxError: Identifier ‘letTest’ has already been declared</p>
+<p>  console.log(varTest); //输出varTest changed.(注意要注释掉上面letTest变量的重复声明才能运行)<br>  console.log(letTest);<br>}());</pre></p>
+<p></p>
+<p><span style="color:rgb(63,63,63); font-family:'microsoft yahei'; line-height:1.1"><span style="font-size:18px"><br>
+</span></span></p>
+<span style="font-size:18px"><span style="color:rgb(63,63,63); font-family:'microsoft yahei'; line-height:1.1"><span style="color:rgb(38,38,38)"><span style="line-height:25.05px; white-space:pre-wrap"><strong>3.变量作用范围不同</strong></span></span></span></span><span style="color:rgb(63,63,63); font-family:'microsoft yahei'; line-height:1.1"><span style="font-size:18px"><strong>，表现不同</strong></span></span>
+<p><span style="color:rgb(63,63,63); font-family:'microsoft yahei'; line-height:1.1"><span style="font-size:18px"></span></span></p>
+<pre name="code" class="html">(function() {
+  var varTest = 'test var OK.';
+  let letTest = 'test let OK.';
+
+<p>  {<br>    var varTest = ‘varTest changed.’;<br>    let letTest = ‘letTest changed.’;<br>  }</p>
+<p>  console.log(varTest); //输出&quot;varTest changed.&quot;，内部&quot;{}&quot;中声明的varTest变量覆盖外部的letTest声明<br>  console.log(letTest); //输出&quot;test let OK.&quot;，内部&quot;{}&quot;中声明的letTest和外部的letTest不是同一个变量<br>}());</pre><br><br><br><br><br></p>
+<p></p>
+<p><span style="font-size:18px"><span style="font-family:microsoft yahei; color:#3f3f3f"><span style="line-height:19.8px"><br>
+</span></span><br>
+<br>
+</span></p>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/12/03/%E5%8E%9F%E7%94%9FBootstrap%E5%AE%9E%E7%8E%B0%E5%8A%A8%E6%80%81%E5%88%86%E9%A1%B5/">原生Bootstrap实现动态分页</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-12-03</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/%E5%88%86%E9%A1%B5/">分页</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/blog/tags/%E5%88%86%E9%A1%B5-boot-bootstrap/">分页 boot bootstrap</a></span><div class="content"><a id="more"></a>
 
 
+<p><br>
+</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="font-size:18px"> &nbsp;<span style="font-family:Microsoft YaHei"> 最近开发时需要动态显示分页页数，写了一个动态显示页数的算法。效果为动态显示当前页数以及后的页数，规定自己想要显示的页数x，若总页数小于x，则显示自己的页数，若大于x，则每次只显示当前所在页数，以及之后的x页。</span></span></p>
+<p><pre name="code" class="html">&lt;!-- 动态获取我的思维导图的页数 --&gt;
+    function getMyMindMapPage(currentPage){
+
+<pre><code>    var html=&amp;quot;&amp;quot;;
+    var lastPage;
+    var nextPage;
+    var showPage=4;      //每次显示的页数
+    var index;
+    var x;               //定义后面页数固定
+    var adata={&amp;quot;parentid&amp;quot;:&amp;quot;00100&amp;quot;};
+    var data=JSON.stringify(adata);
+
+    $.ajax({
+        type:&amp;quot;post&amp;quot;,
+        contentType:&amp;quot;application/json&amp;quot;,
+        dataType:&amp;quot;json&amp;quot;,
+        data:data,
+        url:&amp;quot;myMindMapTotal.do&amp;quot;,
+
+        success:function(data){
+            if(data==null){
+                alert(&amp;quot;获取失败&amp;quot;);
+            }else{
+
+                html+=&amp;quot;&amp;lt;ul class=&apos;pagination&apos;&amp;gt;&amp;quot;;
+                html+=&amp;quot;&amp;lt;li&amp;gt;&amp;lt;span onclick=&apos;getMyMindMap(1)&apos;&amp;gt;首页&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;&amp;quot;;
+
+                lastPage=currentPage;
+                if(lastPage&amp;lt;=1){
+                    lastPage==1;
+                }else{
+                    lastPage--;
+                }
+
+                html+=&amp;quot;&amp;lt;li&amp;gt;&amp;lt;span onclick=&apos;getMyMindMap(&amp;quot;+lastPage+&amp;quot;)&apos;&amp;gt;上一页&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;&amp;quot;;
+
+                if(data&amp;lt;=showPage){
+                    for(var i=1;i&amp;lt;=data;i++){
+                        html+=&amp;quot;&amp;lt;li&amp;gt;&amp;lt;span onclick=&apos;getMyMindMap(&amp;quot;+i+&amp;quot;)&apos;&amp;gt;&amp;quot;+i+&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;&amp;quot;;
+                    }
+                }else{
+                    index=currentPage+showPage;
+                    x=currentPage;
+                    if(index&amp;gt;data){
+                        index=data+1;
+                        x=index-showPage;
+                    }
+
+                    for(var i=x;i&amp;lt;index;i++){
+                        html+=&amp;quot;&amp;lt;li&amp;gt;&amp;lt;span onclick=&apos;getMyMindMap(&amp;quot;+i+&amp;quot;)&apos;&amp;gt;&amp;quot;+i+&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;&amp;quot;;
+                    }
+                } 
 
 
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 最近在学习关系型数据，整理了一些关于数据库学习的笔记。包括一些基本概念和需要了解的知识，并整理成思维图谱， ...</div><a class="more" href="/blog/2017/11/12/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A6%82%E8%BF%B0%E5%8F%8A%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/#more" style="margin-top: 14px">阅读更多</a><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/11/07/Could%20not%20obtain%20transaction-synchronized%20Session%20for%20current%20thread%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">Could not obtain transaction-synchronized Session for current thread解决方法</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-07</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/hibernate/">hibernate</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/blog/tags/spring-session-hibernate/">spring session hibernate</a></span><div class="content">
+                nextPage=currentPage;
+                if(nextPage&amp;lt;data){
+                    nextPage++;
+                }else if(nextPage==data){
+                    nextPage=data;
+                }
+
+                html+=&amp;quot;&amp;lt;li&amp;gt;&amp;lt;span onclick=&apos;getMyMindMap(&amp;quot;+nextPage+&amp;quot;)&apos;&amp;gt;下一页&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;&amp;quot;;
+                html+=&amp;quot;&amp;lt;li&amp;gt;&amp;lt;span onclick=&apos;getMyMindMap(&amp;quot;+data+&amp;quot;)&apos;&amp;gt;尾页&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;&amp;quot;;
+                html+=&amp;quot;&amp;lt;/ul&amp;gt;&amp;quot;;
+                $(&amp;quot;#jsmind_container&amp;quot;).append(html); 
+
+            }
+
+        },
+
+        error:function(e){
+            alert(&amp;quot;网络连接失败!&amp;quot;);
+        },
+
+    });
+}&lt;/pre&gt;&lt;br&gt;</code></pre><p><span style="font-size:18px">效果图</span></p></p>
+<p><span style="font-size:18px"><img src="https://img-blog.csdn.net/20171203165314926" alt=""><br>
+</span></p>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/11/16/Spring%204.0%E6%96%B0%E7%89%B9%E6%80%A7------Web%E5%BC%80%E5%8F%91%E7%9A%84%E5%A2%9E%E5%BC%BA/">Spring 4.0新特性------Web开发的增强</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-16</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/spring/">spring</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/blog/tags/spring-spring%E6%96%B0%E7%89%B9%E6%80%A7-web%E5%BC%80%E5%8F%91%E5%A2%9E%E5%BC%BA/">spring spring新特性 web开发增强</a></span><div class="content"><a id="more"></a>
 
 
+<p><span style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:18px"><strong><br>
+</strong></span></p>
+<p><span style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:18px"><strong>一、@RestController</strong></span></p>
+<p><span style="font-size:14px; font-family:Helvetica,Tahoma,Arial,sans-serif">为了方便Rest开发，通过新的@RestController指定在控制器上，这样就不需要在每个@RequestMapping方法上加@ResponseBody了。而且添加了一个AsyncRstTemplate,支持REST客户端的异步无阻塞支持。</span><br>
+</p>
+<p><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"></span><pre name="code" class="java" style="font-weight: bold;"><span style="font-size:18px;">@RestController  
+public class UserController {  
+    private UserService userService;  
+    @Autowired  
+    public UserController(UserService userService) {  
+        this.userService = userService;  
+    }  
+    @RequestMapping(&quot;/login&quot;)  
+      public User view() {  
+        User user = new User();  
+        user.setId(1L);  
+        user.setName(&quot;haha&quot;);  
+        return user;  
+    }  
+
+<pre><code>@RequestMapping(&amp;quot;/test2&amp;quot;)  
+public String view2() {  
+    return &amp;quot;{\&amp;quot;name\&amp;quot; : pudge}&amp;quot;;  
+}  </code></pre><p>}  </span></pre><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-size:14px">这样当你开发Rest服务器端的时候，spring-mvc只需要简单的配置一下,如下:</span></span></p></p>
+<p><strong><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"></span></strong><pre name="code" class="java"><span style="font-size:18px;">&lt;context:component-scan base-package=&quot;com.hwj.spring4&quot;/&gt;  
+&lt;mvc:annotation-driven/&gt;  </span></pre></p>
+<p style="font-size:14px"><br>
+</p>
+<p style="font-size:14px"><br>
+</p>
+<span style="font-size:18px">二、<span style="font-family:Helvetica,Tahoma,Arial,sans-serif">mvc:annotation-driven配置变化</span></span>
+<p><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-size:14px">统一风&#26684;，将&nbsp;enableMatrixVariables改为enable-matrix-variables属性，将ignoreDefaultModelOnRedirect改为ignore-default-model-on-redirect。</span></span><br>
+</span></p>
+<p><strong><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-size:18px"><br>
+</span></span></strong></p>
+<p><strong><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-size:18px"><br>
+</span></span></strong></p>
+<p><strong><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-size:18px">三、<span style="font-family:Helvetica,Tahoma,Arial,sans-serif">提供AsyncRestTemplate用于客户端非阻塞异步支持。</span></span></span></strong></p>
+<p><strong><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-size:18px"><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><br>
+</span></span></span></strong></p>
+<p><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><strong><span style="font-size:18px">3.1、服务器端</span></strong></span><br>
+</span></span></p>
+<p><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-size:18px">非常简单，服务器端暂停10秒再返回结果（但是服务器也是非阻塞的）。</span></span><br>
+</span></span></span></p>
+<p><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><strong></strong></span></span></span><pre name="code" class="java"><span style="font-size:18px;">@RestController  
+public class UserController {  
+    private UserService userService;  
+    @Autowired  
+    public UserController(UserService userService) {  
+        this.userService = userService;  
+    }  
+    @RequestMapping(&quot;/api&quot;)  
+      public Callable&lt;User&gt; api() {  
+        System.out.println(&quot;=====hello&quot;);  
+        return new Callable&lt;User&gt;() {  
+            @Override  
+            public User call() throws Exception {  
+                Thread.sleep(10L * 1000); //暂停两秒  
+                User user = new User();  
+                user.setId(1L);  
+                user.setName(&quot;haha&quot;);  
+                return user;  
+            }  
+        };  
+    }  
+}  </span></pre></p>
+<p><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><strong><br>
+</strong></span></span></span></p>
+<span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-size:18px">3.2、客户端</span></span>
+<p><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-size:18px"></span></span></span></span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif">
+此处使用Future来完成非阻塞，这样的话我们也需要给它一个回调接口来拿结果； Future和Callable是一对，一个消费结果，一个产生结果。调用完模板后会立即返回，不会阻塞；有结果时会调用其回调。</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif">
+<br>
+</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif">
+AsyncRestTemplate默认使用SimpleClientHttpRequestFactory，即通过java.net.HttpURLConnection实现；另外我们也可以使用apache的http components；使用template.setAsyncRequestFactory(new HttpComponentsAsyncClientHttpRequestFactory());设置即可。</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif">
+<br>
+</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif">
+<pre name="code" class="java"><strong>public static void main(String[] args) {  
+    AsyncRestTemplate template = new AsyncRestTemplate();  
+    //调用完后立即返回（没有阻塞）  
+    ListenableFuture&lt;ResponseEntity&lt;User&gt;&gt; future = template.getForEntity(&quot;http://localhost:9080/spring4/api&quot;, User.class);  
+    //设置异步回调  
+    future.addCallback(new ListenableFutureCallback&lt;ResponseEntity&lt;User&gt;&gt;() {  
+        @Override  
+        public void onSuccess(ResponseEntity&lt;User&gt; result) {  
+            System.out.println(&quot;======client get result : &quot; + result.getBody());  
+        }  
+
+<pre><code>    @Override  
+    public void onFailure(Throwable t) {  
+        System.out.println(&amp;quot;======client failure : &amp;quot; + t);  
+    }  
+});  
+System.out.println(&amp;quot;==no wait&amp;quot;);  </code></pre><p>}  </strong></pre><br><br><br></p>
+</p>
+<br>
+<br>
+<p><strong><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-size:18px"><br>
+</span><br>
+<br>
+</span></strong></p>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/11/14/Spring%20Boot%20Jpa%20%20%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E8%AF%AD%E5%8F%A5/">Spring Boot Jpa  常用操作语句</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-14</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/spring-boot/">spring boot</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/blog/tags/spring-boot-jpa-spring-data-jpa-Spring-jpa%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C%E8%AF%AD%E5%8F%A5-Jpa%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/">spring boot jpa spring data jpa Spring jpa基本操作语句 Jpa基础概念</a></span><div class="content"><a id="more"></a>
 
 
-&nbsp; &nbsp; 调用session factory 时抛出的异常
-org.hibernate.HibernateException: Could not obtain transaction-synchronized Session for current thread
-null ...</div><a class="more" href="/blog/2017/11/07/Could%20not%20obtain%20transaction-synchronized%20Session%20for%20current%20thread%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/#more" style="margin-top: 14px">阅读更多</a><hr></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/blog/page/7/"><i class="fa fa-chevron-left"></i></a><a class="page-number" href="/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/blog/page/9/">9</a><a class="extend next" rel="next" href="/blog/page/9/"><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer class="footer-bg" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2020 By Ragty</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text"><a href="http://beian.miit.gov.cn " target="_blank" rel="noopener" charset="utf-8"> ICP备案号:京ICP备<13502>号 </a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span><span></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/blog/js/utils.js?version=1.7.0"></script><script src="/blog/js/fancybox.js?version=1.7.0"></script><script src="/blog/js/sidebar.js?version=1.7.0"></script><script src="/blog/js/copy.js?version=1.7.0"></script><script src="/blog/js/fireworks.js?version=1.7.0"></script><script src="/blog/js/transition.js?version=1.7.0"></script><script src="/blog/js/scroll.js?version=1.7.0"></script><script src="/blog/js/head.js?version=1.7.0"></script><script src="/blog/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+<p><strong><span style="font-size:24px">什么是JPA?&nbsp;&nbsp;</span></strong></p>
+<p><strong><span style="font-size:24px"><br>
+</span></strong></p>
+<p><span style="font-size:24px"></span></p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; font-size:14px; line-height:22.4px">
+JPA （ The Java Persistence API ）是用于访问，持久化和管理 Java 对象 /类与关系型数据库之间的数据交互的 Java 规范。 JPA 被定义为 EJB （ Enterprise JavaBeans ） 3.0 规范的一部分，作为 EJB 2 CMP 实体 Bean 规范的替代。</p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; font-size:14px; line-height:22.4px">
+注意， JPA 只是一个标准，只定义了一系列接口，而没有具体的实现。很多企业级框架提供了对 JPA 的实现，如 Spring 。因此 Spring 本身与 JPA 无关，只是提供了对 JPA 的支持，因此在 Spring 中你也会看到很多注解都是属于&nbsp;<code style="font-family:Consolas,'Panic Sans','DejaVu Sans Mono','Bitstream Vera Sans Mono',Menlo,'Microsoft Yahei',monospace">javax.persistence</code>&nbsp;包的。</p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; font-size:14px; line-height:22.4px">
+JPA<span style="line-height:22.4px; background-color:rgb(240,240,240)">&nbsp;</span>允许&nbsp;<a target="_blank" target="_blank" href="https://en.wikipedia.org/wiki/POJO" rel="nofollow" style="color:rgb(119,128,135); text-decoration:none; word-break:break-all">POJO</a>（
+ Plain Old Java Objects ）轻松地持久化，而不需要类来实现 EJB 2 CM P 规范所需的任何接口或方法。 JPA 还允许通过<strong>注解</strong>或 XML 定义对象的关系映射，定义 Java 类如何映射到关系数据库表。 JPA 还定义了一个运行时&nbsp;<code style="font-family:Consolas,'Panic Sans','DejaVu Sans Mono','Bitstream Vera Sans Mono',Menlo,'Microsoft Yahei',monospace">EntityManager</code>&nbsp;API
+ ，用于处理对象的查询和管理事务。 同时， JPA 定义了对象级查询语言&nbsp;<strong>JPQL</strong>，以允许从数据库中查询对象，实现了对数据库的解耦合，提高了程序的可移植性，而不具体依赖某一底层数据库。</p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; font-size:14px; line-height:22.4px">
+JPA 是 Java 持久化规范中的一个最新版本。第一个版本是 OMG 持久性服务 Java 绑定，但这个一个失败的产品，甚至没有任何商业产品支持它。接下来的版本是 EJB 1.0 CMP Entity Beans ，它已经非常成功地被大型 Java EE 提供程序（ BEA ， IBM ）采用，但是它复杂性太高而且性能比较差。 EJB 2.0 CMP 试图通过引入本地接口来减少 Entity Bean 的一些复杂性，但是大多数复杂性仍然存在,而且缺乏可移植性。</p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; font-size:14px; line-height:22.4px">
+历史总是要向前发展的，种种的这些使得 EJB 3.0 规范将降低复杂性作为主要目标，这导致规范委员会沿着 JPA 的路径前进。 JPA 旨在统一 EJB 2 CMP ， JDO ， Hibernate ，从目前来看， JPA 的确取得了成功。</p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; font-size:14px; line-height:22.4px">
+目前大多数持久化供应商已经发布了 JPA 的实现，并被行业和用户采用。这些包括 Hibernate （由 JBoss 和 Red Hat 收购）， TopLink （由 Oracle 收购）和 Kodo JDO （由 BEA 和 Oracle 收购）。其他支持 JPA 的产品包括 Cocobase （由 Thought Inc. 收购）和 JPOX 。</p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; font-size:14px; line-height:22.4px">
+<br>
+</p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; font-size:14px; line-height:22.4px">
+<br>
+</p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; line-height:22.4px">
+<strong><span style="font-size:24px">JPA的基本操作语句</span></strong></p>
+<p style="font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; line-height:22.4px; font-size:14px">
+<br>
+</p>
+<pre name="code" class="java" style="font-size: 14px;"> //And --- 等价于 SQL 中的 and 关键字，比如 findByHeightAndSex(int height,char sex)；  
+ public List&lt;User&gt; findByHeightAndSex(int height,char sex);  
+
+<p>// Or — 等价于 SQL 中的 or 关键字，比如 findByHeightOrSex(int height,char sex)；<br> public List&lt;User&gt; findByHeightOrSex(int height,char sex);  </p>
+<p> //Between — 等价于 SQL 中的 between 关键字，比如 findByHeightBetween(int min, int max)；<br> public List&lt;User&gt; findByHeightBetween(int min,int max);  </p>
+<p> //LessThan — 等价于 SQL 中的 &quot;&lt;&quot;，比如 findByHeightLessThan(int max)；<br> public List&lt;User&gt; findByHeightLessThan(int max);  </p>
+<p> //GreaterThan — 等价于 SQL 中的&quot;&gt;&quot;，比如 findByHeightGreaterThan(int min)；<br> public List&lt;User&gt; findByHeightGreaterThan(int min);  </p>
+<p> //IsNull — 等价于 SQL 中的 &quot;is null&quot;，比如 findByNameIsNull()；<br> public List&lt;User&gt; findByNameIsNull();  </p>
+<p> //IsNotNull — 等价于 SQL 中的 &quot;is not null&quot;，比如 findByNameIsNotNull()；<br> public List&lt;User&gt; findByNameIsNotNull();  </p>
+<p> //NotNull — 与 IsNotNull 等价；<br> public List&lt;User&gt; findByNameNotNull();  </p>
+<p> //Like — 等价于 SQL 中的 &quot;like&quot;，比如 findByNameLike(String name);<br> public List&lt;User&gt; findByNameLike(String name);  </p>
+<p> //NotLike — 等价于 SQL 中的 &quot;not like&quot;，比如 findByNameNotLike(String name)；<br> public List&lt;User&gt; findByNameNotLike(String name);  </p>
+<p> //OrderBy — 等价于 SQL 中的 &quot;order by&quot;，比如 findByNameNotNullOrderByHeightAsc()；<br> public List&lt;User&gt;findByNameNotNullOrderByHeightAsc();  </p>
+<p> //Not — 等价于 SQL 中的 &quot;！ =&quot;，比如 findByNameNot(String name)；<br> public List&lt;User&gt; findByNameNot(String name);  </p>
+<p> //In — 等价于 SQL 中的 &quot;in&quot;，比如 findByNameIN(String name);<br> public List&lt;User&gt; findByNameIn(String name);  </p>
+<p> //NotIn — 等价于 SQL 中的 &quot;not in&quot;，比如 findByNameNotIN(String name);<br> public List&lt;User&gt; findByNameNotIn(String name);<br></pre></p>
+<p></p>
+<p style="font-size:14px; font-family:'Helvetica Neue','Luxi Sans','DejaVu Sans',Tahoma,'Hiragino Sans GB','Microsoft Yahei',sans-serif; line-height:22.4px">
+<br>
+</p>
+<br>
+<p><strong><span style="font-size:24px">&nbsp;原生Sql语句</span></strong></p>
+<p><strong><span style="font-size:24px"><br>
+</span></strong></p>
+<pre name="code" class="java">   //利用原生的SQL进行查询操作  
+   @Query(value = &quot;select o.* from orders o ,user u where o.uid=u.id and u.name=?1&quot;, nativeQuery = true)  
+   @Modifying  
+   public List&lt;Order&gt; findOrderByName(String name);  
+
+<p>   //利用原生的SQL进行删除操作<br>   @Query(value = &quot;delete from orders where id=?1 &quot;, nativeQuery = true)<br>   @Modifying<br>   public void deleteOrderById(int id);  </p>
+<p>   //利用原生的SQL进行删除操作<br>   @Query(value = &quot;delete from orders where uid=?1 &quot;, nativeQuery = true)<br>   @Modifying<br>   public void deleteOrderByUId(int uid);  </p>
+<p>   //利用原生的SQL进行修改操作<br>   @Query(value = &quot;update orders set name=?1 where id=?2 &quot;, nativeQuery = true)<br>   @Modifying<br>   public void updateOrderName(String name,int id);  </p>
+<p>   //利用原生的SQL进行插入操作<br>   @Query(value = &quot;insert into orders(name,uid) value(?1,?2)&quot;, nativeQuery = true)<br>   @Modifying<br>   public void insertOrder(String name,int uid);</pre></p>
+<p></p>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/11/13/Spring%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/">Spring体系结构</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-13</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/spring/">spring</a></span><div class="content"><a id="more"></a>
+
+
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <strong>&nbsp;<span style="font-size:24px">概述</span></strong></p>
+<p><span style="font-size:24px"><strong>&nbsp; &nbsp; &nbsp; </strong></span><span style="font-family:SimSun; font-size:18px"><strong>Spring核心框架</strong>由4000多个类组成，整个框架按其所属功能可以划分为4个主要模块。如图1所示</span></p>
+<p><strong><span style="font-size:12px">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<img src="https://img-blog.csdn.net/20171113142441272" alt=""><br>
+</span></strong></p>
+<p><strong><span style="font-size:12px">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 图 1 &nbsp; &nbsp; &nbsp; &nbsp; Spring框架结构</span></strong></p>
+<p><span style="font-size:12px"><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </strong></span><span style="font-size:18px">从整体来看，这5个主要模块几乎为企业应用提供了所需的一切，从持久层、业务层到展现层都拥有相应的支持。Ioc和AOP是Spring &nbsp;所依赖的根本。在此基础上，spring整合了各种企业应用开源框架和许多优秀的第三方库，成为java企业应用 full-stack 的开发框架。</span></p>
+<p><span style="font-size:18px"><strong><br>
+</strong></span></p>
+<p><span style="font-size:18px"><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1.IoC &nbsp;</strong></span></p>
+<p><span style="font-size:18px"><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</strong><span style="color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; line-height:30px; text-align:justify">Spring核心模块实现了IoC的功能，它将类和类之间的依赖从代码中脱离出来，用配置的方式进行依赖关系描述，由IoC容器负责依赖类之间的创建、拼接、管理、获取等工作。BeanFactory接口是Spring框架的核心接口，它实现了容器的许多核心功能。</span>&nbsp;&nbsp;</span><span style="font-size:18px">&nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+<p><span style="font-size:18px"><strong></strong></span></p>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Context模块构建于核心模块之上，扩展了BeanFactory的功能，添加了i18n国际化、Bean生命周期控制、框架事件体系、资源加载透明化等多项功能。此外，该模块还提供了许多企业级服务的支持，如邮件服务、任务调度、JNDI定位、EJB集成、远程访问等。ApplicationContext是Context模块的核心接口。</p>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;表达式语言模块是统一表达式语言（unified EL）的一个扩展，该表达式语言用于查询和管理运行期的对象，支持设置和获取对象属性，调用对象方法、操作数组、集合等。还提供了逻辑表达式运算、变量定义等功能。使用它就可以方便地通过表达式串和Spring IoC容器进行交互。</p>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>2.AOP</strong></p>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word">
+</p>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;AOP是继OOP之后，对编程设计思想影响最大的技术之一。AOP是进行横切逻辑编程的思想，它开拓了人们考虑问题的思路。在AOP模块里，Spring提供了满足AOP Alliance规范的实现，此外，还整合了AspectJ这种AOP语言级的框架。在Spring里实现AOP编程拥有众多的选择。Java 5.0引入java.lang.instrument，允许在JVM启动时启用一个代理类，通过该代理类在运行期修改类的字节码，改变一个类的功能，实现AOP的功能。</p>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>3.数据访问和集成</strong>。</p>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;任何应用程序，其核心的问题是对数据的访问和操作。数据有很多表现形式，如数据表、XML、消息等，而每种数据形式又拥有不同的数据访问技术（如数据表的访问既可以直接通过JDBC，也可以通过Hibernate或iBatis）。</p>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word; display:inline!important">
+</p>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word; display:inline!important">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Spring站在DAO的抽象层面，建立了一套面向DAO层统一的异常体系，同时将各种访问数据的检查型异常转换为非检查型异常，为整合各种持久层框架提供基础。其次，Spring通过模板化技术对各种数据访问技术进行了薄层的封装，将模式化的代码隐藏起来，使数据访问的程序得到大幅简化。这样，Spring就建立起了和数据形式及访问技术无关的统一的DAO层，借助AOP技术，Spring提供了声明式事务的功能。</p>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word">
+</p>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word; display:inline!important">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>4.</strong></p>
+<strong></strong>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word; display:inline!important">
+</p>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word; display:inline!important">
+</p>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word; display:inline!important">
+<strong>Web及远程操作。</strong><br>
+</p>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word; display:inline!important">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;该模块建立在Application Context模块之上，提供了Web应用的各种工具类，如通过Listener或Servlet初始化Spring容器，将Spring容器注册到Web容器中。其次，该模块还提供了多项面向Web的功能，如透明化文件上传、Velocity、FreeMarker、XSLT的支持。此外，Spring可以整合Struts、WebWork、Tapestry Web等MVC框架。</p>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word; display:inline!important">
+</p>
+<p><span style="font-size:18px"><strong></strong></span></p>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word; display:inline!important">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <strong>5.</strong></p>
+<span style="color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; line-height:30px; text-align:justify"><strong>Web及远程访问</strong>。</span>
+<div>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word; display:inline!important">
+</p>
+<p style="padding-top:0px; padding-bottom:15px; margin-top:0px; margin-bottom:0px; color:rgb(51,51,51); font-family:'Microsoft Yahei'; font-size:16px; text-align:justify; line-height:30px; word-wrap:break-word; display:inline!important">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Spring自己提供了一个完整的类&#20284;于Struts的MVC框架，称为Spring MVC。据说，Spring之所以也提供了一个MVC框架，是因为Rod Johnson想证明实现MVC其实是一项简单的工作。当然，如果你不希望使用Spring MVC，那么Spring对Struts、Tapestry等MVC框架的整合，一定也可以给你带来方便。相对于Servlet的MVC，Spring在简化Portlet的开发上也做了很多工作，开发者可以从中受益。</p>
+<p><span style="font-size:18px"></span></p>
+<p><span style="font-size:18px"><strong></strong></span></p>
+<p></p>
+</div>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/11/13/Spring%20%E6%A6%82%E8%BF%B0%E5%8F%8A%E4%BC%98%E7%82%B9/">Spring 概述及优点</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-13</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/spring/">spring</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/blog/tags/spring-spring%E4%BC%98%E7%82%B9-Spring%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/">spring spring优点 Spring基础概念</a></span><div class="content"><a id="more"></a>
+
+
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="font-size:24px">&nbsp;1.&nbsp;<strong>Spring是什么</strong></span></p>
+<p></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:14px">&nbsp; &nbsp; &nbsp;</span><span style="font-size:14px"> &nbsp; <strong>
+Spring</strong>是分层的java SE/EE 应用一站式的轻量级开源框架，以<strong>ioc</strong>（Inverse of Control，控制反转）和<strong>AOP</strong>（Aspect Oriented Programming,切面编程）为内核，提供了展现层Spring MVC、持久层Spring JDBC及业务层事物管理等一站式的企业级应用技术。</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:14px; white-space:pre"></span><span style="font-size:14px">说它轻量级有一大部分原因是相对与EJB的（虽然本人从没有接触过EJB的应用），重要的是，Spring是非侵入式的，基于spring开发的应用一般不依赖于spring的类。</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:14px">&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:14px"><br>
+</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:14px"><br>
+</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:14px">&nbsp; &nbsp; &nbsp; &nbsp; </span><span style="font-size:24px"><strong>2.几个需要了解的概念</strong></span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:24px"><strong><br>
+</strong></span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:14px">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>DI:称作依赖注入(Dependency Injection),</strong>和控制反转一个概念，具体的讲，当一个角色需要另外一个角色协助的时候，在传统的程序设计中，通常有调用者来创建被调用者的实例。但是在spring中创建被调用者将不再有调用者完成，因此叫控制反转。创建被调用对象有Spring来完成，在容器实例化对象的时候主动的将被调用者（或者说它的依赖对象）注入给调用对象，因此又叫依赖注入。</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:14px"><span style="white-space:pre"></span><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;AOP</strong>：Spring对面向切面编程提供了强有力的支持，通过它让我们将业务逻辑从应用服务（如事务管理）中分离出来，实现了高内聚开发，应用对象只关注业务逻辑，不再负责其它系统问题（如日志、事务等）。Spring支持用户自定义切面。</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:14px"><span style="white-space:pre"></span><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;面向切面编程: &nbsp;&nbsp;</strong>是面向对象编程的有力补充。面向对象编程将程序分成各个层次的对象，面向切面的程序将运行过程分解成各个切面。AOP是从运行程序的角度去考虑程序的结构，提取业务处理过程的切面，OOP是静态的抽象，AOP是动态的抽象，是对应用执行过程的步骤进行抽象，从而获得步骤之间的逻辑划分。</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:14px"><span style="white-space:pre"></span><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;容器：</strong>Spring是个容器，因为它包含并且管理应用对象的生命周期和配置。如对象的创建、销毁、回调等。</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:14px"><span style="white-space:pre"></span><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;框架：</strong>Spring作为一个框架，提供了一些基础功能，（如事务管理，持久层集成等），使开发人员更专注于开发应用逻辑。</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:14px"><br>
+</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:14px"><br>
+</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:14px"><br>
+</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:24px">&nbsp; &nbsp; &nbsp;<strong>3.Spring的优点</strong></span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:24px"><strong><br>
+</strong></span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:24px"><strong>&nbsp; &nbsp; &nbsp; </strong></span><strong><span style="font-size:24px">&nbsp;</span><span style="font-size:14px">1.方便解隅，简化开发。通过Spring踢动的Ioc容器，用户可以将对象之间的依赖关系交由Spring进行控制，避免硬编码所造成的过度程序隅合。有了Spring，用户不必再为单实例模式类，属性文件解析等这些底层的需求编写代码，可以更专注于上层的应用。</span></strong></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:14px"><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2.AOP编程的支持。通过Spring提供的Aop功能，方便进行对面向切向的编程。</strong></span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:14px"><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;3.声明事务的支持。</strong></span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:14px"><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;4.方便程序的测试。可以用非容器依赖的编程方式进行几乎所有的测试工作。</strong></span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<strong><span style="font-size:14px">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;5.方便集成各种优秀的框架。</span><span style="font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px"><span style="font-size:18px">如</span><span style="font-size:14px">Hibernate,Struts2,Hession</span></span></strong></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<strong><span style="font-size:14px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><span style="font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px"><span style="font-size:18px">6.降低
+</span><span style="font-size:14px">Java EE API</span><span style="font-size:18px">的使用难度。</span></span></strong></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<strong><span style="font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px"><span style="font-size:18px">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></span></strong></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:24px"><strong><br>
+</strong></span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:24px"><strong><br>
+</strong></span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:24px"><strong><br>
+</strong></span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-family:Helvetica,Tahoma,Arial,sans-serif; line-height:25.2px">
+<span style="font-size:24px"><strong><br>
+</strong></span></p>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/11/12/Spring%20%E4%B8%AD%E5%B8%B8%E7%94%A8%E7%9A%84%E5%87%A0%E7%A7%8D%E6%B3%A8%E8%A7%A3/">Spring 中常用的几种注解</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-12</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/spring/">spring</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/blog/tags/spring-spring%E6%B3%A8%E8%A7%A3-%E5%BA%94%E7%94%A8-%E6%B3%A8%E9%87%8A-%E7%BB%93%E6%9E%84/">spring spring注解 应用 注释 结构</a></span><div class="content"><a id="more"></a>
+
+
+<p><span style="font-family:Microsoft YaHei; font-size:18px"><span style="line-height:25.2px">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span><span style="line-height:26px; color:rgb(51,51,51)">Spring 2.5 中除了提供 @Component 注释外，还定义了几个拥有特殊语义的注释，它们分别是：@Repository、@Service 和 @Controller。</span></span></p>
+<p><span style="line-height:25.2px"><span style="font-family:Microsoft YaHei; font-size:18px"><span style="color:rgb(51,51,51); line-height:26px"></span></span></span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; word-wrap:break-word; word-break:normal; color:rgb(51,51,51); line-height:26px">
+<span style="font-family:Microsoft YaHei; font-size:18px">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;在目前的 Spring 版本中，这 3 个注释和 @Component 是等效的，但是从注释类的命名上，很容易看出这 3 个注释分别和持久层、业务层和控制层（Web 层）相对应。<br style="">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 虽然目前这3 个注释和 @Component 相比没有什么新意，但 Spring 将在以后的版本中为它们添加特殊的功能。所以，如果 Web 应用程序采用了经典的三层分层结构的话，最好在持久层、业务层和控制层分别采用上述注解对分层中的类进行注释。</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; word-wrap:break-word; word-break:normal; color:rgb(51,51,51); line-height:26px">
+<span style="font-family:Microsoft YaHei; font-size:18px">&nbsp; &nbsp; &nbsp; &nbsp; @Service用于标注业务层组件</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; word-wrap:break-word; word-break:normal; color:rgb(51,51,51); line-height:26px">
+<span style="font-family:Microsoft YaHei; font-size:18px">&nbsp; &nbsp; &nbsp; &nbsp; @Controller用于标注控制层组件（如struts中的action）</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; word-wrap:break-word; word-break:normal; color:rgb(51,51,51); line-height:26px">
+<span style="font-family:Microsoft YaHei; font-size:18px">&nbsp; &nbsp; &nbsp; &nbsp; @Repository用于标注数据访问组件，即DAO组件</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; word-wrap:break-word; word-break:normal; color:rgb(51,51,51); line-height:26px">
+<span style="font-family:Microsoft YaHei; font-size:18px">&nbsp; &nbsp; &nbsp; &nbsp; @Component泛指组件，当组件不好归类的时候，我们可以使用这个注解进行标注。 &nbsp; &nbsp; &nbsp;&nbsp;</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; word-wrap:break-word; word-break:normal; color:rgb(51,51,51); line-height:26px">
+<span style="font-family:Microsoft YaHei; font-size:18px">&nbsp; &nbsp; &nbsp; &nbsp; @Autowired后不需要getter()和setter()方法，Spring也会自动注入。 &nbsp;</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; word-wrap:break-word; word-break:normal; color:rgb(51,51,51); line-height:26px">
+<span style="font-family:Microsoft YaHei; font-size:18px">&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<span style="color:rgb(51,51,51); line-height:26px">@Qualifier&nbsp;<span style="color:rgb(51,51,51); line-height:26px">当接口存在两个实现类的时候必须使用@Qualifier指定注入哪个实现类，否则可以省略，只写@Autowired。</span></span></span></p>
+<p><span style="line-height:25.2px"><span style="font-family:Microsoft YaHei; font-size:18px"><span style="color:rgb(51,51,51); line-height:26px"></span></span></span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; word-wrap:break-word; word-break:normal; color:rgb(51,51,51); line-height:26px">
+<span style="font-family:Microsoft YaHei; font-size:18px">&nbsp; &nbsp; &nbsp; &nbsp; 在接口前面标上@Autowired注释使得接口可以被容器注入，如：</span></p>
+<div class="dp-highlighter bg_java" style="padding:1px 0px 0px; width:687px; overflow:auto; position:relative; color:rgb(51,51,51); line-height:26px; margin:18px 0px!important; background-color:rgb(231,229,220)">
+<div class="bar" style="margin:0px; padding:0px 0px 0px 45px">
+<div class="tools" style="margin:0px; padding:3px 8px 10px 10px; line-height:normal; color:silver; border-left-width:3px; border-left-style:solid; border-left-color:rgb(108,226,108); border-right-width:1px; border-right-style:solid; border-right-color:rgb(231,229,220); background-color:rgb(248,248,248)">
+<a target="_blank" target="_blank" href="http://blog.csdn.net/zhang854429783/article/details/6785574#" class="ViewSource" title="view plain" style="color:rgb(160,160,160); text-decoration:none; margin:0px 10px 0px 0px; padding:1px; outline:none; border:none; display:inline-block; width:16px; height:16px; text-indent:-2000px; background-color:inherit"><span style="font-family:Microsoft YaHei; font-size:18px">view
+ plain</span></a></div>
+</div>
+<ol start="1" class="dp-j" style="padding:0px; border:none; color:rgb(92,92,92); margin:0px 0px 1px 45px!important; background-color:rgb(255,255,255)">
+<li class="alt" style="list-style:decimal-leading-zero outside; border-style:none none none solid; border-left-width:3px; border-left-color:rgb(108,226,108); color:inherit; line-height:18px; margin:0px!important; padding:0px 3px 0px 10px!important">
+<span style="margin:0px; padding:0px; border:none; color:black; background-color:inherit"><span style="font-family:'Microsoft YaHei'"><span style="font-size:14px"><span class="annotation" style="margin:0px; padding:0px; border:none; color:rgb(100,100,100); background-color:inherit">@Autowired</span><span style="margin:0px; padding:0px; border:none; background-color:inherit">&nbsp;&nbsp;</span></span></span></span></li><li style="list-style:decimal-leading-zero outside; border-style:none none none solid; border-left-width:3px; border-left-color:rgb(108,226,108); line-height:18px; margin:0px!important; padding:0px 3px 0px 10px!important; background-color:rgb(248,248,248)">
+<span style="margin:0px; padding:0px; border:none; color:black; background-color:inherit"><span style="font-family:'Microsoft YaHei'"><span style="font-size:14px"><span class="annotation" style="margin:0px; padding:0px; border:none; color:rgb(100,100,100); background-color:inherit">@Qualifier</span><span style="margin:0px; padding:0px; border:none; background-color:inherit">(</span><span class="string" style="margin:0px; padding:0px; border:none; color:blue; background-color:inherit">&quot;name&quot;</span><span style="margin:0px; padding:0px; border:none; background-color:inherit">)&nbsp;&nbsp;</span></span></span></span></li><li class="alt" style="list-style:decimal-leading-zero outside; border-style:none none none solid; border-left-width:3px; border-left-color:rgb(108,226,108); color:inherit; line-height:18px; margin:0px!important; padding:0px 3px 0px 10px!important">
+<span style="margin:0px; padding:0px; border:none; color:black; background-color:inherit"><span style="font-family:'Microsoft YaHei'"><span style="font-size:14px"><span class="keyword" style="margin:0px; padding:0px; font-weight:bold; color:rgb(0,102,153); word-wrap:normal; border:none; background-color:inherit">private</span><span style="margin:0px; padding:0px; border:none; background-color:inherit">&nbsp;Man&nbsp;man;
+ &nbsp;&nbsp;</span></span></span></span></li></ol>
+</div>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/11/12/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A6%82%E8%BF%B0%E5%8F%8A%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/">数据库概述及基本概念</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-12</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/blog/tags/%E6%95%B0%E6%8D%AE%E5%BA%93-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B-mysql-%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/">数据库 数据类型 mysql 关系型数据库 数据库基本概念</a></span><div class="content"><a id="more"></a>
+
+
+<h2 style="text-align:center">数据库学习笔记（一）数据库概述及基本概念 &nbsp;</h2>
+<div><br>
+</div>
+<div><br>
+</div>
+<p style="text-align:left">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span style="font-size:18px"><strong>最近在学习关系型数据，整理了一些关于数据库学习的笔记。包括一些基本概念和需要了解的知识，并整理成思维图谱，使知识学习更直观。</strong></span></p>
+<p style="text-align:left"><span style="font-size:18px"><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<img src="https://img-blog.csdn.net/20171112185945741?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHVvamk1NTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" align="middle" width="500" height="200" alt=""></strong></span></p>
+<p style="text-align:left"><span style="font-size:18px"><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</strong></span></p>
+<div id="magicdomid18" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 bold:true font-size:16pt" style="margin:0px; padding:0px; outline:transparent solid 0px; font-weight:bold; font-size:16pt">1.关系型数据基础知识概述</span></div>
+<div id="magicdomid19" class="ace-line longKeep gutter-noauthor" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<br style="margin:0px; padding:0px">
+</div>
+<div id="magicdomid20" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:#db1f2d" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(219,31,45)">&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 bold:true color:#000000" style="margin:0px; padding:0px; outline:transparent solid 0px; font-weight:bold">1.1&nbsp;&nbsp;概述</span></div>
+<div id="magicdomid21" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:#db1f2d" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(219,31,45)">&nbsp;</span><span class="author-p-5599590 bold:true color:#000000 font-size:15.008px" style="margin:0px; padding:0px; outline:transparent solid 0px; font-weight:bold; font-size:15.008px">关系数据库</span><span class="author-p-5599590 color:#404040 font-size:15.008px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-size:15.008px">（英语：Relational&nbsp;database），</span><span class="author-p-5599590 color:#404040 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-size:12pt">关系数据库，是建立在关系数据库模型基础上的数据库，借助于集合代数等概念和方法来处理数据库中的数据，同时也是一个被组织成一组拥有正式描述性的表&#26684;，该形式的表&#26684;作用的实质是装载着数据项的特殊收集体，这些表&#26684;中的数据能以许多不同的方式被存取或重新召集而不需要重新组织数据库表&#26684;。关系数据库的定义造成元数据的一张表&#26684;或造成表&#26684;、列、范围和约束的正式描述。每个表&#26684;（有时被称为一个关系）包含用列表示的一个或更多的数据种类。&nbsp;每行包含一个唯一的数据实体，这些数据是被列定义的种类。当创造一个关系数据库的时候，你能定义数据列的可能&#20540;的范围和可能应用于那个数据&#20540;的进一步约束。而SQL语言是标准用户和应用程序到关系数据库的接口。其优势是容易扩充，且在最初的数据库创造之后，一个新的数据种类能被添加而不需要修改所有的现有应用软件。主流的关系数据库有oracle、db2、sqlserver、sybase、mysql&nbsp;&nbsp;等。</span><span class="author-p-5599590 color:#404040 font-family:Microsoft YaHei font-size:15.008px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-family:'Microsoft YaHei'; font-size:15.008px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid22" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:#404040 font-family:Microsoft YaHei" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-family:'Microsoft YaHei'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:#404040 font-family:Microsoft YaHei font-size:15.008px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-family:'Microsoft YaHei'; font-size:15.008px">&nbsp;&nbsp;-----------《百度百科》</span></div>
+<div id="magicdomid23" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid24" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid25" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 bold:true" style="margin:0px; padding:0px; outline:transparent solid 0px; font-weight:bold">&nbsp;1.2&nbsp;&nbsp;发展及应用目标</span></div>
+<div id="magicdomid26" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 background-color:#ffffff color:#000000 font-family:Microsoft YaHei font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; font-family:'Microsoft YaHei'; font-size:12pt">关系型数据库的发展</span><span class="author-p-5599590 color:rgb(69, 69, 69)" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(69,69,69)">，大致可分为理论奠基、SQL标准、商用成型、多家发展等几个阶段.首先是数学家E.F.Codd发表了数学论文《用于大型共享数据库的关系数据模型》，提出关系和关系运算的概念，奠定了关系型数据库的理论模型；</span><span class="author-p-5599590 color:rgb(69, 69, 69) font-size:16px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(69,69,69)">然后是Codd的同事DonChamberlin将Codd的论文和关系运算，转换成为比较容易理解和使用的SQL语言，并且在后面成为所有关系型数据库的标准；有了上面的数据理论和SQL基础，LarryElision和他的同事看到商机，开发出第一个商用大型关系型数据库Oracle，Scott作为一个开发的员工，将其测试账户放在里面了；除了Oracle数据库，IBM也开发出了DB2数据库，但其他主流的关系型数据库都与Michael&nbsp;Stonebraker有关，开发了Postgres并放在BSD版权下，后来演变成了Postgres&nbsp;SQL；87年微软和Sybase合作，开发除了MS&nbsp;SQL和Sybase；后又加入Ingres和Informax。</span></div>
+<div id="magicdomid27" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid28" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 font-family:Microsoft YaHei font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; font-family:'Microsoft YaHei'; font-size:12pt">&nbsp;</span><span class="author-p-5599590 color:#000000 font-family:Microsoft YaHei font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; font-family:'Microsoft YaHei'; font-size:12pt">关系型数据库应用目标</span><span class="author-p-5599590 font-family:Microsoft YaHei font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; font-family:'Microsoft YaHei'; font-size:12pt">&nbsp;,</span><span class="author-p-5599590 color:#404040 font-family:Microsoft YaHei font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-family:'Microsoft YaHei'; font-size:12pt">建立一个冗余少、易维护、便于使用的数据库。易维护包括无各种操作异常现象发生，并且数据库的安全性、一致性、完整性也有保障；便于使用除了指用起来方便以外还包括具有较高的存取效率。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid29" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:#404040 font-family:Microsoft YaHei font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-family:'Microsoft YaHei'; font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--------</span><span class="author-p-5599590 color:#404040 font-size:12px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-size:12px">朱扬勇．数据库系统设计与开发：清华大学出版社，北京交通大学出版社，2007</span></div>
+<div id="magicdomid30" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid31" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid32" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 bold:true" style="margin:0px; padding:0px; outline:transparent solid 0px; font-weight:bold">1.3&nbsp;&nbsp;数据&nbsp;&nbsp;</span><span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;</span></div>
+<div id="magicdomid33" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:#404040 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-size:12pt">计算机数据是指计算机中能被识别和处理的物理符号，如数字符号、图形、图像、声音等。数据分为数&#20540;型数据(如整数、实数)和非数&#20540;型数据(如数字符号、图形、图像、声音等)，数据是信息的表现形式。</span><span class="author-p-5599590 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:rgb(34, 34, 34) font-size:15.0080003738403px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(34,34,34); font-size:15.0080003738403px">&nbsp;&nbsp;</span><span class="author-p-5599590 color:rgb(51, 51, 51) font-size:13.92px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:13.92px">&nbsp;</span></div>
+<div id="magicdomid34" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:#333333" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;---------</span><span class="author-p-5599590 color:rgb(51, 51, 51) font-size:13.92px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:13.92px">王岳斌,杨克昌主编.计算机导论(第4版).中国水利水电出版社,2012.01.</span></div>
+<div id="magicdomid35" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid36" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid37" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 bold:true" style="margin:0px; padding:0px; outline:transparent solid 0px; font-weight:bold">1.4&nbsp;数据管理db</span></div>
+<div id="magicdomid38" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据管理，</span><span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">是利用计算机硬件和软件技术对数据进行有效的收集、存储、处理和应用的过程。其目的在于充分有效地发挥数据的作用。实现数据有效管理的关键是数据组织。随着计算机技术的发展，数据管理经历了人工管理、文件系统、数据库系统三个发展阶段。在数据库系统中所建立的数据结构，更充分地描述了数据间的内在联系，便于数据修改、更新与扩充，同时保证了数据的独立性、可靠、安全性与完整性，减少了数据冗余，故提高了数据共享程度及数据管理效率。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;---------《百度百科》</span></div>
+<div id="magicdomid39" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid40" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid41" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 bold:true" style="margin:0px; padding:0px; outline:transparent solid 0px; font-weight:bold">1.5&nbsp;数据库管理系统(DBMS)</span></div>
+<div id="magicdomid42" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 bold:true color:rgb(34, 34, 34) font-size:15.008px" style="margin:0px; padding:0px; outline:transparent solid 0px; font-weight:bold; color:rgb(34,34,34); font-size:15.008px">数据库管理系统</span><span class="author-p-5599590 color:rgb(34, 34, 34) font-size:15.008px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(34,34,34); font-size:15.008px">（</span><span class="author-p-5599590 bold:true color:rgb(34, 34, 34) font-size:15.008px" style="margin:0px; padding:0px; outline:transparent solid 0px; font-weight:bold; color:rgb(34,34,34); font-size:15.008px">DBMS</span><span class="author-p-5599590 color:rgb(34, 34, 34) font-size:15.008px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(34,34,34); font-size:15.008px">）&nbsp;是一种针对对象数据库，为管理数据库而设计的大型电脑软件管理系统。具有代表性的数据管理系统有：Oracle、Micorosoft&nbsp;SQL&nbsp;Server、Access、MySql及PostgreSql等。通常数据库管理师会使用数据库管理系统来创建数据库系统。</span></div>
+<div id="magicdomid43" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:rgb(34, 34, 34) font-size:15.008px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(34,34,34); font-size:15.008px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现代DBMS使用不同的数据库模型追踪实体、属性和关系。在个人电脑、大型计算机和主机上应用最广泛的数据库管理系统是关系型DBMS（relational&nbsp;DBMS）。在关系型数据模型中，用二维表&#26684;表示数据库中的数据。这些表&#26684;称为关系。</span></div>
+<div id="magicdomid44" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:#222222" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(34,34,34)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-----</span><span class="author-p-5599590 color:rgb(34, 34, 34) font-size:13.5072px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(34,34,34); font-size:13.5072px">Kenneth&nbsp;C.Laudon&nbsp;and&nbsp;Jane&nbsp;P.Laudon,《Management&nbsp;Information&nbsp;Systems》,&nbsp;Pearson,&nbsp;07&nbsp;March&nbsp;2011,&nbsp;Chapter6&nbsp;Information&nbsp;systems&nbsp;Organizations&nbsp;and&nbsp;Strategy&nbsp;p.143</span></div>
+<div id="magicdomid45" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid46" class="ace-line longKeep gutter-noauthor" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<br style="margin:0px; padding:0px">
+</div>
+<div id="magicdomid47" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 bold:true" style="margin:0px; padding:0px; outline:transparent solid 0px; font-weight:bold">&nbsp;1.6&nbsp;&nbsp;&nbsp;数据模型</span><span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid48" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 bold:true color:rgb(34, 34, 34) font-size:15.008px" style="margin:0px; padding:0px; outline:transparent solid 0px; font-weight:bold; color:rgb(34,34,34); font-size:15.008px">数据模型&nbsp;&nbsp;</span><span class="author-p-5599590 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:rgb(51, 51, 51)" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51)">&nbsp;</span><span class="author-p-5599590 color:rgb(34, 34, 34) font-size:15.008px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(34,34,34); font-size:15.008px">在软件工程中，</span><span class="author-p-5599590 bold:true color:rgb(34, 34, 34) font-size:15.008px" style="margin:0px; padding:0px; outline:transparent solid 0px; font-weight:bold; color:rgb(34,34,34); font-size:15.008px">数据模型</span><span class="author-p-5599590 color:rgb(34, 34, 34) font-size:15.008px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(34,34,34); font-size:15.008px">是定义数据如何输入和与输出的一种模型。其主要作用是为信息系统提供数据的定义和&#26684;式。数据模型是数据库系统的核心和基础，现有的数据库系统都是基于某种数据模型而创建起来的。&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid49" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:rgb(34, 34, 34) font-size:15.008px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(34,34,34); font-size:15.008px">三要素</span></div>
+<div id="magicdomid50" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:rgb(34, 34, 34) font-size:15.008px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(34,34,34); font-size:15.008px">1.数据结构：储存在数据库中对象类型的集合，作用是描述数据库组成对象以及对象之间的联系。</span></div>
+<div id="magicdomid51" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:rgb(34, 34, 34) font-size:15.008px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(34,34,34); font-size:15.008px">2.数据操作：指对数据库中各种对象实例允许执行的操作的集合，包括操作及其相关的操作规则。</span></div>
+<div id="magicdomid52" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:rgb(34, 34, 34) font-size:15.008px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(34,34,34); font-size:15.008px">3.数据完整性约束条件：指在给定的数据模型中，数据及其联系所遵守的一组通用的完整性规则，它&nbsp;能&nbsp;保证数据的正确性和一致性。</span></div>
+<div id="magicdomid53" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--------&nbsp;&nbsp;</span><span class="author-p-5599590 color:rgb(34, 34, 34) font-size:13.5072px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(34,34,34); font-size:13.5072px">陈国明，徐长航.&nbsp;安全工程信息化技术概论.&nbsp;中国石油大学出版社.</span><span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">&nbsp;</span></div>
+<div id="magicdomid54" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid55" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid56" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 bold:true" style="margin:0px; padding:0px; outline:transparent solid 0px; font-weight:bold">1.7&nbsp;&nbsp;关系模型</span></div>
+<div id="magicdomid57" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; font-size:12pt">关系模型&nbsp;&nbsp;</span><span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">关系数据模型是最重要的一种模型。关系模型的特点是用一组二维数组来表示数据和数据之间的联系。二维表结构简单、直观。目前，关系数据库在数据库管理领域占主导地位&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:rgb(51, 51, 51)" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51)">&nbsp;&nbsp;</span></div>
+<div id="magicdomid58" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:#333333" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:rgb(51, 51, 51)" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51)">&nbsp;&nbsp;---------《Acess数据库应用教程》</span></div>
+<div id="magicdomid59" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid60" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid61" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 bold:true" style="margin:0px; padding:0px; outline:transparent solid 0px; font-weight:bold">1.8&nbsp;&nbsp;数据库内部体系结构&nbsp;</span></div>
+<div id="magicdomid62" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:#000000 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; font-size:12pt">数据库系统的体系结构</span><span class="author-p-5599590 color:#404040 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-size:12pt">从不同的角度可有不同的划分方式。从数据库管理系统的角度可分为三层，从外到内依次为外模式、模式和内模式。</span></div>
+<div id="magicdomid63" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:#404040 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数据库的三层结构是数据的三个抽象级别。用户只要抽象地处理数据，而不必关心数据在计算机中如何表示和存储。</span></div>
+<div id="magicdomid64" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:#404040 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-size:12pt">为了实现三个抽象级别的联系和转换，数据库管理系统在三层结构之间提供了两层映像：外模式／模式映像和模式／内模式映像。</span></div>
+<div id="magicdomid65" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:#404040 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1．外模式&nbsp;&nbsp;&nbsp;&nbsp;外模式(external&nbsp;schema)称为用户模式，是数据库用户和数据库系统的数据库用户的数据视图(view)，是数据库用户可以看见和使用的局部数据的逻辑结描述，是与某一应用有关的数据的逻辑表示。一个数据库通常都有多个外模式。当不同用户在应用需求保密级别等方面存在差异时，其外模式描述就会有所不同。一个应用程序只能使用一个外模式，但同一外模式可为多个应用程序所使用。外模式是保证数据库安全的重要措施。每个用户只能看见和访问所对应的外模式中的数据，而数据库中的其他数据均不可见。</span></div>
+<div id="magicdomid66" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:#404040 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2．模式&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模式(schema)又可细分为概念模式(conceptual&nbsp;schema)和逻辑模式(109ical&nbsp;schema)，是所有数据库用户的公共数据视图，是数据库中全部数据的逻辑结构和特征的描述。一个数据库只有一个模式。其中概念模式可用实体----联系模型来描述，逻辑模式以某种数据模型(比如关系模型)为基础，综合考虑所有用户的需求，并将其形成全局逻辑结构。模式不但要描述数据的逻辑结构，比如数据记录的组成，各数据项的名称、类型、取&#20540;范围，而且要描述数据之间的联系、数据的完整性、安全性要求。</span></div>
+<div id="magicdomid67" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:#404040 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3．内模式&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:rgb(64, 64, 64) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-size:12pt">内模式(internal&nbsp;Schema)又称为存储模式(storage&nbsp;schema)，是数据库物理结构和存储方式的描述，是数据在数据库内部的表示方式。</span></div>
+<div id="magicdomid68" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:#404040 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-size:12pt">一个数据库只有一个内模式。内模式描述记录的存储方式、索引的组织方式、数据是否&nbsp;&nbsp;压缩、是否加密等。但内模式并不涉及物理记录，也不涉及硬件设备，比如，对硬盘的读写操作是由操作系统(其中的文件系统)来完成的。</span></div>
+<div id="magicdomid69" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:#404040 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-size:12pt">在三层模式结构中，数据库模式是数据库的核心与关键，外模式通常是模式的子集。数&nbsp;&nbsp;据按外模式的描述提供给用户，按内模式的描述存储在硬盘上，而模式介于外、内模式之间，&nbsp;&nbsp;既不涉及外部的访问，也不涉及内部的存储，从而起到隔离作用，有利于保持数据的独立性。</span></div>
+<div id="magicdomid70" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:rgb(51, 51, 51)" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51)">---------《百度百科》</span></div>
+<div id="magicdomid71" class="ace-line longKeep gutter-noauthor" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<br style="margin:0px; padding:0px">
+</div>
+<div id="magicdomid72" class="ace-line longKeep gutter-noauthor" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<br style="margin:0px; padding:0px">
+</div>
+<div id="magicdomid73" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:#404040 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:#000000 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; font-size:12pt">&nbsp;&nbsp;</span><span class="author-p-5599590 bold:true color:#000000 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; font-weight:bold; font-size:12pt">1.9&nbsp;&nbsp;关系运算</span></div>
+<div id="magicdomid74" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; font-size:12pt">&nbsp;&nbsp;</span><span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">一类是传统的集合运算（并、差、交等），另一类是专门的关系运算（选择、投影、联接等），有些查询需要几个基本运算的组合，要经过若干步骤才能完成。选择和投影运算都是属于一目运算，它们的操作对象只是一个关系。运算过程是通过联接条件来控制的，联接条件中将出现两个关系中的公共属性名，或者具有相同语义、可比的属性。在FOXPRO中有单独一条命令JOIN实现两个关系的联接运算。它属于联接运算的一个特例，是最常用的联接运算，在关系运算中起着重要作用。[1]</span></div>
+<div id="magicdomid75" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid76" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一、传统的集合运算</span></div>
+<div id="magicdomid77" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、并（UNION）　设有两个关系R和S，它们具有相同的结构。R和S的并是由属于R或属于S的元组组成的集合，运算符为∪。记为T=R∪S。</span></div>
+<div id="magicdomid78" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、差（DIFFERENCE）　R和S的差是由属于R但不属于S的元组组成的集合，运算符为－。记为T=R－S。</span></div>
+<div id="magicdomid79" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3、交（INTERSECTION）　R和S的交是由既属于R又属于S的元组组成的集合，运算符为∩。记为T=R∩S。　R∩S=R－（R－S）。</span></div>
+<div id="magicdomid80" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid81" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;二、选择运算</span></div>
+<div id="magicdomid82" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">从关系中找出满足给定条件的那些元组称为选择。其中的条件是以逻辑表达式给出的，&#20540;为真的元组将被选取。这种运算是从水平方向抽取元组。　在FOXPRO中的短语FOR和WHILE均相当于选择运算。</span></div>
+<div id="magicdomid83" class="ace-line longKeep gutter-noauthor" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<br style="margin:0px; padding:0px">
+</div>
+<div id="magicdomid84" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;三、投影运算</span></div>
+<div id="magicdomid85" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;从关系模式中挑选若干属性组成新的关系称为投影。这是从列的角度进行的运算，相当于对关系进行垂直分解。在FOXPRO中短语FIELDS相当于投影运算。</span></div>
+<div id="magicdomid86" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid87" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;四、连接运算</span></div>
+<div id="magicdomid88" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;连接运算是从两个关系的笛卡尔积中选择属性间满足一定条件的元组。</span></div>
+<div id="magicdomid89" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid90" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;五、除法运算</span></div>
+<div id="magicdomid91" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在关系代数中，除法运算可理解为笛卡尔积的逆运算。</span></div>
+<div id="magicdomid92" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;设被除关系R为m元关系，除关系S为n元关系，那么它们的商为m-n元关系，记为R÷S。商的构成原则是：将被除关系R中的m-n列，按其&#20540;分成若干组，检查每一组的n列&#20540;的集合是否包含除关系S，若包含则取m-n列的&#20540;作为商的一个元组，否则不取.[2]</span></div>
+<div id="magicdomid93" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid94" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;六、外连接运算&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid95" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:#333333 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:rgb(51, 51, 51)" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51)">---------《互动百科》[1]</span></div>
+<div id="magicdomid96" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:#333333" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51)">---------《百度百科》[2]</span><span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid97" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid98" class="ace-line longKeep gutter-noauthor" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<br style="margin:0px; padding:0px">
+</div>
+<div id="magicdomid99" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 bold:true font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; font-weight:bold; font-size:12pt">1.10&nbsp;&nbsp;&nbsp;mysql与powerdesigner16.5的简介与安装&nbsp;</span><span class="author-p-5599590 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; font-size:12pt">&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid100" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:#000000 font-size:14px" style="margin:0px; padding:0px; outline:transparent solid 0px; font-size:14px">MySQL</span><span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">是一个关系型数据库管理系统</span><span class="author-p-5599590 bold:true color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; font-weight:bold; color:rgb(51,51,51); font-size:12pt">，</span><span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">由瑞典MySQL&nbsp;AB&nbsp;公司开发，目前属于Oracle旗下产品.MySQL是一种关系数据库管理系统，关系数据库将数据保存在不同的表中，而不是将所有数据放在一个大仓库内，这样就增加了速度并提高了灵活性。MySQL所使用的&nbsp;SQL&nbsp;语言是用于访问数据库的最常用标准化语言。MySQL&nbsp;软件采用了双授权政策，分为社区版和商业版，由于其体积小、速度快、总体拥有成本低，尤其是开放源码这一特点，一般中小型网站的开发都选择&nbsp;MySQL&nbsp;作为网站数据库。&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;---------《mysql数据库》</span></div>
+<div id="magicdomid101" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid102" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; font-size:12pt">&nbsp;</span><span class="author-p-5599590 color:rgb(102, 102, 102) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(102,102,102); font-size:12pt">PowerDesigner是一款**的企业建模和设计解&nbsp;决方案，采用模型驱动的方法，将业务与IT结合起来&nbsp;，能够帮助企业解决大规模复杂信息系统分析设计问&nbsp;题。它集成了多种标准数据建模技术，包括UML、业&nbsp;务流程建模以及市场领先的数据建模等等。</span><span class="author-p-5599590 color:rgb(102, 102, 102) font-size:12px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(102,102,102); font-size:12px">&nbsp;</span></div>
+<div id="magicdomid103" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid104" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid105" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+<div id="magicdomid106" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 bold:true" style="margin:0px; padding:0px; outline:transparent solid 0px; font-weight:bold">&nbsp;1.11&nbsp;&nbsp;主数据库</span></div>
+<div id="magicdomid107" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; font-size:12pt">&nbsp;</span><span class="author-p-5599590 color:rgb(51, 51, 51) font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">主数据库(master&nbsp;database，MDB)，简称主库，就是集中存储管理历史归档数据的场所，它永久保管具有长期保留价&#20540;、有共享需求的、经过数据质量检查验证的、规范化的数据。加载进入主数据库后的数据，原则上不允许进行更改；主数据库一般不直接支持处理解释等专业应用软件的数据存取；主数据库面向数据管理和共享查询，通过管理平台支持用户的数据存取，通过数据接口为项目库提供数据支持。数据库的数据主要来源于数据源头的各类专业数据库以及项目研究成果的归档。</span></div>
+<div id="magicdomid108" class="ace-line gutter-author-p-5599590 emptyGutter" style="margin:0px; padding:0px 60px 0px 54px; font-size:12pt; line-height:1.5; font-family:'Microsoft YaHei',Verdana,sans-serif; border:none!important">
+<span class="author-p-5599590" style="margin:0px; padding:0px; outline:transparent solid 0px">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="author-p-5599590 color:#333333 font-size:12pt" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(51,51,51); font-size:12pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;---------</span><span class="author-p-5599590 color:#404040 font-size:12px" style="margin:0px; padding:0px; outline:transparent solid 0px; color:rgb(64,64,64); font-size:12px">常冠华，熊华平，马玉书．数据库新技术在石油勘探中的应用：科学出版社，2005年11月：第1版,第118页</span></div>
+<p></p>
+<div><img src="file:///C:\Users\Lenovo\AppData\Roaming\Tencent\Users\961946407\TIM\WinTemp\RichOle\80EF{8DW`](P[1R$4JK2_IN.png" alt=""></div>
+<div><img src="file:///C:\Users\Lenovo\AppData\Roaming\Tencent\Users\961946407\TIM\WinTemp\RichOle\80EF{8DW`](P[1R$4JK2_IN.png" alt=""></div>
+<p></p>
+</div><hr></div><div class="recent-post-item article-container"><a class="article-title" href="/blog/2017/11/07/Could%20not%20obtain%20transaction-synchronized%20Session%20for%20current%20thread%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">Could not obtain transaction-synchronized Session for current thread解决方法</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2017-11-07</time><span class="article-meta"><span class="article-meta__separator">|</span><i class="fa fa-inbox article-meta__icon" aria-hidden="true"></i><a class="article-meta__categories" href="/blog/categories/hibernate/">hibernate</a></span><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/blog/tags/spring-session-hibernate/">spring session hibernate</a></span><div class="content"><a id="more"></a>
+
+
+<p><br>
+</p>
+<h4>&nbsp; &nbsp;<span style="font-size:18px"> <strong>调用session factory 时抛出的异常</strong></span></h4>
+<p><pre name="code" class="html">org.hibernate.HibernateException: Could not obtain transaction-synchronized Session for current thread
+null
+2017-11-06 20:19:23.342 ERROR 4292 --- [0.1-8080-exec-3] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is java.lang.NullPointerException] with root cause
+
+<p>java.lang.NullPointerException: null<br>    at com.hwj.web.IndexController.getId(IndexController.java:79)<br>    at com.hwj.web.IndexController$$FastClassBySpringCGLIB$$e54c6cb4.invoke(&lt;generated&gt;)<br>    at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)<br>    at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:738)<br>    at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)<br>    at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:52)<br>    at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179)<br>    at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:85)<br>    at com.hwj.aspect.HttpAspect.daRound(HttpAspect.java:70)<br>    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)<br>    at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)<br>    at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)<br>    at java.lang.reflect.Method.invoke(Unknown Source)<br>    at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:629)<br>    at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:618)<br>    at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:70)<br>    at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179)<br>    at org.springframework.aop.framework.adapter.AfterReturningAdviceInterceptor.invoke(AfterReturningAdviceInterceptor.java:52)<br>    at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179)<br>    at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:92)<br>    at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179)<br>    at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:673)<br>    at com.hwj.web.IndexController$$EnhancerBySpringCGLIB$$bbeabbb9.getId(&lt;generated&gt;)<br>    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)<br>    at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)<br>    at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)<br></pre><br></p>
+</p>
+<p>&nbsp;<span style="font-size:18px"> 解决方法:&nbsp;</span></p>
+<p><span style="font-size:18px">&nbsp; &nbsp; 1. 检查Session Factory是否开启事物注解(如没有，在配置中开启事物注解)<a target="_blank" href="http://blog.csdn.net/huoji555/article/details/78466526" target="_blank"> 传送门</a></span></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;<span style="font-size:18px">2.在impl层注入@Transactional&nbsp;</span></p>
+</div><hr></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/blog/page/7/"><i class="fa fa-chevron-left"></i></a><a class="page-number" href="/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/blog/page/9/">9</a><a class="extend next" rel="next" href="/blog/page/9/"><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer class="footer-bg" style="background-image: url(https://blog-1251750343.cos.ap-beijing.myqcloud.com/blog/blog-bg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2017 - 2020 By Ragty</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text"><a href="http://beian.miit.gov.cn " target="_blank" rel="noopener" charset="utf-8"> ICP备案号:京ICP备<13502>号 </a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span><span></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/blog/js/utils.js?version=1.7.0"></script><script src="/blog/js/fancybox.js?version=1.7.0"></script><script src="/blog/js/sidebar.js?version=1.7.0"></script><script src="/blog/js/copy.js?version=1.7.0"></script><script src="/blog/js/fireworks.js?version=1.7.0"></script><script src="/blog/js/transition.js?version=1.7.0"></script><script src="/blog/js/scroll.js?version=1.7.0"></script><script src="/blog/js/head.js?version=1.7.0"></script><script src="/blog/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
   $('#nav').addClass('is-mobile')
   $('footer').addClass('is-mobile')
   $('#top-container').addClass('is-mobile')
