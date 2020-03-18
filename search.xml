@@ -302,11 +302,11 @@
       
         <tags>
             
+            <tag> 排序算法 </tag>
+            
             <tag> 堆排序 </tag>
             
             <tag> 有界堆排序 </tag>
-            
-            <tag> 排序算法 </tag>
             
         </tags>
       
@@ -331,9 +331,9 @@
       
         <tags>
             
-            <tag> 排序算法 </tag>
-            
             <tag> 归并排序Java实现 </tag>
+            
+            <tag> 排序算法 </tag>
             
         </tags>
       
@@ -1761,17 +1761,6 @@
     
     
     <entry>
-      <title>archives</title>
-      <link href="/blog/archives/index.html"/>
-      <url>/blog/archives/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>about</title>
       <link href="/blog/about/index.html"/>
       <url>/blog/about/index.html</url>
@@ -1786,6 +1775,17 @@
       <title>categories</title>
       <link href="/blog/categories/index.html"/>
       <url>/blog/categories/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>archives</title>
+      <link href="/blog/archives/index.html"/>
+      <url>/blog/archives/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
