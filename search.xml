@@ -2033,9 +2033,9 @@
     
     
     <entry>
-      <title>categories</title>
-      <link href="/blog/categories/index.html"/>
-      <url>/blog/categories/index.html</url>
+      <title>archives</title>
+      <link href="/blog/archives/index.html"/>
+      <url>/blog/archives/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -2055,9 +2055,9 @@
     
     
     <entry>
-      <title>archives</title>
-      <link href="/blog/archives/index.html"/>
-      <url>/blog/archives/index.html</url>
+      <title>categories</title>
+      <link href="/blog/categories/index.html"/>
+      <url>/blog/categories/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
