@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>停止词过滤原理及实现</title>
+      <link href="/blog/2020/04/11/%E5%81%9C%E7%94%A8%E8%AF%8D%E8%BF%87%E6%BB%A4%E5%8E%9F%E7%90%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/"/>
+      <url>/blog/2020/04/11/%E5%81%9C%E7%94%A8%E8%AF%8D%E8%BF%87%E6%BB%A4%E5%8E%9F%E7%90%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/</url>
+      
+        <content type="html"><![CDATA[<a id="more"></a><h2 id="1-停用词"><a href="#1-停用词" class="headerlink" title="1.停用词"></a>1.停用词</h2><p><strong>指语言中一类没有多少意义的词语</strong>，比如<code>“的”</code>，<code>“甚至”</code>，<code>“不仅”</code>，<code>“吧”</code>……</p><p>一个句子去掉了停用词并不影响理解，停用词视具体的任务不同而不同。停用词过滤是一个常见的预处理过程</p><br><h2 id="2-实现思路"><a href="#2-实现思路" class="headerlink" title="2.实现思路"></a>2.实现思路</h2><ul><li><strong>加载中止词</strong>：IO加载中止词(<a href="https://blog.csdn.net/u010533386/article/details/51458591" target="_blank" rel="noopener">中止词下载地址</a>，复制粘贴保存为txt文本)</li><li><strong>分词</strong>：使用HanLP进行分词</li><li><strong>停用词过滤</strong>：从分词结果中去除中止词</li></ul><br><h2 id="3-加载中止词"><a href="#3-加载中止词" class="headerlink" title="3.加载中止词"></a>3.加载中止词</h2><p>这里最简单的做法是把中止词直接加入List中，但当词过多时，会浪费大量空间和查询时间，考虑到中文词大部分较短，这里使用<strong>双数组字典树(DATrie)</strong>构建，不熟悉双数组字典树的可以看<a href="https://blog.csdn.net/huoji555/article/details/104786615" target="_blank" rel="noopener">这里</a>，下面是构建代码：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@author</span>: Ragty</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Date</span>: 2020/4/11 12:37</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Description</span>: 加载字典到DATrie</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> DATrie <span class="title">loadStopword</span><span class="params">(String path)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">    BufferedReader bufferedReader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(stopWordsPath));</span><br><span class="line">    List&lt;String&gt; stopWords = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">    String temp = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> ((temp = bufferedReader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        stopWords.add(temp.trim());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    DATrie daTrie = <span class="keyword">new</span> DATrie();</span><br><span class="line">    daTrie.build(stopWords);</span><br><span class="line">    <span class="keyword">return</span> daTrie;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><h2 id="4-分词"><a href="#4-分词" class="headerlink" title="4.分词"></a>4.分词</h2><p>这里分词我们使用<code>HanLP</code>进行分词，不熟悉的可参考<a href="https://github.com/hankcs/HanLP" target="_blank" rel="noopener">配置</a>，下面是分词代码：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@author</span>: Ragty</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Date</span>: 2020/4/11 12:41</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Description</span>: HanLP分词</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> List&lt;Term&gt; <span class="title">segment</span><span class="params">(String text)</span> </span>&#123;</span><br><span class="line">    List&lt;Term&gt; list = HanLP.segment(text);</span><br><span class="line">    <span class="keyword">return</span> list;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><h2 id="5-停止词过滤"><a href="#5-停止词过滤" class="headerlink" title="5.停止词过滤"></a>5.停止词过滤</h2><p>这里直接从构建好的<code>DATrie</code>上查询，匹配到就停止词，就去掉，下面是实现代码：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@author</span>: Ragty</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Date</span>: 2020/4/11 13:17</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Description</span>: 停用词过滤</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;Term&gt; <span class="title">removeStopWords</span><span class="params">(String text, DATrie daTrie)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    List&lt;Term&gt; list = segment(text);</span><br><span class="line">    ListIterator&lt;Term&gt; listIterator = list.listIterator();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(listIterator.hasNext()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (daTrie.containsKey(listIterator.next().word)) &#123;</span><br><span class="line">            listIterator.remove();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> list;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><h2 id="6-测试用例"><a href="#6-测试用例" class="headerlink" title="6.测试用例"></a>6.测试用例</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    String text = <span class="string">"原来的路已经看不到了，只剩远方模糊的身影"</span>;</span><br><span class="line">    DATrie daTrie = loadStopword(text);</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">"源文本："</span>+ text);</span><br><span class="line">    System.out.println(<span class="string">"分词结果："</span>+ segment(text));</span><br><span class="line">    System.out.println(<span class="string">"停用词过滤："</span> + removeStopWords(text,daTrie));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><h2 id="7-测试结果"><a href="#7-测试结果" class="headerlink" title="7.测试结果"></a>7.测试结果</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">源文本：原来的路已经看不到了，只剩远方模糊的身影</span><br><span class="line">分词结果：[原来/d, 的/ude1, 路/n, 已经/d, 看不到/v, 了/ule, ，/w, 只剩/v, 远方/s, 模糊/a, 的/ude1, 身影/n]</span><br><span class="line">停用词过滤：[路/n, ，/w, 模糊/a, 身影/n]</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> NLP </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> NLP </tag>
+            
+            <tag> 停止词过滤 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>AC自动机详解及实现</title>
       <link href="/blog/2020/04/10/AC%E8%87%AA%E5%8A%A8%E6%9C%BA/"/>
       <url>/blog/2020/04/10/AC%E8%87%AA%E5%8A%A8%E6%9C%BA/</url>
@@ -851,33 +878,6 @@
             <tag> 数据结构思维 </tag>
             
             <tag> 双链表 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>停止词过滤原理及实现</title>
-      <link href="/blog/2019/04/11/%E5%81%9C%E7%94%A8%E8%AF%8D%E8%BF%87%E6%BB%A4%E5%8E%9F%E7%90%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/"/>
-      <url>/blog/2019/04/11/%E5%81%9C%E7%94%A8%E8%AF%8D%E8%BF%87%E6%BB%A4%E5%8E%9F%E7%90%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/</url>
-      
-        <content type="html"><![CDATA[<a id="more"></a><h2 id="1-停用词"><a href="#1-停用词" class="headerlink" title="1.停用词"></a>1.停用词</h2><p><strong>指语言中一类没有多少意义的词语</strong>，比如<code>“的”</code>，<code>“甚至”</code>，<code>“不仅”</code>，<code>“吧”</code>……</p><p>一个句子去掉了停用词并不影响理解，停用词视具体的任务不同而不同。停用词过滤是一个常见的预处理过程</p><br><h2 id="2-实现思路"><a href="#2-实现思路" class="headerlink" title="2.实现思路"></a>2.实现思路</h2><ul><li><strong>加载中止词</strong>：IO加载中止词(<a href="https://blog.csdn.net/u010533386/article/details/51458591" target="_blank" rel="noopener">中止词下载地址</a>，复制粘贴保存为txt文本)</li><li><strong>分词</strong>：使用HanLP进行分词</li><li><strong>停用词过滤</strong>：从分词结果中去除中止词</li></ul><br><h2 id="3-加载中止词"><a href="#3-加载中止词" class="headerlink" title="3.加载中止词"></a>3.加载中止词</h2><p>这里最简单的做法是把中止词直接加入List中，但当词过多时，会浪费大量空间和查询时间，考虑到中文词大部分较短，这里使用<strong>双数组字典树(DATrie)</strong>构建，不熟悉双数组字典树的可以看<a href="https://blog.csdn.net/huoji555/article/details/104786615" target="_blank" rel="noopener">这里</a>，下面是构建代码：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@author</span>: Ragty</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Date</span>: 2020/4/11 12:37</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Description</span>: 加载字典到DATrie</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> DATrie <span class="title">loadStopword</span><span class="params">(String path)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">    BufferedReader bufferedReader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(stopWordsPath));</span><br><span class="line">    List&lt;String&gt; stopWords = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">    String temp = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> ((temp = bufferedReader.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        stopWords.add(temp.trim());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    DATrie daTrie = <span class="keyword">new</span> DATrie();</span><br><span class="line">    daTrie.build(stopWords);</span><br><span class="line">    <span class="keyword">return</span> daTrie;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><h2 id="4-分词"><a href="#4-分词" class="headerlink" title="4.分词"></a>4.分词</h2><p>这里分词我们使用<code>HanLP</code>进行分词，不熟悉的可参考<a href="https://github.com/hankcs/HanLP" target="_blank" rel="noopener">配置</a>，下面是分词代码：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@author</span>: Ragty</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Date</span>: 2020/4/11 12:41</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Description</span>: HanLP分词</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> List&lt;Term&gt; <span class="title">segment</span><span class="params">(String text)</span> </span>&#123;</span><br><span class="line">    List&lt;Term&gt; list = HanLP.segment(text);</span><br><span class="line">    <span class="keyword">return</span> list;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><h2 id="5-停止词过滤"><a href="#5-停止词过滤" class="headerlink" title="5.停止词过滤"></a>5.停止词过滤</h2><p>这里直接从构建好的<code>DATrie</code>上查询，匹配到就停止词，就去掉，下面是实现代码：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@author</span>: Ragty</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Date</span>: 2020/4/11 13:17</span></span><br><span class="line"><span class="comment"> *  <span class="doctag">@Description</span>: 停用词过滤</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;Term&gt; <span class="title">removeStopWords</span><span class="params">(String text, DATrie daTrie)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    List&lt;Term&gt; list = segment(text);</span><br><span class="line">    ListIterator&lt;Term&gt; listIterator = list.listIterator();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(listIterator.hasNext()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (daTrie.containsKey(listIterator.next().word)) &#123;</span><br><span class="line">            listIterator.remove();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> list;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><h2 id="6-测试用例"><a href="#6-测试用例" class="headerlink" title="6.测试用例"></a>6.测试用例</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    String text = <span class="string">"原来的路已经看不到了，只剩远方模糊的身影"</span>;</span><br><span class="line">    DATrie daTrie = loadStopword(text);</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">"源文本："</span>+ text);</span><br><span class="line">    System.out.println(<span class="string">"分词结果："</span>+ segment(text));</span><br><span class="line">    System.out.println(<span class="string">"停用词过滤："</span> + removeStopWords(text,daTrie));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><h2 id="7-测试结果"><a href="#7-测试结果" class="headerlink" title="7.测试结果"></a>7.测试结果</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">源文本：原来的路已经看不到了，只剩远方模糊的身影</span><br><span class="line">分词结果：[原来/d, 的/ude1, 路/n, 已经/d, 看不到/v, 了/ule, ，/w, 只剩/v, 远方/s, 模糊/a, 的/ude1, 身影/n]</span><br><span class="line">停用词过滤：[路/n, ，/w, 模糊/a, 身影/n]</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-      <categories>
-          
-          <category> NLP </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> NLP </tag>
-            
-            <tag> 停止词过滤 </tag>
             
         </tags>
       
@@ -1817,6 +1817,17 @@
     
     
     <entry>
+      <title>archives</title>
+      <link href="/blog/archives/index.html"/>
+      <url>/blog/archives/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Demo</title>
       <link href="/blog/about/index.html"/>
       <url>/blog/about/index.html</url>
@@ -1831,17 +1842,6 @@
       <title>categories</title>
       <link href="/blog/categories/index.html"/>
       <url>/blog/categories/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>archives</title>
-      <link href="/blog/archives/index.html"/>
-      <url>/blog/archives/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
