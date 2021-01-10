@@ -358,11 +358,11 @@
       
         <tags>
             
+            <tag> 排序算法 </tag>
+            
             <tag> 堆排序 </tag>
             
             <tag> 有界堆排序 </tag>
-            
-            <tag> 排序算法 </tag>
             
         </tags>
       
@@ -387,9 +387,9 @@
       
         <tags>
             
-            <tag> 排序算法 </tag>
-            
             <tag> 归并排序Java实现 </tag>
+            
+            <tag> 排序算法 </tag>
             
         </tags>
       
@@ -1839,9 +1839,9 @@
     
     
     <entry>
-      <title>categories</title>
-      <link href="/blog/categories/index.html"/>
-      <url>/blog/categories/index.html</url>
+      <title>Tagcloud</title>
+      <link href="/blog/tags/index.html"/>
+      <url>/blog/tags/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -1850,9 +1850,9 @@
     
     
     <entry>
-      <title>Tagcloud</title>
-      <link href="/blog/tags/index.html"/>
-      <url>/blog/tags/index.html</url>
+      <title>categories</title>
+      <link href="/blog/categories/index.html"/>
+      <url>/blog/categories/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
